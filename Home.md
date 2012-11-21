@@ -45,13 +45,9 @@ When one of many backend systems becomes latent it can block the entire user req
 
 With high volume traffic a single backend dependency becoming latent can cause all resources to become saturated in seconds on all servers.
 
-Latency is far worse for system resilience than failure. Failures naturally “fail fast” and shed load so systems can typically process the failures quickly, continue serving other requests and recover quickly.
-
-Latency on the other hand backs up queues, threads and system resources and if isolation techniques are not used it can cause an entire system to fail. 
+Every point in an application that reaches out over the network or into a client library that can potentially result in network requests is a source of failure.  Worse than failures, these applications can also result in increased latencies between services which backs up queues, threads and other system resources causing even more cascading failures across the system.
 
 [[images/soa-3-640.png]]
-
-Every point in an application that reaches out over the network or into a client library that can potentially result in network requests is a source of failure.  Worse than failures, these applications can also result in increased latencies between services which backs up queues, threads and other system resources causing even more cascading failures across the system.
 
 These issues are exacerbated when network access is performed through 3rd party clients which act as a "black box" where implementation details are hidden, can change at any time, and network or resource configurations are different for each client library and often difficult to monitor and change. 
 
