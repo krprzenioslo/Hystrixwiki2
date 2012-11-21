@@ -21,7 +21,7 @@ The following links provide more context around Hystrix and the challenges that 
 
 ## Problem Definition
 
-Applications in complex distributed architectures have dozens of dependencies that can and will fail and if not isolated from these points of failure the entire application will be taken down with them.
+Applications in complex distributed architectures have dozens of dependencies, each of which will inevitably fail at some point.  If not isolated from these external failures, the host application is at risk of being taken down with them.
 
 For example, running an application that depends on 30 services that each have 99.99% uptime we get:
 
@@ -49,15 +49,9 @@ Latency is far worse for system resilience than failure. Failures naturally “f
 
 Latency on the other hand backs up queues, threads and system resources and if isolation techniques are not used it can cause an entire system to fail. 
 
-A system failing due to latency is often expressed in ways such as:
-
-* rejecting incoming requests with 503s because the HTTP acceptor thread pool is saturated because all threads are blocked on slow backend calls
-* user responses become very slow because they end up in network connection queues or HTTP accept queues
-* no other backend systems can be connected to even if they are healthy because the connection pools are saturated and blocked on a single latent system
-
 [[images/soa-3-640.png]]
 
-Every point in an application that reaches out over the network or into a client library that can potentially result in network requests is a source of failure or worse, latency.
+Every point in an application that reaches out over the network or into a client library that can potentially result in network requests is a source of failure.  Worse than failures, these applications can also result in increased latencies between services which backs up queues, threads and other system resources causing even more cascading failures across the system.
 
 These issues are exacerbated when network access is performed through 3rd party clients which act as a "black box" where implementation details are hidden, can change at any time, and network or resource configurations are different for each client library and often difficult to monitor and change. 
 
