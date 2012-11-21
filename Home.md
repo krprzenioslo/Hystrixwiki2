@@ -1,14 +1,15 @@
 ## What is Hystrix?
 
-Hystrix is a latency and fault tolerance library designed to isolate points of access to remote systems, services and 3rd party libraries, stop cascading failure and enable resilience in complex distributed systems where failure is inevitable.
+In a distributed environment, failure of any given service is inevitable.  Hystrix is a library designed to control the interactions between these distributed services providing greater latency and fault tolerance.  Hystrix does this by isolating points of access between the services, stopping cascading failures across them, and providing fallback options, all of which improve the system's overall resiliency.
 
-Hystrix evolved out of resilience engineering work the Netflix API team began in 2011 and matured through 2012 eventually leading to adoption across many teams within Netflix.
+Hystrix evolved out of resilience engineering work that the Netflix API team began in 2011.  Over the course of 2012, Hystrix continued to evolve and mature, eventually leading to adoption across many teams within Netflix.  Today tens of billions of thread-isolated and hundreds of billions of semaphore-isolated calls are executed via Hystrix every day at Netflix and a dramatic improvement in uptime and resilience has been achieved through its use.
+
+The following links provide more context around Hystrix and the challenges that it attempts to address:
 
 * [Making Netflix API More Resilient](http://techblog.netflix.com/2011/12/making-netflix-api-more-resilient.html)
 * [Fault Tolerance in a High Volume, Distributed System](http://techblog.netflix.com/2012/02/fault-tolerance-in-high-volume.html)
 * [Performance and Fault Tolerance for the Netflix API](https://speakerdeck.com/benjchristensen/performance-and-fault-tolerance-for-the-netflix-api-august-2012)
 
-Today tens of billions of thread-isolated and hundreds of billions of semaphore-isolated calls are executed via Hystrix every day at Netflix and a dramatic improvement in uptime and resilience has been achieved through its use.
 
 ## Purpose of Hystrix
 
