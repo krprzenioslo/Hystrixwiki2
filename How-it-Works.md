@@ -133,6 +133,9 @@ Netflix chose the use of threads and thread-pools to achieve isolation for many 
 * Most network access is performed synchronously.
 * Failure and latency can occur in the client-side code as well, not just the network call.
 
+<a href="images/isolation-options-1280.png">[[images/isolation-options-640.png]]</a>
+_(Click for larger view)_
+
 #### Benefits of Thread Pools
 
 The benefits of isolation via threads in their own thread pools are:
@@ -151,9 +154,6 @@ In short, the isolation provided by thread pools allows for the always changing 
 The primary drawback of thread pools is that they add computational overhead since each command execution involves the queueing, scheduling and context switching for running the command on a separate thread.
 
 At Netflix this overhead has been accepted for the benefits it provides and deemed small enough to not have major cost or performance impact.
-
-<a href="images/isolation-options-1280.png">[[images/isolation-options-640.png]]</a>
-_(Click for larger view)_
 
 #### Cost of Threads
 
