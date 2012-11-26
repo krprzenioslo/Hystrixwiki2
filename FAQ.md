@@ -5,7 +5,7 @@ Naming things is [hard](http://martinfowler.com/bliki/TwoHardThings.html).
 
 Many words, synonyms, animals and mashups of them all were sought that would keep the theme of resilience, defense and fault tolerance while being short, easy to say and not already taken. Not many worked.
 
-A hystrix is an "[Old World porcupine](http://en.wikipedia.org/wiki/Hystrix)" with an [impressive defense mechanism](http://www.arkive.org/north-african-crested-porcupine/hystrix-cristata/video-11b.html). It's also (in my opinion) a cool name, only 2 syllables (I end up saying it a lot so this was important), looks nice written out and when Googling for it only found animals so seemed free from collision with other products.
+A Hystrix is an "[Old World porcupine](http://en.wikipedia.org/wiki/Hystrix)" with an [impressive defense mechanism](http://www.arkive.org/north-african-crested-porcupine/hystrix-cristata/video-11b.html). It's also (in my opinion) a cool name, only 2 syllables (I end up saying it a lot so this was important), looks nice written out and when Googling for it only found animals so seemed free from collision with other products.
 
 And it allows for cool artistic interpretations such as this logo:
 
