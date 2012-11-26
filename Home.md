@@ -1,3 +1,5 @@
+[[images/hystrix-logo-tagline.png]]
+
 ## What is Hystrix?
 
 In a distributed environment, failure of any given service is inevitable.  Hystrix is a library designed to control the interactions between these distributed services providing greater latency and fault tolerance.  Hystrix does this by isolating points of access between the services, stopping cascading failures across them, and providing fallback options, all of which improve the system's overall resiliency.
