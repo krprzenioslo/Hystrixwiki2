@@ -10,12 +10,12 @@ The typical approach to deploying a new circuit has been to release it into prod
 
 In practice what this typically looks like is:
 
-1. Leave at default 1000ms timeout unless its known that more time is needed.
-2. Leave threadpool at default of 10 threads unless its known tht more threads are needed.
+1. Leave at default 1000ms timeout unless it's known that more time is needed.
+2. Leave threadpool at default of 10 threads unless it's known that more threads are needed.
 3. Deploy to canary. If all is well proceed.
-4. Run in production for 24 hours on entire fleet. 
+4. Run in production for 24 hours on entire fleet.
 5. Rely on standard alerting and monitoring to catch issues if any.
-6. After 24 hours use latency percentiles and traffic volume to calculate what the lowest values are that makes sense for the circuit. 
+6. After 24 hours use latency percentiles and traffic volume to calculate what the lowest values are that makes sense for the circuit.
 7. Change the values live in production and monitor them using the realtime dashboards until confident.
 8. Only ever look at the configuration for this circuit again if behavior or performance characteristics of the circuit change and are brought to attention via alerts and/or dashboard monitoring.
 
