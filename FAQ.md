@@ -3,7 +3,7 @@
 
 Naming things is [hard](http://martinfowler.com/bliki/TwoHardThings.html).
 
-Many words, synonyms, animals and mashups of them all were sought that would keep the theme of resilience, defense and fault tolerance while being short, easy to say and not already taken. Not many worked.
+We wanted a name that would keep the theme of resilience, defense and fault tolerance while being short, easy to say and not already taken. We considered many words - synonyms, adjectives, animals - and mashups of them all, and Hystrix came out on top.
 
 A Hystrix is an "[Old World porcupine](http://en.wikipedia.org/wiki/Hystrix)" with an [impressive defense mechanism](http://www.arkive.org/north-african-crested-porcupine/hystrix-cristata/video-11b.html). It's also (in my opinion) a cool name, only 2 syllables (I end up saying it a lot so this was important), looks nice written out and when Googling for it only found animals so seemed free from collision with other products.
 
@@ -41,7 +41,7 @@ By design Hystrix intends to offer a clearly defined barrier of "host app" versu
 
 When developing Hystrix at Netflix we specifically sought out transparent network calls and wrapped them in HystrixCommand implementations as on multiple occasions these were the cause of production outages.
 
-Developers interact with a library they know to execute over the network very differently than something they know to be an in-memory cache lookup.
+Developers interact with a library that accesses resources over a network very differently than one that operates on in-memory data.
 
 Thus, the addition of the Hystrix layer serves these purposes:
 
@@ -62,13 +62,13 @@ If you still feel strongly that you shouldn't have to modify libraries and add c
 <a name='TransitiveDependencies'/>
 ## What about transitive dependencies?
 
-Transitive dependencies and thus transitive calls to HystrixCommands is expected and okay.
+Transitive dependencies and thus transitive calls to HystrixCommands are expected and okay.
 
 It does not negate the benefit of visibility and communicating resilience if I interact with a HystrixCommand which then happens to invoke others – the trust is given by the single command being interacted with at the top of the call. Anything below that is being used with the scope of the initial protection.
 
 The transitive commands provide modular fault tolerance for each piece of aggregate functionality required by the first command.
 
-Also, because all command executions are logged for a request, metrics on transitive HystrixCommands also become exposed even though the caller may not have directly invoked it.
+Also, because all command executions are logged for a request, metrics on transitive HystrixCommands are also exposed even though the caller may not have directly invoked it.
 
 [[images/transitive-commands-640.png]]
 
@@ -76,7 +76,7 @@ Also, because all command executions are logged for a request, metrics on transi
 <a name='Annotations'/>
 ## Can annotations be used?
 
-Not as part of [hystrix-core](https://github.com/Netflix/Hystrix/tree/master/hystrix-core) functionality. It has been considered but not pursued heavily. It is definitely a candidate for someone to implement as a [sub-module](https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib).
+Not as part of [hystrix-core](https://github.com/Netflix/Hystrix/tree/master/hystrix-core) functionality. It has been considered but not pursued. It is definitely a candidate for someone to implement as a [sub-module](https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib).
 
 The primary design principle this doesn't mesh very well with is that it makes the isolation barriers transparent (see [["Why is it so intrusive?"|FAQ#wiki-Intrusive]] for more reasoning on this). In other words, a consumer of a library would no longer see a HystrixCommand implementation with standard execute(), queue() and other functionality nor receive the communication of isolation and fault tolerance that is assumed when interacting with a HystrixCommand. They would just invoke a method and have no idea of whether it's isolated or not.
 
