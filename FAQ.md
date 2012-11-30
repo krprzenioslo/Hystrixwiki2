@@ -78,14 +78,14 @@ Also, because all command executions are logged for a request, metrics on transi
 
 Not as part of [hystrix-core](https://github.com/Netflix/Hystrix/tree/master/hystrix-core) functionality. It has been considered but not pursued heavily. It is definitely a candidate for someone to implement as a [sub-module](https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib).
 
-The primary design principle this doesn't mesh very well with is that it makes the isolation barriers transparent (see "Why is it so intrusive?" for more reasoning on this). In other words, a consumer of a library would no longer see a HystrixCommand implementation with standard execute(), queue() and other functionality nor receive the communication of isolation and fault tolerance that is assumed when interacting with a HystrixCommand. They would just invoke a method and have no idea of whether it's isolated or not.
+The primary design principle this doesn't mesh very well with is that it makes the isolation barriers transparent (see [["Why is it so intrusive?"|FAQ#wiki-Intrusive]] for more reasoning on this). In other words, a consumer of a library would no longer see a HystrixCommand implementation with standard execute(), queue() and other functionality nor receive the communication of isolation and fault tolerance that is assumed when interacting with a HystrixCommand. They would just invoke a method and have no idea of whether it's isolated or not.
 
 <a name='AOP'/>
 ## Why not use AOP?
 
 AOP has been avoided as part of [hystrix-core](https://github.com/Netflix/Hystrix/tree/master/hystrix-core) functionality due to the non-obviousness of using it and the desire to stay away from bytecode manipulation. 
 
-It also goes against the principles of Hystrix which prefer explicitly exposing access points to dependencies, networks and system as points of possible failure (see "Can annotations be used?" and "Why is it so intrusive?" for more reasoning on this).
+It also goes against the principles of Hystrix which prefer explicitly exposing access points to dependencies, networks and systems as points of possible failure (see [["Can annotations be used?"|FAQ#wiki-Annotations]] and [["Why is it so intrusive?"|FAQ#wiki-Intrusive]] for more reasoning on this).
 
 However, there may be use cases where it's applicable and thus it is a camdidate someone to implement as a [sub-module](https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib).
 
