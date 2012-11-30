@@ -45,10 +45,10 @@ Developers interact with a library they know to execute over the network very di
 
 Thus, the addition of the Hystrix layer serves these purposes:
 
-1) Communicate resilience to anyone calling it.
-2) Developers trust the object, can configure and monitor it and won't inadvertently add yet another wrapping layer by being unaware of hidden resiliency features.
-3) Ability to execute synchronously (HystrixCommand.execute()) or asynchronously (HystrixCommand.queue()).
-4) Ability to query a command after execution for state (fallback, errors, metrics, etc)
+1) Communicate resilience to anyone calling it.  
+2) Developers trust the object, can configure and monitor it and won't inadvertently add yet another wrapping layer by being unaware of hidden resiliency features.  
+3) Ability to execute synchronously (HystrixCommand.execute()) or asynchronously (HystrixCommand.queue()).  
+4) Ability to query a command after execution for state (fallback, errors, metrics, etc)  
 
 The [[migration of a library|How-To-Use#wiki-MigratingLibrary]] to using Hystrix typically looks like this:
 
