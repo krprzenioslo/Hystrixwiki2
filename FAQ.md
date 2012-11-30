@@ -169,7 +169,7 @@ An area where threads are purposefully blocked is when request caching is used a
 
 The Future.get() behavior will also cause calling threads to block on a thread-isolated execution while the underlying run() method is invoked on a child thread.
 
-Additionally the following types of functionality use atomic counters which under high contention can impact performance:
+Additionally the following types of functionality use atomic counters which under high contention have cost:
 
 - rolling and cumulative counters
 - rolling percentile calculations of latency
