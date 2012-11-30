@@ -425,6 +425,7 @@ The filter would be enabled for all incoming traffic in the web.xml as follows:
 
 Following are common uses and patterns of use for [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html).
 
+<a name='Common-Patterns-FailFast'/>
 ### Fail Fast
 
 The most basic execution is one that does a single thing and has no fallback behavior.
@@ -471,7 +472,7 @@ public void testFailure() {
     }
 }
 ```
-
+<a name='Common-Patterns-FailSilent'/>
 ### Fail Silent
 
 Failing silently is the equivalent of returning an empty response or removing functionality.
@@ -534,6 +535,7 @@ Another implementation that returns an empty list would look like:
     }
 ```
 
+<a name='Common-Patterns-FallbackStatic'/>
 ### Fallback: Static
 
 Some fallbacks can return default values statically embedded in code that doesn't cause the feature or service to be removed as "fail silent" often does, but would cause default behavior to occur.
@@ -547,6 +549,7 @@ For example, if a command is returning a true/false based on user credentials bu
     }
 ```
 
+<a name='Common-Patterns-FallbackStubbed'/>
 ### Fallback: Stubbed
 
 A stubbed fallback is typically used when a compound object containing multiple fields is being returned, some of which can be determined from other request state while other fields are set to default values.
@@ -636,7 +639,7 @@ The following unit test demonstrates its behavior:
     }
 ```
 
-
+<a name='Common-Patterns-FallbackCacheViaNetwork'/>
 ### Fallback: Cache via Network
 
 Sometimes if a backend service fails a stale version of data can be retrieved from a cache service such as memcached.
@@ -706,6 +709,7 @@ public class CommandWithFallbackViaNetwork extends HystrixCommand<String> {
 ```
 [View Source](../blob/master/hystrix-examples/src/main/java/com/netflix/hystrix/examples/basic/CommandWithFallbackViaNetwork.java)
 
+<a name='Common-Patterns-PrimarySecondaryWithFallback'/>
 ### Primary + Secondary with Fallback
 
 Some systems have dual-mode behavior - primary and secondary, or primary and failover.
@@ -840,6 +844,7 @@ public class CommandFacadeWithPrimarySecondary extends HystrixCommand<String> {
 ```
 [View Source](../blob/master/hystrix-examples/src/main/java/com/netflix/hystrix/examples/basic/CommandFacadeWithPrimarySecondary.java)
 
+<a name='Common-Patterns-Semaphore'/>
 ### Client Doesn't Perform Network Access
 
 When wrapping behavior that does not perform network access where latency is a concern or the threading overhead is unacceptable the [executionIsolationStrategy](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandProperties.html#executionIsolationStrategy(\)) property can be set to [ExecutionIsolationStrategy.SEMAPHORE](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandProperties.ExecutionIsolationStrategy.html) and semaphore isolation will be used instead.
@@ -869,6 +874,7 @@ public class CommandUsingSemaphoreIsolation extends HystrixCommand<String> {
 ```
 [View Source](../blob/master/hystrix-examples/src/main/java/com/netflix/hystrix/examples/basic/CommandUsingSemaphoreIsolation.java)
 
+<a name='Common-Patterns-GetSetGet'/>
 ### Get-Set-Get with Request Cache Invalidation
 
 If a Get-Set-Get use case is needed where the Get receives enough traffic that request caching is desired but sometimes a Set occurs on another command that should invalidate the cache within the same request, this can be performed using [HystrixRequestCache.clear()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixRequestCache.html).
