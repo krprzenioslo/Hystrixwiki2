@@ -163,7 +163,7 @@ Netflix API servers executing over 5500 HystrixCommands per seconds per box on 4
 
 There are a lot of shared data structures in Hystrix, particularly around metrics.
 
-Significant effort has been made to use non-blocking approaches to concurrency and use atomics rather than locks wherever possible (and where locks are used they are of the tryLock variety) to avoid causing threads to be put to sleep and affect throughput.
+Effort has been made to use non-blocking approaches to concurrency and use atomics rather than locks wherever possible (and where locks are used they are of the tryLock variety) to avoid causing threads to be put to sleep and affect throughput.
 
 An area where threads are purposefully blocked is when request caching is used and multiple threads are waiting on a single network execution. In this case the cost of the command execution (typically a network call) outweighs the cost of having threads block and be rescheduled so a CountDownLatch is used to block waiting threads until the response is available.
 
