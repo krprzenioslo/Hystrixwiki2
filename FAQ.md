@@ -121,7 +121,7 @@ For example:
 
 In this example 4 separate HystrixCommands expose the functionality, wrap both network and client code execution and allow granular control of isolation and fallback behavior.
 
-Resilience engineering becomes part of the library behavior and business logic. It is not a generic layer that makes failure go away.
+Resilience engineering becomes part of the library behavior and business logic. 
 
 <a name='LoadBalancer'/>
 ## Why don't you just use a load-balancer?
