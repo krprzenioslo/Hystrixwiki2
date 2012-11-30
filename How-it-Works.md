@@ -161,7 +161,7 @@ Hystrix measures the latency when executing the run() method on the child thread
 
 The Netflix API processes 10+ billion HystrixCommand executions per day using thread isolation. Each API instance has 40+ thread-pools with 5-20 threads in each (most are set to 10).
 
-The following diagram represents one [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) being executed at 60 requests-per-second on a single API instance (of about 500 total threaded executions per second per server):
+The following diagram represents one [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) being executed at 60 requests-per-second on a single API instance (of about 350 total threaded executions per second per server):
 
 <a href="images/thread-cost-60rps-original.png">[[images/thread-cost-60rps-640.png]]</a>
 _(Click for larger view)_
