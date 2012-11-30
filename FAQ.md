@@ -87,7 +87,7 @@ AOP has been avoided as part of [hystrix-core](https://github.com/Netflix/Hystri
 
 It also goes against the principles of Hystrix which prefer explicitly exposing access points to dependencies, networks and systems as points of possible failure (see [["Can annotations be used?"|FAQ#wiki-Annotations]] and [["Why is it so intrusive?"|FAQ#wiki-Intrusive]] for more reasoning on this).
 
-However, there may be use cases where it's applicable and thus it is a camdidate someone to implement as a [sub-module](https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib).
+However, there may be use cases where it's applicable and thus it is a candidate for someone to implement as a [sub-module](https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib).
 
 A related area where it may be useful is not for Hystrix command objects but for tracking drift – determining points of unwrapped network access that spring up over time.
 
