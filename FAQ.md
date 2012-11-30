@@ -76,20 +76,20 @@ Also, because all command executions are logged for a request, metrics on transi
 <a name='Annotations'/>
 ## Can annotations be used?
 
-Not as part of (hystrix-core)[https://github.com/Netflix/Hystrix/tree/master/hystrix-core] functionality.
+Not as part of [hystrix-core](https://github.com/Netflix/Hystrix/tree/master/hystrix-core) functionality.
 
-It has been considered but not pursued heavily. It is definitely a candidate for someone to implement as a (sub-module)[https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib].
+It has been considered but not pursued heavily. It is definitely a candidate for someone to implement as a [sub-module](https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib).
 
 The primary design principle this doesn't mesh very well with is that it makes the isolation barriers transparent (see "Why is it so intrusive?" for more reasoning on this). In other words, a consumer of a library would no longer see a HystrixCommand implementation with standard execute(), queue() and other functionality nor receive the communication of isolation and fault tolerance that is assumed when interacting with a HystrixCommand. They would just invoke a method and have no idea of whether it's isolated or not.
 
 <a name='AOP'/>
 ## Why not use AOP?
 
-AOP has been avoided as part of (hystrix-core)[https://github.com/Netflix/Hystrix/tree/master/hystrix-core] functionality due to the non-obviousness of using it and the desire to stay away from bytecode manipulation. 
+AOP has been avoided as part of [hystrix-core](https://github.com/Netflix/Hystrix/tree/master/hystrix-core) functionality due to the non-obviousness of using it and the desire to stay away from bytecode manipulation. 
 
 It also goes against the principles of Hystrix which prefer explicitly exposing access points to dependencies, networks and system as points of possible failure (see "Can annotations be used?" and "Why is it so intrusive?" for more reasoning on this).
 
-However, there may be use cases where it's applicable and thus it is a camdidate someone to implement as a (sub-module)[https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib].
+However, there may be use cases where it's applicable and thus it is a camdidate someone to implement as a [sub-module](https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib).
 
 A related area where it may be useful is not for Hystrix command objects but for tracking drift – determining points of unwrapped network access that spring up over time.
 
