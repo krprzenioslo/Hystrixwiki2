@@ -1,8 +1,6 @@
 Hystrix supports the modification or addition of behavior using plugin implementations.
 
-They can be injected at runtime into the [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) and [HystrixCollapser](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html) constructors to be applicable to that particular command/collapser execution. 
-
-They can also be registered globally using the HystrixPlugin service and will then apply to all [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) and [HystrixCollapser](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html) implementations and override all others.
+They can be registered using the HystrixPlugin service and will then apply to all [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) and [HystrixCollapser](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html) implementations and override all others.
 
 ## Plugin Types
 
@@ -46,43 +44,11 @@ The [HystrixConcurrencyStrategy](http://netflix.github.com/Hystrix/javadoc/index
 
 ## How to Use
 
-Once a plugin has been implemented there are 2 different ways it can be used:
-
-### Injection via Constructor
-
-Plugins can be registered via dependency injection into the constructor of [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/HystrixCommand.html).
-
-This allows side-effect free use of plugins where they affect only the desired commands and without changing global state.
-
-This also allows different plugin implementations for different [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/HystrixCommand.html) instances if desired (though this can be confusing and/or problematic for some plugin behavior such as [HystrixRequestVariable](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/concurrency/HystrixRequestVariable.html)).
-
-> Netflix uses this approach by default. All Netflix HystrixCommands extend from a custom _NFHystrixCommand_ class that extends _HystrixCommand_ with extra behavior that injects all "Netflix" specific plugins. 
-
-Here is an example of a [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/HystrixCommand.html) being constructed with various custom plugin implementations:
-
-```java
-        public CommandImplementation(HystrixCommandGroupKey owner) {
-            super(Setter.withGroupKey(owner)
-                    .andPropertiesStrategy(ACustomHystrixPropertiesStrategy.getInstance())
-                    .andEventNotifier(ACustomHystrixEventNotifierDefaultStrategy.getInstance())
-                    .andConcurrencyStrategy(ACustomHystrixConcurrencyDefaultStrategy.getInstance())
-                    .andMetricsPublisher(ACustomHystrixCommandMetricsPublisher.getInstance()));
-        }
-```
-
-### Global Override via Registry
-
-This approach can be used to globally set an implementation to use regardless of what commands are being used, where they came from or what they are initialized with by default.
-
-This is typically used by an application owner as part of application startup. 
-
 Registering a plugin globally looks like this:
 
 ```java
         HystrixPlugins.registerEventNotifier(ACustomHystrixEventNotifierDefaultStrategy.getInstance());
 ```
-
-> Netflix uses this approach for certain use cases where the default behavior is to be overridden and a plugin is to be injected for a certain application to all HystrixCommands running in the entire system. For example, in our batch-compute applications we want some different behavior than we do in our transactional customer-facing systems.
 
 ## Abstract vs Interface
 
