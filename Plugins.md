@@ -1,6 +1,6 @@
 Hystrix supports the modification or addition of behavior using plugin implementations.
 
-They can be registered using the HystrixPlugin service and will then apply to all [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) and [HystrixCollapser](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html) implementations and override all others.
+They can be registered using the [HystrixPlugins](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/HystrixPlugins.html) service and will then apply to all [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) and [HystrixCollapser](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html) implementations and override all others.
 
 ## Plugin Types
 
@@ -47,7 +47,7 @@ The [HystrixConcurrencyStrategy](http://netflix.github.com/Hystrix/javadoc/index
 Registering a plugin globally looks like this:
 
 ```java
-        HystrixPlugins.registerEventNotifier(ACustomHystrixEventNotifierDefaultStrategy.getInstance());
+HystrixPlugins.registerEventNotifier(ACustomHystrixEventNotifierDefaultStrategy.getInstance());
 ```
 
 ## Abstract vs Interface
