@@ -190,5 +190,3 @@ To monitor an aggregate stream via Turbine it would be like:
 ```
 http://hostname:port/turbine/turbine.stream
 ```
-
-<iframe width="640" height="360" src="http://www.youtube.com/embed/zWM7oAbVL4g?vq=hd720" frameborder="0" allowfullscreen></iframe>
