@@ -129,3 +129,22 @@ The 'delay' parameter controls the latency that is injected between polling cycl
 
 The 'title' parameter is used by the monitor.html page to display a nice title instead of the raw URL.
 
+# Customizing and Embedding
+
+We fully expect that many will want to embed the dashboard functionality into their own existing dashboards.
+
+To accommodate this we have kept the app very simple - primary just HTML, Javascript and CSS in modules that can be dropped into any app.
+
+The only portion that is server side is a [proxy servlet](https://github.com/Netflix/Hystrix/blob/master/hystrix-dashboard/src/main/java/com/netflix/hystrix/dashboard/stream/ProxyStreamServlet.java) used to proxy streams between the browser and backend since EventSource CORS support is still [a work in progress](https://bugs.webkit.org/show_bug.cgi?id=61862).
+
+Displaying HystrixCommand monitors on an existing page is as simple as importing the javascript module, instantiating it with a DIV to use and giving it an EventStream:
+
+```javascript
+var hystrixMonitor = new HystrixCommandMonitor('dependencies', {includeDetailIcon:false});
+// start the EventSource which will open a streaming connection to the server
+var source = new EventSource("http://hostname:port/hystrix.stream");
+// add the listener that will process incoming events
+source.addEventListener('message', hystrixMonitor.eventSourceMessageListener, false);
+```
+
+If you have UI improvements that you feel would benefit everyone please create a pull request and contribute back to the project and feel free to [ask questions and file bugs](https://github.com/Netflix/Hystrix/issues).
