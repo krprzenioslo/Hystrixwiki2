@@ -20,8 +20,8 @@ Metrics can be published by an implementation of [HystrixMetricsPublisher](http:
 Implementations can be registered using [HystrixPlugins.registerMetricsPublisher(HystrixMetricsPublisher impl)](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/HystrixPlugins.html#registerMetricsPublisher(com.netflix.hystrix.strategy.metrics.HystrixMetricsPublisher\)).
 
 Implementations included with the project are:
-- Netflix Servo: [hystrix-servo-metrics-publisher](Hystrix/tree/master/hystrix-contrib/hystrix-servo-metrics-publisher)
-- Yammer Metrics: [hystrix-yammer-metrics-publisher](Hystrix/tree/master/hystrix-contrib/hystrix-yammer-metrics-publisher)
+- Netflix Servo: [hystrix-servo-metrics-publisher](../tree/master/hystrix-contrib/hystrix-servo-metrics-publisher)
+- Yammer Metrics: [hystrix-yammer-metrics-publisher](../tree/master/hystrix-contrib/hystrix-yammer-metrics-publisher)
 
 Following are details of metrics published with these implementations:
 
