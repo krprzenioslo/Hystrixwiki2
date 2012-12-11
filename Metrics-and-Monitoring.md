@@ -1,10 +1,29 @@
 Metrics are captured using the _HystrixRollingNumber_ and _HystrixRollingPercentile_ classes in rolling windows. The rolling windows allow low-latency moving windows of metrics to be used for circuit breaker health checks and [[operations|Operations]].
 
-Metrics are published by an implementation of [HystrixMetricsPublisher](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/metrics/HystrixMetricsPublisher.html).
+# Direct Access
 
-The default implementation uses [Servo](https://github.com/Netflix/servo) or a custom implementation can be registered using [HystrixPlugins.registerMetricsPublisher(HystrixMetricsPublisher impl)](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/HystrixPlugins.html#registerMetricsPublisher(com.netflix.hystrix.strategy.metrics.HystrixMetricsPublisher\)).
+You can get direct programmatic access to metrics like this:
 
-Following are details of metrics published with the default implementation using [Servo](https://github.com/Netflix/servo):
+```java
+HystrixCommandMetrics.getInstances()
+HystrixThreadPoolMetrics.getInstances()
+```
+
+# Metrics Event Stream
+
+The [hystrix-metrics-event-stream](/Hystrix/tree/master/hystrix-contrib/hystrix-metrics-event-stream) can be used to power the [Dashboard], realtime alerting and other such use cases.
+
+# Metrics Publisher
+
+Metrics can be published by an implementation of [HystrixMetricsPublisher](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/metrics/HystrixMetricsPublisher.html).
+
+Implementations can be registered using [HystrixPlugins.registerMetricsPublisher(HystrixMetricsPublisher impl)](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/HystrixPlugins.html#registerMetricsPublisher(com.netflix.hystrix.strategy.metrics.HystrixMetricsPublisher\)).
+
+Implementations included with the project are:
+- Netflix Servo: [hystrix-servo-metrics-publisher](Hystrix/tree/master/hystrix-contrib/hystrix-servo-metrics-publisher)
+- Yammer Metrics: [hystrix-yammer-metrics-publisher](Hystrix/tree/master/hystrix-contrib/hystrix-yammer-metrics-publisher)
+
+Following are details of metrics published with these implementations:
 
 ## Command Metrics
 
