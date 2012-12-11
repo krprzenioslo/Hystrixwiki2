@@ -30,6 +30,7 @@
   * [[Collapser|Configuration#wiki-Collapser]]
   * [[Thread-Pool|Configuration#wiki-ThreadPool]]
 
+* [[Dashboard|Dashboard]]
 * [[Metrics & Monitoring|Metrics-and-Monitoring]]
 * [[Plugins & Customization|Plugins]]
 * [[Operations]]
