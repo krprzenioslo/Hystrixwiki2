@@ -11,7 +11,7 @@ HystrixThreadPoolMetrics.getInstances()
 
 # Metrics Event Stream
 
-The [hystrix-metrics-event-stream](Hystrix/tree/master/hystrix-contrib/hystrix-metrics-event-stream) can be used to power the [[dashboard|Dashboard]], realtime alerting and other such use cases.
+The [hystrix-metrics-event-stream](../blob/tree/master/hystrix-contrib/hystrix-metrics-event-stream) can be used to power the [[dashboard|Dashboard]], realtime alerting and other such use cases.
 
 # Metrics Publisher
 
