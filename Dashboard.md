@@ -21,7 +21,3 @@ It allows monitoring a single server or cluster of servers in aggregate with low
 
 <a href="images/dashboard-example-1280.png">[[images/dashboard-example-640.png]]</a>
 _(Click for larger view.)_
-
-Following is an explanation of the metrics that are reported:
-
-[[images/dashboard-annoted-circuit-640.png]]
