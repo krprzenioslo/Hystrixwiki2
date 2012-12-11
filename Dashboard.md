@@ -31,13 +31,13 @@ _(Click for larger view.)_
 1) Download <a href="https://github.com/downloads/Netflix/Hystrix/hystrix-dashboard-1.1.1.war">hystrix-dashboard-1.1.1.war</a>  
 2) Install in servlet container such as <a href="http://tomcat.apache.org/download-70.cgi">Apache Tomcat 7</a>
 
-Usage examples below will assume installation to /webapps/hystrix.war
+Usage examples below will assume installation to /webapps/hystrix-dashboard.war
 
 ### Build
 
 ```
 ./gradlew build
-cp hystrix-dashboard/build/libs/hystrix-dashboard-*.war ./apache-tomcat-7.*/webapps/hystrix.war  (or other servlet container)
+cp hystrix-dashboard/build/libs/hystrix-dashboard-*.war ./apache-tomcat-7.*/webapps/hystrix-dashboard.war  (or other servlet container)
 ```
 
 # Installation of Metrics Stream
@@ -175,4 +175,20 @@ data: {"rollingCountFailure":0,"propertyValue_executionIsolationThreadInterruptO
 
 # Using
 
+When you access the Hystrix Dashboard homepage you should see something like this:
+
 [[images/dashboard-home-640.png]]
+
+To monitor a single server you would use a URL such as:
+
+```
+http://hostname:port/application/hystrix.stream
+```
+
+To monitor an aggregate stream via Turbine it would be like:
+
+```
+http://hostname:port/turbine/turbine.stream
+```
+
+<iframe width="640" height="360" src="http://www.youtube.com/embed/zWM7oAbVL4g?vq=hd720" frameborder="0" allowfullscreen></iframe>
