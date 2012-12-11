@@ -190,3 +190,10 @@ To monitor an aggregate stream via Turbine it would be like:
 ```
 http://hostname:port/turbine/turbine.stream
 ```
+
+The landing page does nothing more than generate the /monitor/monitor.html URLs that can then be bookmarked.
+
+The 'delay' parameter controls the latency that is injected between polling cycles on the server to slow down the stream. This can be used to reduce the network and CPU usage on the client.
+
+The 'title' parameter is used by the monitor.html page to display a nice title instead of the raw URL.
+
