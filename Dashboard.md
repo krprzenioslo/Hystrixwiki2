@@ -28,7 +28,7 @@ _(Click for larger view.)_
 
 ### Download
 
-1) Download <a href="https://github.com/downloads/Netflix/Hystrix/hystrix-dashboard-1.1.1.war">hystrix-dashboard-1.1.1.war</a>  
+1) Download <a href="https://github.com/downloads/Netflix/Hystrix/hystrix-dashboard-1.1.2.war">hystrix-dashboard-1.1.2.war</a>  
 2) Install in servlet container such as <a href="http://tomcat.apache.org/download-70.cgi">Apache Tomcat 7</a>
 
 Usage examples below will assume installation to /webapps/hystrix-dashboard.war
