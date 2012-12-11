@@ -131,7 +131,7 @@ The 'title' parameter is used by the monitor.html page to display a nice title i
 
 # Customizing and Embedding
 
-We fully expect that many will want to embed the dashboard functionality into their own existing dashboards.
+We expect that many will want to embed the dashboard functionality into their own existing dashboards.
 
 To accommodate this we have kept the app very simple - primary just HTML, Javascript and CSS in modules that can be dropped into any app.
 
