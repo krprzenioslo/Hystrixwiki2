@@ -143,16 +143,3 @@ Each [HystrixThreadPool](http://netflix.github.com/Hystrix/javadoc/index.html?co
 * _Number_ propertyValue_keepAliveTimeInMinutes
 * _Number_ propertyValue_queueSizeRejectionThreshold
 * _Number_ propertyValue_maxQueueSize
-
-## Dashboard
-
-A dashboard for near real-time monitoring Hystrix circuits __will be open-sourced soon__.
-
-It allows monitoring a single server or cluster of servers in aggregate with low latency (typically around 1 or 2 seconds when aggregating a cluster, subsecond with a single server).
-
-<a href="images/dashboard-example-1280.png">[[images/dashboard-example-640.png]]</a>
-_(Click for larger view.)_
-
-Following is an explanation of the metrics that are reported:
-
-[[images/dashboard-annoted-circuit-640.png]]
