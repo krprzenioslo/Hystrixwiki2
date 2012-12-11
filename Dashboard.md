@@ -19,14 +19,27 @@ It allows monitoring a single server or a cluster of servers aggregated using <a
 
 [[images/dashboard-direct-vs-turbine-640.png]]
 
-Here is another example from the Netflix API dashboard monitoring 476 servers aggregated using Turbine:
+Here is another example from the Netflix API dashboard monitoring 476 servers aggregated using <a href="https://github.com/Netflix/Turbine">Turbine</a>:
 
 <a href="images/dashboard-example-1280.png">[[images/dashboard-example-640.png]]</a>
 _(Click for larger view.)_
 
 # Installation of Dashboard
 
-how to
+### Download
+
+1) Download <a href="https://github.com/downloads/Netflix/Hystrix/hystrix-dashboard-1.1.1.war">hystrix-dashboard-1.1.1.war</a>
+2) Install in servlet container such as <a href="http://tomcat.apache.org/download-70.cgi">Apache Tomcat 7</a>
+
+Usage examples below will assume installation to /webapps/hystrix.war
+
+### Build
+
+```
+./gradlew build
+cp hystrix-dashboard/build/libs/hystrix-dashboard-*.war ./apache-tomcat-7.*/webapps/hystrix.war  (or other servlet container)
+```
+
 
 # Installation of Turbine
 
