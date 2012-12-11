@@ -118,8 +118,61 @@ See its [README](Hystrix/tree/master/hystrix-contrib/hystrix-metrics-event-strea
 
 # Installation of Turbine (optional)
 
-how to
+### Download
+
+1) Download <a href="https://github.com/downloads/Netflix/Turbine/turbine-web-1.0.0.war">turbine-web-1.0.0.war</a>  
+2) Install in servlet container such as <a href="http://tomcat.apache.org/download-70.cgi">Apache Tomcat 7</a>
+
+Usage examples below will assume installation to /webapps/turbine.war
+
+### Build
+
+```
+git clone git://github.com/Netflix/Turbine.git
+./gradlew build
+cp turbine-web/build/libs/turbine-web-*.war ./apache-tomcat-7.*/webapps/turbine.war  (or other servlet container)
+```
+
+### Configure Hosts Discovery
+
+Turbine configuration details can be found on its [Configuration Wiki](http://github100.ops.netflix.com/poberai/Turbine/wiki/Configuration/). It also supports custom plugins for [Instance Discovery](http://github100.ops.netflix.com/poberai/Turbine/wiki/Plugging-in-your-own-InstanceDiscovery).
+
+To get started as a "Hello World!" example a static configuration file pointing to specific instances can be used such as the following.
+
+Create a file config.properties that lists hosts to aggregate.
+
+This example includes 2 EC2 instances:
+
+```
+turbine.ConfigPropertyBasedDiscovery.default.instances=ec2-72-44-38-203.compute-1.amazonaws.com,ec2-23-20-84-255.compute-1.amazonaws.com
+turbine.instanceUrlSuffix=:8080/hystrix.stream
+```
+
+The 'turbine.instanceUrlSuffix' property is what will be appended to each hostname to create a URL that will result in the [hystrix-metrics-event-stream](Hystrix/tree/master/hystrix-contrib/hystrix-metrics-event-stream).
+
+The config.properties file can be:
+
+- placed on the classpath such as in /WEB-INF/classes
+- specified using a [JVM property](https://github.com/Netflix/archaius/wiki/Getting-Started) such as 
+
+```
+-Darchaius.configurationSource.additionalUrls=file:///path/to/config.properties
+```
+
+You can test that Turbine is correctly accessing instances and streaming metrics like this:
+
+```
+curl http://hostname:port/turbine/turbine.stream
+```
+
+If successful you should see something like this:
+
+```
+$ curl http://ec2-23-20-84-255.compute-1.amazonaws.com:8080/turbine/turbine.stream
+: ping
+data: {"rollingCountFailure":0,"propertyValue_executionIsolationThreadInterruptOnTimeout":true,"rollingCountTimeout":0,"rollingCountExceptionsThrown":0,"rollingCountFallbackSuccess":0,"errorCount":0,"type":"HystrixCommand","propertyValue_circuitBreakerEnabled":true,"reportingHosts":1,"latencyTotal":{"0":0,"95":0,"99.5":0,"90":0,"25":0,"99":0,"75":0,"100":0,"50":0},"currentConcurrentExecutionCount":0,"rollingCountSemaphoreRejected":0,"rollingCountFallbackRejection":0,"rollingCountShortCircuited":0,"rollingCountResponsesFromCache":0,"propertyValue_circuitBreakerForceClosed":false,"name":"IdentityCookieAuthSwitchProfile","propertyValue_executionIsolationThreadPoolKeyOverride":"null","rollingCountSuccess":0,"propertyValue_requestLogEnabled":true,"requestCount":0,"rollingCountCollapsedRequests":0,"errorPercentage":0,"propertyValue_circuitBreakerSleepWindowInMilliseconds":5000,"latencyTotal_mean":0,"propertyValue_circuitBreakerForceOpen":false,"propertyValue_circuitBreakerRequestVolumeThreshold":20,"propertyValue_circuitBreakerErrorThresholdPercentage":50,"propertyValue_executionIsolationStrategy":"THREAD","rollingCountFallbackFailure":0,"isCircuitBreakerOpen":false,"propertyValue_executionIsolationSemaphoreMaxConcurrentRequests":20,"propertyValue_executionIsolationThreadTimeoutInMilliseconds":1000,"propertyValue_metricsRollingStatisticalWindowInMilliseconds":10000,"propertyValue_fallbackIsolationSemaphoreMaxConcurrentRequests":10,"latencyExecute":{"0":0,"95":0,"99.5":0,"90":0,"25":0,"99":0,"75":0,"100":0,"50":0},"group":"IDENTITY","latencyExecute_mean":0,"propertyValue_requestCacheEnabled":true,"rollingCountThreadPoolRejected":0}
+```
 
 # Using
 
-how
+[[images/dashboard-home-640.png]]
