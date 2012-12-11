@@ -15,9 +15,23 @@ We've purposefully tried to pack a lot of information into the dashboard so that
 
 [[images/dashboard-annoted-circuit-640.png]]
 
-It allows monitoring a single server or cluster of servers in aggregate with low latency (typically around 1 or 2 seconds when aggregating a cluster, subsecond with a single server).
+It allows monitoring a single server or a cluster of servers aggregated using <a href="https://github.com/Netflix/Turbine">Turbine</a> with low latency (typically around 1 or 2 seconds when aggregating a cluster, subsecond with a single server).
 
 [[images/dashboard-direct-vs-turbine-640.png]]
 
+Here is another example from the Netflix API dashboard monitoring 476 servers aggregated using Turbine:
+
 <a href="images/dashboard-example-1280.png">[[images/dashboard-example-640.png]]</a>
 _(Click for larger view.)_
+
+# Installation of Dashboard
+
+how to
+
+# Installation of Turbine
+
+how to
+
+# Using
+
+how
