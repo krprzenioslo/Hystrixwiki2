@@ -42,7 +42,7 @@ cp hystrix-dashboard/build/libs/hystrix-dashboard-*.war ./apache-tomcat-7.*/weba
 
 # Installation of Metrics Stream
 
-The [hystrix-metrics-event-stream](Hystrix/tree/master/hystrix-contrib/hystrix-metrics-event-stream) module exposes metrics in a [text/event-stream](https://developer.mozilla.org/en-US/docs/Server-sent_events/Using_server-sent_events) formatted stream that continues as long as a client holds the connection.
+The [hystrix-metrics-event-stream](https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib/hystrix-metrics-event-stream) module exposes metrics in a [text/event-stream](https://developer.mozilla.org/en-US/docs/Server-sent_events/Using_server-sent_events) formatted stream that continues as long as a client holds the connection.
 
 The Hystrix Dashboard expects data in the format that this module emits.
 
