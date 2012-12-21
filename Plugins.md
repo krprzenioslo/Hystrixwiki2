@@ -47,7 +47,7 @@ The [HystrixConcurrencyStrategy](http://netflix.github.com/Hystrix/javadoc/index
 Registering a plugin globally looks like this:
 
 ```java
-HystrixPlugins.registerEventNotifier(ACustomHystrixEventNotifierDefaultStrategy.getInstance());
+HystrixPlugins.getInstance().registerEventNotifier(ACustomHystrixEventNotifierDefaultStrategy.getInstance());
 ```
 
 ## Abstract vs Interface
