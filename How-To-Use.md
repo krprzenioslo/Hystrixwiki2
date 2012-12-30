@@ -196,7 +196,7 @@ Thus, we logically want these commands grouped together but want them isolated d
 <a name='Caching'/>
 ## Request Cache
 
-Request caching is enabled by implemented the [getCacheKey()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getCacheKey(\)) method on a [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) object as follows:
+Request caching is enabled by implementing the [getCacheKey()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getCacheKey(\)) method on a [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) object as follows:
 
 ```java
 public class CommandUsingRequestCache extends HystrixCommand<Boolean> {
