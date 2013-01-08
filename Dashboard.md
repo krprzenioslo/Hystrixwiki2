@@ -24,7 +24,7 @@ Here is another example from the Netflix API dashboard monitoring 476 servers ag
 <a href="images/dashboard-example-1280.png">[[images/dashboard-example-640.png]]</a>
 _(Click for larger view.)_
 
-# Run via Git Clone
+# Run via Gradle
 
 ```
 $ git clone git@github.com:Netflix/Hystrix.git
