@@ -306,8 +306,8 @@ In other words, 10000/10 is okay, so is 10000/20 but 10000/7 is not.
 
 _Default Value:_ 10  
 _Possible Values:_ Any value that metrics.rollingStats.timeInMilliseconds can be evenly divided by. The result however should be buckets measuring 100s or 1000s of milliseconds. Performance at  high volume has not been tested with buckets <100ms.  
-_Default Property:_ hystrix.command.default.metrics.rollingPercentile.numBuckets  
-_Instance Property:_ hystrix.command.[HystrixCommandKey].metrics.rollingPercentile.numBuckets  
+_Default Property:_ hystrix.command.default.metrics.rollingStats.numBuckets  
+_Instance Property:_ hystrix.command.[HystrixCommandKey].metrics.rollingStats.numBuckets  
 _How to Set Instance Default:_  
 
 ```java
