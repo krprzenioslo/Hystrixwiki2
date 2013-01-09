@@ -178,6 +178,8 @@ HystrixCommandProperties.Setter()
 
 #### fallback.enabled
 
+Since: 1.2
+
 Whether [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandKey.html#getFallback(\)) will be attempted when failure or rejection occurs.
 
 _Default Value:_ true  
