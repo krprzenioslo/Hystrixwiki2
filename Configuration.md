@@ -176,6 +176,20 @@ HystrixCommandProperties.Setter()
    .withFallbackIsolationSemaphoreMaxConcurrentRequests(int value)
 ```
 
+#### fallback.enabled
+
+Whether [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandKey.html#getFallback(\)) will be attempted when failure or rejection occurs.
+
+_Default Value:_ true  
+_Default Property:_ hystrix.command.default.fallback.enabled   
+_Instance Property:_ hystrix.command.[HystrixCommandKey].fallback.enabled  
+_How to Set Instance Default:_  
+
+```java
+HystrixCommandProperties.Setter()
+   .withFallbackEnabled(boolean value)
+```
+
 <a name='CommandCircuitBreaker'/>
 ### Circuit Breaker
 
