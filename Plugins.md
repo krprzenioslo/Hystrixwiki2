@@ -42,6 +42,11 @@ The [HystrixConcurrencyStrategy](http://netflix.github.com/Hystrix/javadoc/index
 * The _getRequestVariable()_ method expects an implementation of [HystrixRequestVariable<T>](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/concurrency/HystrixRequestVariable.html) that functions like a ThreadLocal except scoped to the request - available on all threads within the request. Generally it will be easier and sufficient to just use the [HystrixRequestContext](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/concurrency/HystrixRequestContext.html) with its own default implementation of [HystrixRequestVariable](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/concurrency/HystrixRequestVariable.html).
 
 
+### Command Execution Hook
+
+A [HystrixCommandExecutionHook](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/executionhook/HystrixCommandExecutionHook.html) implementation gets access to the execution lifecycle of a [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) to inject behavior, logging, override responses, alter thread state etc.
+
+
 ## How to Use
 
 Registering a plugin globally looks like this:
