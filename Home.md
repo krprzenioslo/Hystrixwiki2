@@ -11,6 +11,7 @@ The following links provide more context around Hystrix and the challenges that 
 * [Making Netflix API More Resilient](http://techblog.netflix.com/2011/12/making-netflix-api-more-resilient.html)
 * [Fault Tolerance in a High Volume, Distributed System](http://techblog.netflix.com/2012/02/fault-tolerance-in-high-volume.html)
 * [Performance and Fault Tolerance for the Netflix API](https://speakerdeck.com/benjchristensen/performance-and-fault-tolerance-for-the-netflix-api-august-2012)
+* [Application Resilience in a Service-oriented Architecture](http://programming.oreilly.com/2013/06/application-resilience-in-a-service-oriented-architecture.html)
 
 
 ## Purpose of Hystrix
