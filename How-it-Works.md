@@ -149,6 +149,8 @@ The benefits of isolation via threads in their own thread pools are:
 
 In short, the isolation provided by thread pools allows for the always changing and dynamic combination of client libraries and subsystem performance characteristics to be handled gracefully without causing outages.
 
+*NOTE:* Despite the isolation a separate thread provides, underlying client code should have timeouts itself and/or respond to Thread interrupts so it can not block indefinitely and saturate the Hystrix thread pool.
+
 #### Drawbacks of Thread Pools
 
 The primary drawback of thread pools is that they add computational overhead since each command execution involves the queueing, scheduling and context switching for running the command on a separate thread.
