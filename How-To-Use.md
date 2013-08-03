@@ -150,27 +150,26 @@ public void testObservable() throws Exception {
         }
 
     });
-
-    // non-blocking
-    // - using closures in Java 8 would look like this:
-    
-    //            fWorld.subscribe((v) -> {
-    //                System.out.println("onNext: " + v);
-    //            })
-    
-    // - or while also including error handling
-    
-    //            fWorld.subscribe((v) -> {
-    //                System.out.println("onNext: " + v);
-    //            }, (exception) -> {
-    //                exception.printStackTrace();
-    //            })
-    
-    // More information about Observable can be found at https://github.com/Netflix/RxJava/wiki/How-To-Use
-
 }
 ```
 
+Using Java 8 lambdas/closures it would look like this:
+
+```java
+    fWorld.subscribe((v) -> {
+        System.out.println("onNext: " + v);
+    })
+    
+    // - or while also including error handling
+    
+    fWorld.subscribe((v) -> {
+        System.out.println("onNext: " + v);
+    }, (exception) -> {
+        exception.printStackTrace();
+    })
+```
+
+More information about Observable can be found at https://github.com/Netflix/RxJava/wiki/How-To-Use
 
 <a name='Fallback'/>
 ## Fallback
