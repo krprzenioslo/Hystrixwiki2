@@ -8,7 +8,7 @@ Example for Maven:
 <dependency>
     <groupId>com.netflix.hystrix</groupId>
     <artifactId>hystrix-core</artifactId>
-    <version>1.2.2</version>
+    <version>x.y.z</version>
 </dependency>
 ```
 and for Ivy:
