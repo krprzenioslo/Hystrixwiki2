@@ -5,6 +5,7 @@
   * [[Hello World!|How-To-Use#wiki-Hello-World]]
   * [[Synchronous Execution|How-To-Use#wiki-Synchronous-Execution]]
   * [[Asynchronous Execution|How-To-Use#wiki-Asynchronous-Execution]]
+  * [[Reactive Execution|How-To-Use#wiki-Reactive-Execution]]
   * [[Fallback|How-To-Use#wiki-Fallback]]
   * [[Command Name|How-To-Use#wiki-CommandName]]
   * [[Command Group|How-To-Use#wiki-CommandGroup]]
