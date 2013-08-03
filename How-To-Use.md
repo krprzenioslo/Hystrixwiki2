@@ -83,10 +83,10 @@ String s1 = new CommandHelloWorld("World").execute();
 String s2 = new CommandHelloWorld("World").queue().get();
 ```
 
-<a name='Asynchronous-Callback'/>
-## Asynchronous Execution with a Callback (Reactive)
+<a name='Reactive-Execution'/>
+## Reactive Execution
 
-Asynchronous execution with a callback is performed using the [observe()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#observe(\)) method:
+Reactive execution (asynchronous callback) is performed using the [observe()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#observe(\)) method:
 
 ```java
 Observable<String> fs = new CommandHelloWorld("World").observe();
@@ -95,26 +95,79 @@ Observable<String> fs = new CommandHelloWorld("World").observe();
 The value can then be retrieved by subscribing to the Observable:
 
 ```java
-fs.subscribe(observer)
+fs.subscribe(new Action1<String>() {
+
+    @Override
+    public void call(String s) {
+         // value emitted here
+    }
+
+});
 ```
 
 The following unit tests demonstrate the behavior:
 
 ```java
-        @Test
-        public void testAsynchronous1() throws Exception {
-            assertEquals("Hello World!", new CommandHelloWorld("World").queue().get());
-            assertEquals("Hello Bob!", new CommandHelloWorld("Bob").queue().get());
-        }
+@Test
+        public void testObservable() throws Exception {
 
-        @Test
-        public void testAsynchronous2() throws Exception {
+            Observable<String> fWorld = new CommandHelloWorld("World").observe();
+            Observable<String> fBob = new CommandHelloWorld("Bob").observe();
 
-            Future<String> fWorld = new CommandHelloWorld("World").queue();
-            Future<String> fBob = new CommandHelloWorld("Bob").queue();
+            // blocking
+            assertEquals("Hello World!", fWorld.toBlockingObservable().single());
+            assertEquals("Hello Bob!", fBob.toBlockingObservable().single());
 
-            assertEquals("Hello World!", fWorld.get());
-            assertEquals("Hello Bob!", fBob.get());
+            // non-blocking 
+            // - this is a verbose anonymous inner-class approach and doesn't do assertions
+            fWorld.subscribe(new Observer<String>() {
+
+                @Override
+                public void onCompleted() {
+                    // nothing needed here
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onNext(String v) {
+                    System.out.println("onNext: " + v);
+                }
+
+            });
+
+            // non-blocking
+            // - also verbose anonymous inner-class
+            // - ignore errors and onCompleted signal
+            fBob.subscribe(new Action1<String>() {
+
+                @Override
+                public void call(String v) {
+                    System.out.println("onNext: " + v);
+                }
+
+            });
+
+            // non-blocking
+            // - using closures in Java 8 would look like this:
+            
+            //            fWorld.subscribe((v) -> {
+            //                System.out.println("onNext: " + v);
+            //            })
+            
+            // - or while also including error handling
+            
+            //            fWorld.subscribe((v) -> {
+            //                System.out.println("onNext: " + v);
+            //            }, (exception) -> {
+            //                exception.printStackTrace();
+            //            })
+            
+            // More information about Observable can be found at https://github.com/Netflix/RxJava/wiki/How-To-Use
+
         }
 ```
 
