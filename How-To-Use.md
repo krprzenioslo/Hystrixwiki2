@@ -15,6 +15,7 @@ public class CommandHelloWorld extends HystrixCommand<String> {
 
     @Override
     protected String run() {
+        // a real example would do work like a network call here
         return "Hello " + name + "!";
     }
 }
@@ -81,6 +82,42 @@ The following are equivalent to each other:
 String s1 = new CommandHelloWorld("World").execute();
 String s2 = new CommandHelloWorld("World").queue().get();
 ```
+
+<a name='Asynchronous-Callback'/>
+## Asynchronous Execution with a Callback (Reactive)
+
+Asynchronous execution with a callback is performed using the [observe()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#observe(\)) method:
+
+```java
+Observable<String> fs = new CommandHelloWorld("World").observe();
+```
+
+The value can then be retrieved by subscribing to the Observable:
+
+```java
+fs.subscribe(observer)
+```
+
+The following unit tests demonstrate the behavior:
+
+```java
+        @Test
+        public void testAsynchronous1() throws Exception {
+            assertEquals("Hello World!", new CommandHelloWorld("World").queue().get());
+            assertEquals("Hello Bob!", new CommandHelloWorld("Bob").queue().get());
+        }
+
+        @Test
+        public void testAsynchronous2() throws Exception {
+
+            Future<String> fWorld = new CommandHelloWorld("World").queue();
+            Future<String> fBob = new CommandHelloWorld("Bob").queue();
+
+            assertEquals("Hello World!", fWorld.get());
+            assertEquals("Hello Bob!", fBob.get());
+        }
+```
+
 
 <a name='Fallback'/>
 ## Fallback
