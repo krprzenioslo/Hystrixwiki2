@@ -56,15 +56,16 @@ The simplest use of Hystrix is as follows:
 ```java
 public class CommandHelloWorld extends HystrixCommand<String> {
 
-    private final String name;
+    private final Integer userId;
 
-    public CommandHelloWorld(String name) {
+    public CommandHelloWorld(int userId) {
         super(HystrixCommandGroupKey.Factory.asKey("ExampleGroup"));
-        this.name = name;
+        this.userId = userId;
     }
 
     @Override
     protected String run() {
+        String name = UserService.getNameFromBlockingNetworkCall(userId);
         return "Hello " + name + "!";
     }
 }
