@@ -14,7 +14,7 @@ Example for Maven:
 and for Ivy:
 
 ```xml
-<dependency org="com.netflix.hystrix" name="hystrix-core" rev="1.2.2" />
+<dependency org="com.netflix.hystrix" name="hystrix-core" rev="x.y.z" />
 ```
 
 If you need to download the jars instead of using a build system, create a Maven pom file like this with the desired version:
