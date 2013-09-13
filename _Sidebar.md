@@ -7,7 +7,7 @@
   * [[Asynchronous Execution|How-To-Use#wiki-Asynchronous-Execution]]
   * [[Reactive Execution|How-To-Use#wiki-Reactive-Execution]]
   * [[Fallback|How-To-Use#wiki-Fallback]]
-  * [[Error Propagation|How-To-Use#wiki-error-propagation]]
+  * [[Error Propagation|How-To-Use#wiki-ErrorPropagation]]
   * [[Command Name|How-To-Use#wiki-CommandName]]
   * [[Command Group|How-To-Use#wiki-CommandGroup]]
   * [[Command Thread Pool|How-To-Use#wiki-CommandThreadPool]]
