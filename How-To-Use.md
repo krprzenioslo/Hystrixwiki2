@@ -209,6 +209,13 @@ This command will fail on every execution and shows how instead of receiving an 
     }
 ```
 
+<a name='ErrorPropagation'/>
+## Error Propagation
+
+All exceptions thrown from the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run(\)) method except for [HystrixBadRequestException](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/exception/HystrixBadRequestException.html) count as failures and trigger [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback(\)) and circuit-breaker logic.
+
+The [HystrixBadRequestException](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/exception/HystrixBadRequestException.html) is intended for use cases such as reporting illegal arguments or non-system failures that should not count against the failure metrics and should not trigger fallback logic.
+
 <a name='CommandName'/>
 ## Command Name
 
