@@ -488,7 +488,7 @@ context.shutdown();
 In a standard java web application a Servlet Filter can be used to initialize this lifecycle by implementing a filter similar to this:
 
 ```java
-public class HystrixRequestFilter implements Filter {
+public class HystrixRequestContextServletFilter implements Filter {
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) 
      throws IOException, ServletException {
@@ -505,15 +505,15 @@ public class HystrixRequestFilter implements Filter {
 The filter would be enabled for all incoming traffic in the web.xml as follows:
 
 ```
-  <filter>
-    <display-name>HystrixRequestFilter</display-name>
-    <filter-name>HystrixRequestFilter</filter-name>
-    <filter-class>com.netflix.hystrix.utilities.HystrixRequestFilter</filter-class>
-  </filter>
-  <filter-mapping>
-    <filter-name>HystrixRequestFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
+    <filter>
+      <display-name>HystrixRequestContextServletFilter</display-name>
+      <filter-name>HystrixRequestContextServletFilter</filter-name>
+      <filter-class>com.netflix.hystrix.contrib.requestservlet.HystrixRequestContextServletFilter</filter-class>
+    </filter>
+    <filter-mapping>
+      <filter-name>HystrixRequestContextServletFilter</filter-name>
+      <url-pattern>/*</url-pattern>
+   </filter-mapping>
 ```
 
 <a name='Common-Patterns'/>
