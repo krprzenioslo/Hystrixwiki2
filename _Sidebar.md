@@ -26,6 +26,7 @@
 
 * [[Configuration & Properties|Configuration]]
   * [[Command: Execution|Configuration#wiki-CommandExecution]]
+  * [[Command: Fallback|Configuration#wiki-CommandFallback]]
   * [[Command: Circuit Breaker|Configuration#wiki-CommandCircuitBreaker]]
   * [[Command: Metrics|Configuration#wiki-CommandMetrics]]
   * [[Command: Request Context|Configuration#wiki-CommandRequestContext]]
