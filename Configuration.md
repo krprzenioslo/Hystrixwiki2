@@ -1,6 +1,6 @@
 Hystrix uses [Archaius](https://github.com/Netflix/archaius) for the default implementation of properties for configuration.
 
-The documentation below is for the default [HystrixPropertiesStrategy](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/properties/HystrixPropertiesStrategy.html) implementation that is used unless overridden using a [[plugin|Plugins]].
+The documentation below is for the default [HystrixPropertiesStrategy](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/strategy/properties/HystrixPropertiesStrategy.html) implementation that is used unless overridden using a [[plugin|Plugins]].
 
 Each property has 4 levels of precedence:
 
