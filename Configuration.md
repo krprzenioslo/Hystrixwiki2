@@ -162,9 +162,11 @@ HystrixCommandProperties.Setter()
 <a name='CommandFallback'/>
 ### Fallback
 
+Properties that control how [HystrixCommand.getFallback()](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixCommand.html#getFallback(\)) is executed. These properties apply to both ExecutionIsolationStrategy.THREAD and ExecutionIsolationStrategy.SEMAPHORE.
+
 #### fallback.isolation.semaphore.maxConcurrentRequests
 
-Max number of requests allows to a [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandKey.html#getFallback(\)) method from the calling thread.
+Max number of requests allows to a [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback(\)) method from the calling thread.
 
 If the max concurrent limit is hit then subsequent requests will be rejected and an exception thrown since no fallback could be retrieved.
 
@@ -182,7 +184,7 @@ HystrixCommandProperties.Setter()
 
 Since: 1.2
 
-Whether [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandKey.html#getFallback(\)) will be attempted when failure or rejection occurs.
+Whether [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback(\)) will be attempted when failure or rejection occurs.
 
 _Default Value:_ true  
 _Default Property:_ hystrix.command.default.fallback.enabled   
