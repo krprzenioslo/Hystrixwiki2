@@ -159,6 +159,8 @@ _How to Set Instance Default:_
 HystrixCommandProperties.Setter()
    .withExecutionIsolationSemaphoreMaxConcurrentRequests(int value)
 ```
+<a name='CommandFallback'/>
+### Fallback
 
 #### fallback.isolation.semaphore.maxConcurrentRequests
 
