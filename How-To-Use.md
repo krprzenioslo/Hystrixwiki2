@@ -814,7 +814,7 @@ Sometimes the secondary or failover is considered a failure state and intended o
 
 However, if flipping to the secondary system is common, such as a normal part of rolling out new code (sometimes part of how stateful systems handle code pushes) then every time the secondary system is used the primary will be in a failure state, tripping circuit breakers and firing alerts.
 
-This is not wanted if for no other reason than avoid the "cry wolf" fatigue that will cause the alerts to ignored when a real issue is occurring.
+This is not wanted if for no other reason than avoid the "cry wolf" fatigue that will cause the alerts to be ignored when a real issue is occurring.
 
 Thus the strategy is instead to treat the switching between primary and secondary as normal, healthy patterns and put a facade in front of them.
 
