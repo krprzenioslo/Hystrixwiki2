@@ -204,24 +204,7 @@ This overhead at the 90th percentile and higher for circuits such as these has b
 
 For circuits that wrap very low latency requests (such as those primarily hitting in-memory caches) the overhead can be too high and in those cases we choose to use tryable semaphores which do not allow for timeouts but provide most of the resilience benefits without the overhead. The overhead in general though is small enough that we prefer the isolation benefits of a separate thread.
 
-
-<a name='UnitTests'/>
-## Why are unit tests inner classes?
-
-Hystrix has all of its unit tests as inner classes rather than in a separate /test/ folder.
-
-Why?
-
-- Low Friction
-- Context
-- Encapsulation
-- Refactoring
-- Self-documenting
-
-More information on the reasoning can be found in this blog post: [JUnit Tests as Inner Classes](http://benjchristensen.com/2011/10/23/junit-tests-as-inner-classes/)
-
 <a name='Async'/>
 ## What about asynchronous dependency calls?
 
-Support for wrapping asynchronous calls is definitely wanted but hasn't been implemented yet. [It will be](https://github.com/Netflix/Hystrix/issues/11).
-
+These are supported as of Hystrix 1.4.
