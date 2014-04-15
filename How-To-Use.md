@@ -25,7 +25,7 @@ public class CommandHelloWorld extends HystrixCommand<String> {
 <a name='Synchronous-Execution'/>
 ## Synchronous Execution
 
-Hystrix commands can be executed synchronously with the [execute()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#execute(\)) method as follows:
+Hystrix commands can be executed synchronously with the [execute()](<http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#execute\(\)>) method as follows:
 
 ```java
 String s = new CommandHelloWorld("World").execute();
@@ -44,7 +44,7 @@ Execution of this form passes the following tests:
 <a name='Asynchronous-Execution'/>
 ## Asynchronous Execution
 
-Asynchronous execution is performed using the [queue()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#queue(\)) method:
+Asynchronous execution is performed using the [queue()](<http://netflix.github.com/Hystrix/javadoc/com/netflix/hystrix/HystrixCommand.html#queue\(\)>) method:
 
 ```java
 Future<String> fs = new CommandHelloWorld("World").queue();
@@ -86,7 +86,7 @@ String s2 = new CommandHelloWorld("World").queue().get();
 <a name='Reactive-Execution'/>
 ## Reactive Execution
 
-Reactive execution (asynchronous callback) is performed using the [observe()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#observe(\)) method:
+Reactive execution (asynchronous callback) is performed using the [observe()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#observe\(\)) method:
 
 ```java
 Observable<String> fs = new CommandHelloWorld("World").observe();
@@ -174,7 +174,7 @@ More information about Observable can be found at https://github.com/Netflix/RxJ
 <a name='Fallback'/>
 ## Fallback
 
-Graceful degradation can be achieved by adding a [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback(\)) implementation that executes for all types of failure such as [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run(\)) failure, timeout, thread pool or semaphore rejection and circuit-breaker short-circuiting.
+Graceful degradation can be achieved by adding a [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) implementation that executes for all types of failure such as [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) failure, timeout, thread pool or semaphore rejection and circuit-breaker short-circuiting.
 
 ```java
 public class CommandHelloFailure extends HystrixCommand<String> {
@@ -199,7 +199,7 @@ public class CommandHelloFailure extends HystrixCommand<String> {
 ```
 [View Source](../blob/master/hystrix-examples/src/main/java/com/netflix/hystrix/examples/basic/CommandHelloFailure.java)
 
-This command will fail on every execution and shows how instead of receiving an exception will instead return the value of [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback(\)) as shown by this unit test:
+This command will fail on every execution and shows how instead of receiving an exception will instead return the value of [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) as shown by this unit test:
 
 ```java
     @Test
@@ -212,7 +212,7 @@ This command will fail on every execution and shows how instead of receiving an 
 <a name='ErrorPropagation'/>
 ## Error Propagation
 
-All exceptions thrown from the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run(\)) method except for [HystrixBadRequestException](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/exception/HystrixBadRequestException.html) count as failures and trigger [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback(\)) and circuit-breaker logic. You can wrap the exception that you would like to throw in ```HystrixBadRequestException``` and retrieve it via ```getCause()```.
+All exceptions thrown from the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method except for [HystrixBadRequestException](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/exception/HystrixBadRequestException.html) count as failures and trigger [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) and circuit-breaker logic. You can wrap the exception that you would like to throw in ```HystrixBadRequestException``` and retrieve it via ```getCause()```.
 
 The [HystrixBadRequestException](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/exception/HystrixBadRequestException.html) is intended for use cases such as reporting illegal arguments or non-system failures that should not count against the failure metrics and should not trigger fallback logic.
 
@@ -292,7 +292,7 @@ Thus, we logically want these commands grouped together but want them isolated d
 <a name='Caching'/>
 ## Request Cache
 
-Request caching is enabled by implementing the [getCacheKey()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getCacheKey(\)) method on a [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) object as follows:
+Request caching is enabled by implementing the [getCacheKey()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getCacheKey\(\)) method on a [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) object as follows:
 
 ```java
 public class CommandUsingRequestCache extends HystrixCommand<Boolean> {
@@ -575,7 +575,7 @@ Failing silently is the equivalent of returning an empty response or removing fu
 
 It can be done by returning _null_, an empty Map, empty List or other such responses.
 
-This is done by implementing a [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback(\)) method on the [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) instance:
+This is done by implementing a [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) method on the [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) instance:
 
 [[images/fallback-640.png]]
 
@@ -746,7 +746,7 @@ Since the fallback will go over the network it is another point of failure so al
 
 Also important is that the fallback command execute on a separate thread-pool, otherwise the main command becoming latent and filling the thread-pool will prevent the fallback from running if the two commands share the same pool.
 
-The following code shows how _CommandWithFallbackViaNetwork_ executes _FallbackViaNetwork_ in its [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback(\)) method.
+The following code shows how _CommandWithFallbackViaNetwork_ executes _FallbackViaNetwork_ in its [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) method.
 
 Also note how if the fallback fails, it also has a fallback implemented which then does a "fail silent" approach of returning null.
 
@@ -824,7 +824,7 @@ The primary and secondary [HystrixCommand](http://netflix.github.com/Hystrix/jav
 
 These two commands are not exposed publicly but instead hidden behind another [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) that is semaphore-isolated which implements the conditional logic as to whether the primary or secondary command should be invoked. If both primary and secondary fail then the facade command would have a fallback.
 
-The facade [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) can use semaphore-isolation since all of the work it is doing is going through 2 other [HystrixCommands](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) that are already thread-isolated. It is unnecessary to have yet another layer of threading as long as the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run(\)) method of the facade is not doing any other network calls, retry logic or other "error prone" things.
+The facade [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) can use semaphore-isolation since all of the work it is doing is going through 2 other [HystrixCommands](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) that are already thread-isolated. It is unnecessary to have yet another layer of threading as long as the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method of the facade is not doing any other network calls, retry logic or other "error prone" things.
 
 ```java
 public class CommandFacadeWithPrimarySecondary extends HystrixCommand<String> {
@@ -943,7 +943,7 @@ public class CommandFacadeWithPrimarySecondary extends HystrixCommand<String> {
 <a name='Common-Patterns-Semaphore'/>
 ### Client Doesn't Perform Network Access
 
-When wrapping behavior that does not perform network access where latency is a concern or the threading overhead is unacceptable the [executionIsolationStrategy](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandProperties.html#executionIsolationStrategy(\)) property can be set to [ExecutionIsolationStrategy.SEMAPHORE](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandProperties.ExecutionIsolationStrategy.html) and semaphore isolation will be used instead.
+When wrapping behavior that does not perform network access where latency is a concern or the threading overhead is unacceptable the [executionIsolationStrategy](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandProperties.html#executionIsolationStrategy\(\)) property can be set to [ExecutionIsolationStrategy.SEMAPHORE](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandProperties.ExecutionIsolationStrategy.html) and semaphore isolation will be used instead.
 
 The following shows how this property is set as the default for a command via code (it can also be overridden via dynamic properties at runtime).
 
