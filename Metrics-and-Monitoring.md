@@ -17,7 +17,7 @@ The [hystrix-metrics-event-stream](../tree/master/hystrix-contrib/hystrix-metric
 
 Metrics can be published by an implementation of [HystrixMetricsPublisher](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/metrics/HystrixMetricsPublisher.html).
 
-Implementations can be registered using [HystrixPlugins.registerMetricsPublisher(HystrixMetricsPublisher impl)](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/HystrixPlugins.html#registerMetricsPublisher(com.netflix.hystrix.strategy.metrics.HystrixMetricsPublisher\)).
+Implementations can be registered using [HystrixPlugins.registerMetricsPublisher(HystrixMetricsPublisher impl)](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/HystrixPlugins.html#registerMetricsPublisher\(com.netflix.hystrix.strategy.metrics.HystrixMetricsPublisher\)).
 
 Implementations included with the project are:
 - Netflix Servo: [hystrix-servo-metrics-publisher](../tree/master/hystrix-contrib/hystrix-servo-metrics-publisher)
@@ -78,7 +78,7 @@ These are "point in time" counts representing the last X seconds (for example 10
 
 ### Latency Percentiles: HystrixCommand.run() Execution ([Gauge](https://github.com/Netflix/servo/blob/master/servo-core/src/main/java/com/netflix/servo/monitor/Gauge.java))
 
-Percentiles of execution times for the [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run(\)) method (on the child thread if using thread isolation).
+Percentiles of execution times for the [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method (on the child thread if using thread isolation).
 
 These are rolling percentiles as configured by [[_metrics.rollingPercentile.*_ properties|Configuration]].
 
@@ -93,7 +93,7 @@ These are rolling percentiles as configured by [[_metrics.rollingPercentile.*_ p
 
 ### Latency Percentiles: End-to-End Execution ([Gauge](https://github.com/Netflix/servo/blob/master/servo-core/src/main/java/com/netflix/servo/monitor/Gauge.java))
 
-Percentiles of execution times for the end-to-end execution of [HystrixCommand.execute()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#execute(\)) or [HystrixCommand.queue()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#queue(\)) until a response is returned (or ready to return in case of [queue()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#queue(\))).
+Percentiles of execution times for the end-to-end execution of [HystrixCommand.execute()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#execute\(\)) or [HystrixCommand.queue()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#queue\(\)) until a response is returned (or ready to return in case of [queue()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#queue\(\))).
 
 The purpose of this compared with the _latencyExecute*_ percentiles is to measure the cost of thread queuing/scheduling/execution, semaphores, circuit breaker logic and other aspects of overhead (including metrics capture itself).
 
