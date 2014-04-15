@@ -25,33 +25,33 @@ K value = command.execute()
 Future<K> value = command.queue()
 ```
 
-The synchronous call [execute()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#execute(\)) invokes [queue().get()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#queue(\)) unless the command is specified to not run in a thread.
+The synchronous call [execute()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#execute\(\)) invokes [queue().get()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#queue\(\)) unless the command is specified to not run in a thread.
 
 __(3) Is Circuit Open?__
 
 Upon execution of the command it first checks with the circuit-breaker to ask, "Is the circuit open?"
 
-If the circuit is open (tripped) then the command will not be executed and flow routed to (8) [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback(\)).
+If the circuit is open (tripped) then the command will not be executed and flow routed to (8) [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)).
 
 If the circuit is closed then the command will proceed to (4) to check if there is capacity available to run the command.
 
 __(4) Is Thread Pool/Queue/Semaphore Full?__
 
-If the thread-pool and queue (or semaphore if not running in a thread) associated with the command are full then the execution will be rejected and immediately routed through (8) [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback(\)).
+If the thread-pool and queue (or semaphore if not running in a thread) associated with the command are full then the execution will be rejected and immediately routed through (8) [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)).
 
 __(5) HystrixCommand.run()__
 
-The concrete implementation of the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run(\)) method is executed.
+The concrete implementation of the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method is executed.
 
 __(5a) Command Timeout__
 
-If the command is configured to run within a thread and the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run(\)) method exceeds the command's timeout value, the thread will throw a TimeoutException. In that case the response is routed through (8) [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback(\)) and the return value of the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run(\)) method is discarded (if it does not cancel/interrupt).
+If the command is configured to run within a thread and the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method exceeds the command's timeout value, the thread will throw a TimeoutException. In that case the response is routed through (8) [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) and the return value of the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method is discarded (if it does not cancel/interrupt).
 
 If the command does not run within a thread then this logic will not be applicable.
 
 __(6) Is Command Successful?__
 
-Application flow is routed based on the response from the _(5) [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run(\)) method.
+Application flow is routed based on the response from the _(5) [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method.
 
 __(6a) Successful Response__
 
@@ -59,7 +59,7 @@ If no exceptions are thrown and a response is returned then the command returns 
 
 __(6b) Failed Response__
 
-When a response throws an exception Hystrix will mark it as "failed" - which will contribute to potentially tripping the circuit - and will route application flow to (8) [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback(\)).
+When a response throws an exception Hystrix will mark it as "failed" - which will contribute to potentially tripping the circuit - and will route application flow to (8) [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)).
 
 __(7) Calculate Circuit Health__
 
@@ -69,7 +69,7 @@ These stats are used to determine when the circuit should "trip", at which point
 
 __(8) HystrixCommand.getFallback()__
 
-The fallback is performed whenever a command execution fails - when an exception is thrown by (5) [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run(\))), when the command is _(3) short-circuited_ because the circuit is open, or when the command's _(4) thread pool and queue or semaphore_ are at capacity.
+The fallback is performed whenever a command execution fails - when an exception is thrown by (5) [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\))), when the command is _(3) short-circuited_ because the circuit is open, or when the command's _(4) thread pool and queue or semaphore_ are at capacity.
 
 The intent of the fallback is to provide a generic response without any network dependency from an in-memory cache or other static logic.
 
@@ -77,7 +77,7 @@ _If a network call is wanted in a fallback it should forward to another [Hystrix
 
 __(8a) Fallback Not Implemented__
 
-If [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback(\)) is not implemented then an exception will be thrown and the caller left to deal with it.
+If [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) is not implemented then an exception will be thrown and the caller left to deal with it.
 
 __(8b) Fallback Successful__
 
@@ -85,7 +85,7 @@ If the fallback returns a response then it will be returned to the caller.
 
 __(8c) Fallback Failed__
 
-If [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback(\)) fails and throws an exception then the caller is left to deal with it.
+If [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) fails and throws an exception then the caller is left to deal with it.
 
 This is considered a poor practice to have a fallback implementation that can fail. A fallback should be implemented such that it is not performing any logic that would fail.
 
@@ -286,6 +286,6 @@ Instead of each time the command is executed potentially returning a different v
 
 * Eliminates duplicate thread executions.
 
-Since the request cache sits in front of the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run(\)) method invocation, Hystrix can de-dupe calls before they result in thread execution. 
+Since the request cache sits in front of the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method invocation, Hystrix can de-dupe calls before they result in thread execution. 
 
 If Hystrix didn't implement the request cache functionality then each command would need to implement it themselves inside the run method which is after a thread is queued and executed. 
