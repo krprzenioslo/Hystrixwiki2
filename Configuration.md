@@ -307,8 +307,8 @@ For example, if set at 10 seconds (10000) with 10 1-second buckets, this followi
 [[images/rolling-stats-640.png]]
 
 _Default Value:_ 10000  
-_Default Property:_ hystrix.command.default.  
-_Instance Property:_ hystrix.command.[HystrixCommandKey].  
+_Default Property:_ hystrix.command.default.metrics.rollingStats.timeInMilliseconds  
+_Instance Property:_ hystrix.command.[HystrixCommandKey].metrics.rollingStats.timeInMilliseconds  
 _How to Set Instance Default:_  
 
 ```java
@@ -393,8 +393,8 @@ For example, if bucket size is set to 100 and represents 10 seconds and 500 exec
 Increasing this size increases the amount of memory used to store values and increases time for sorting the lists to do percentile calculations.
 
 _Default Value:_ 100   
-_Default Property:_ hystrix.command.default.  
-_Instance Property:_ hystrix.command.[HystrixCommandKey].  
+_Default Property:_ hystrix.command.default.metrics.rollingPercentile.bucketSize  
+_Instance Property:_ hystrix.command.[HystrixCommandKey].metrics.rollingPercentile.bucketSize  
 _How to Set Instance Default:_  
 
 ```java
