@@ -1,3 +1,3 @@
 List of Hystrix Libraries:
 
-- we barely released ... need some time to acquire implementations!
+- [Spring Cloud](http://projects.spring.io/spring-cloud) - Integration of Netflix OSS and Spring Boot
