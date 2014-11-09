@@ -55,7 +55,7 @@ Example:
 
 > _Instance Property:_ hystrix.command.[HystrixCommandKey].execution.isolation.thread.timeoutInMilliseconds  
 
-The [HystrixCommandKey](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandKey.html) portion of the property would be replaced with the [HystrixCommandKey.name()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandKey.html#name(\)) value of whatever HystrixCommand is being targeted.
+The [HystrixCommandKey](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandKey.html) portion of the property would be replaced with the [HystrixCommandKey.name()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandKey.html#name\(\)) value of whatever HystrixCommand is being targeted.
 
 If the key was "SubscriberGetAccount" then the property name would be:
 
@@ -70,11 +70,11 @@ If the key was "SubscriberGetAccount" then the property name would be:
 <a name='CommandExecution'/>
 ### Execution
 
-Properties that control how [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run(\)) is executed.
+Properties that control how [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) is executed.
 
 #### execution.isolation.strategy
 
-What isolation strategy [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run(\)) will be executed with.
+What isolation strategy [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) will be executed with.
 
 If THREAD then it will be executed on a separate thread and concurrent requests limited by the number of threads in the thread-pool.
 
@@ -112,7 +112,7 @@ HystrixCommandProperties.Setter()
 
 #### execution.isolation.thread.timeoutInMilliseconds
 
-Time in milliseconds after which the calling thread will timeout and walk away from the [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run(\)) execution and mark the [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) as a TIMEOUT and perform fallback logic.  This applies when ExecutionIsolationStrategy.THREAD is used.
+Time in milliseconds after which the calling thread will timeout and walk away from the [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) execution and mark the [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) as a TIMEOUT and perform fallback logic.  This applies when ExecutionIsolationStrategy.THREAD is used.
 
 _Default Value:_ 1000  
 _Default Property:_ hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds  
@@ -126,7 +126,7 @@ HystrixCommandProperties.Setter()
 
 #### execution.isolation.thread.interruptOnTimeout
 
-Whether the thread executing [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run(\)) should be interrupted when timeout occurs.
+Whether the thread executing [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) should be interrupted when timeout occurs.
 
 _Default Value:_ true  
 _Default Property:_ hystrix.command.default.execution.isolation.thread.interruptOnTimeout  
@@ -140,7 +140,7 @@ HystrixCommandProperties.Setter()
 
 #### execution.isolation.semaphore.maxConcurrentRequests
 
-Max number of requests allowed to a [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run(\)) method when ExecutionIsolationStrategy.SEMAPHORE is used.
+Max number of requests allowed to a [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method when ExecutionIsolationStrategy.SEMAPHORE is used.
 
 If the max concurrent limit is hit then subsequent requests will be rejected.
 
@@ -162,11 +162,11 @@ HystrixCommandProperties.Setter()
 <a name='CommandFallback'/>
 ### Fallback
 
-Properties that control how [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback(\)) is executed. These properties apply to both ExecutionIsolationStrategy.THREAD and ExecutionIsolationStrategy.SEMAPHORE.
+Properties that control how [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) is executed. These properties apply to both ExecutionIsolationStrategy.THREAD and ExecutionIsolationStrategy.SEMAPHORE.
 
 #### fallback.isolation.semaphore.maxConcurrentRequests
 
-Max number of requests allows to a [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback(\)) method from the calling thread.
+Max number of requests allows to a [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) method from the calling thread.
 
 If the max concurrent limit is hit then subsequent requests will be rejected and an exception thrown since no fallback could be retrieved.
 
@@ -184,7 +184,7 @@ HystrixCommandProperties.Setter()
 
 Since: 1.2
 
-Whether [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback(\)) will be attempted when failure or rejection occurs.
+Whether [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) will be attempted when failure or rejection occurs.
 
 _Default Value:_ true  
 _Default Property:_ hystrix.command.default.fallback.enabled   
@@ -425,7 +425,7 @@ HystrixCommandProperties.Setter()
 
 #### requestCache.enabled
 
-Whether [HystrixCommand.getCacheKey()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getCacheKey(\)) should be used with [HystrixRequestCache](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixRequestCache.html) to provide de-duplication functionality via request-scoped caching. 
+Whether [HystrixCommand.getCacheKey()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getCacheKey\(\)) should be used with [HystrixRequestCache](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixRequestCache.html) to provide de-duplication functionality via request-scoped caching. 
 
 _Default Value:_ true  
 _Default Property:_ hystrix.command.default.requestCache.enabled  
@@ -486,7 +486,7 @@ HystrixCollapserProperties.Setter()
 
 #### requestCache.enabled
 
-Whether request caching is enabled for [HystrixCollapser.execute()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html#execute(\)) and [HystrixCollapser.queue()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html#queue(\)) invocations.
+Whether request caching is enabled for [HystrixCollapser.execute()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html#execute\(\)) and [HystrixCollapser.queue()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html#queue\(\)) invocations.
 
 _Default Value:_ true  
 _Default Property:_ hystrix.collapser.default.requestCache.enabled  
