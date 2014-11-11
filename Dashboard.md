@@ -78,7 +78,7 @@ cp turbine-web/build/libs/turbine-web-*.war ./apache-tomcat-7.*/webapps/turbine.
 
 ### Configure Hosts Discovery
 
-Turbine configuration details can be found on its [Configuration Wiki](https://github.com/Netflix/Turbine/wiki/Configuration). It also supports custom plugins for [Instance Discovery](https://github.com/Netflix/Turbine/wiki/Plugging-in-your-own-InstanceDiscovery).
+Turbine configuration details can be found on its [Configuration Wiki](https://github.com/Netflix/Turbine/wiki/Configuration-(1.x)). It also supports custom plugins for [Instance Discovery](https://github.com/Netflix/Turbine/wiki/Plugging-in-your-own-InstanceDiscovery).
 
 To get started as a "Hello World!" example a static configuration file pointing to specific instances can be used such as the following.
 
