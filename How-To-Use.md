@@ -317,7 +317,7 @@ public class CommandUsingRequestCache extends HystrixCommand<Boolean> {
 ```
 [View Source](../blob/master/hystrix-examples/src/main/java/com/netflix/hystrix/examples/basic/CommandUsingRequestCache.java)
 
-Since we are now using something that depends on request context we must initialize the [HystrixRequestContext](http://netflix.github.io/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/concurrent/HystrixRequestContext.html).
+Since we are now using something that depends on request context we must initialize the [HystrixRequestContext](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/strategy/concurrency/HystrixRequestContext.html).
 
 In a simple unit test it is done as follows:
 
