@@ -169,7 +169,7 @@ Using Java 8 lambdas/closures it would look like this:
     })
 ```
 
-More information about Observable can be found at https://github.com/Netflix/RxJava/wiki/How-To-Use
+More information about Observable can be found at https://github.com/ReactiveX/RxJava/wiki/How-To-Use-RxJava
 
 <a name='Fallback'/>
 ## Fallback
