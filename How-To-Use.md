@@ -199,7 +199,7 @@ public class CommandHelloFailure extends HystrixCommand<String> {
 ```
 [View Source](../blob/master/hystrix-examples/src/main/java/com/netflix/hystrix/examples/basic/CommandHelloFailure.java)
 
-This command will fail on every execution and shows how instead of receiving an exception will instead return the value of [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) as shown by this unit test:
+This command's `run` method will fail on every execution. However, the caller will always receive the value returned by the command's [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) method instead of receiving an exception:
 
 ```java
     @Test
