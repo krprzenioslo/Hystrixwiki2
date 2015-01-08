@@ -57,7 +57,7 @@ The [hystrix-metrics-event-stream](https://github.com/Netflix/Hystrix/tree/maste
 
 The Hystrix Dashboard expects data in the format that this module emits.
 
-See its [README](Hystrix/tree/master/hystrix-contrib/hystrix-metrics-event-stream) for installation instructions.
+See its [README](https://github.com/Netflix/Hystrix/blob/master/hystrix-contrib/hystrix-metrics-event-stream/README.md) for installation instructions.
 
 # Installation of Turbine (optional)
 
