@@ -1,30 +1,20 @@
 Hystrix uses [Archaius](https://github.com/Netflix/archaius) for the default implementation of properties for configuration.
 
-The documentation below is for the default [HystrixPropertiesStrategy](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/properties/HystrixPropertiesStrategy.html) implementation that is used unless overridden using a [[plugin|Plugins]].
+The documentation below describes the default [HystrixPropertiesStrategy](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/properties/HystrixPropertiesStrategy.html) implementation that is used unless you override it by using a [[plugin|Plugins]].
 
-Each property has 4 levels of precedence:
+Each property has four levels of precedence:
 
-__1) Global default from code__ 
+__1. Global default from code__ 
 
 This is the default if none of the following 3 are set.
 
-It is shown as "_Default Value_" below.
+The global default is shown as &ldquo;_Default Value_&rdquo; in the examples below.
 
-__2) Dynamic global default property__
+__2. Dynamic global default property__
 
-Default values can be changed globally using properties.
+You can change a global default value by using properties.
 
-The property name is shown as "_Default Property_" below.
-
-Example:
-
-> _Default Property:_ hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds  
-
-__3) Instance default from code__
-
-This allows defining an instance specific default in the code via the [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) constructor.
-
-Sample code is shown as "_How to Set Instance Default_" below.
+The global default property name is shown as &ldquo;_Default Property_&rdquo; in the examples below.
 
 Example:
 
@@ -33,7 +23,7 @@ HystrixCommandProperties.Setter()
    .withExecutionIsolationThreadTimeoutInMilliseconds(int value)
 ```
 
-This would be injected into a constructor of HystrixCommand similar to this:
+You would insert a command of this sort into a `HystrixCommand` constructor in a manner similar to this:
 
 ```java
     public HystrixCommandInstance(int id) {
@@ -44,61 +34,58 @@ This would be injected into a constructor of HystrixCommand similar to this:
     }
 ```
 
+__4. Dynamic instance property__
 
-__4) Dynamic instance property__
+You can set instance-specific values dynamically which override the preceding three levels of defaults.
 
-Instance specific values can be set dynamically and override the preceding 3 levels of defaults.
-
-The property name is shown as "_Instance Property_" below.
+The dynamic instance property name is shown as &ldquo;_Instance Property_&rdquo; in the examples below.
 
 Example:
 
-> _Instance Property:_ hystrix.command.[HystrixCommandKey].execution.isolation.thread.timeoutInMilliseconds  
+> _Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.execution.isolation.thread.timeoutInMilliseconds`
 
-The [HystrixCommandKey](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandKey.html) portion of the property would be replaced with the [HystrixCommandKey.name()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandKey.html#name\(\)) value of whatever HystrixCommand is being targeted.
+Replace the [[HystrixCommandKey|http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandKey.html]] portion of the property with the [[HystrixCommandKey.name()|http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandKey.html#name\(\)]] value of whichever `HystrixCommand` you are targeting.
 
-If the key was "SubscriberGetAccount" then the property name would be:
+For example, if the key was named &ldquo;`SubscriberGetAccount`&rdquo; then the property name would be:
 
-> hystrix.command.SubscriberGetAccount.execution.isolation.thread.timeoutInMilliseconds
-
-
+> `hystrix.command.SubscriberGetAccount.execution.isolation.thread.timeoutInMilliseconds`
 
 ## Command Properties
 
-[Properties](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandProperties.html) for controlling [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) behavior:
+The following [Properties](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandProperties.html) control [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) behavior:
 
 <a name='CommandExecution'/>
 ### Execution
 
-Properties that control how [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) is executed.
+The following Properties control how [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) executes.
 
 #### execution.isolation.strategy
 
-What isolation strategy [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) will be executed with.
+This property indicates which isolation strategy [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) executes with, one of the following two choices:
 
-If THREAD then it will be executed on a separate thread and concurrent requests limited by the number of threads in the thread-pool.
+`THREAD` - it executes on a separate thread and concurrent requests are limited by the number of threads in the thread-pool
 
-If SEMAPHORE then it will be executed on the calling thread and concurrent requests limited by the semaphore count.
+`SEMAPHORE` - it executes on the calling thread and concurrent requests are limited by the semaphore count
 
 ##### Thread or Semaphore
 
-In most cases it is recommended to stick with the default which is to run commands using thread isolation.
+The default, and the recommended setting, is to run commands using thread isolation (`THREAD`).
 
 Commands executed in threads have an extra layer of protection against latencies beyond what network timeouts can offer.
 
-Generally the only time semaphore isolation should be used instead of thread is when the call is so high volume (hundreds per second per instance) that the overhead of separate threads is too high, and this typically only applies to non-network calls.
+Generally the only time you should use semaphore isolation (`SEMAPHORE`) is when the call is so high volume (hundreds per second, per instance) that the overhead of separate threads is too high; this typically only applies to non-network calls.
 
->Netflix API has 100+ commands running in 40+ thread pools and only a handful of commands are not running in a thread - those that fetch metadata from an in-memory cache or that are facades to thread-isolated commands (see [["Primary + Secondary with Fallback" pattern|How-To-Use#wiki-Common-Patterns]] for more information on this).
+>Netflix API has 100+ commands running in 40+ thread pools and only a handful of those commands are not running in a thread - those that fetch metadata from an in-memory cache or that are fa&ccedil;ades to thread-isolated commands (see [[&ldquo;Primary + Secondary with Fallback&rdquo; pattern|https://github.com/Netflix/Hystrix/wiki/How-To-Use#common-patterns]] for more information on this).
 
 <a href="images/isolation-options-1280.png">[[images/isolation-options-640.png]]</a>
 _(Click for larger view)_
 
-See how [[isolation works|How It Works#wiki-Isolation]] for more information about this decision.
+See [[how isolation works|How-it-Works#isolation]] for more information about this decision.
 
-_Default Value:_ THREAD (see ExecutionIsolationStrategy.THREAD)  
-_Possible Values:_ THREAD, SEMAPHORE  
-_Default Property:_ hystrix.command.default.execution.isolation.strategy  
-_Instance Property:_ hystrix.command.[HystrixCommandKey].execution.isolation.strategy  
+_Default Value:_ `THREAD` (see `ExecutionIsolationStrategy.THREAD`)  
+_Possible Values:_ `THREAD`, `SEMAPHORE`
+_Default Property:_ `hystrix.command.default.execution.isolation.strategy`  
+_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.execution.isolation.strategy`  
 _How to Set Instance Default:_  
 
 ```java
@@ -112,11 +99,11 @@ HystrixCommandProperties.Setter()
 
 #### execution.isolation.thread.timeoutInMilliseconds
 
-Time in milliseconds after which the calling thread will timeout and walk away from the [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) execution and mark the [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) as a TIMEOUT and perform fallback logic.  This applies when ExecutionIsolationStrategy.THREAD is used.
+This property sets the time in milliseconds after which the calling thread will timeout, walk away from the [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) execution, mark the [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) as a TIMEOUT, and perform fallback logic. This property only applies when you use  `ExecutionIsolationStrategy.THREAD`.
 
-_Default Value:_ 1000  
-_Default Property:_ hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds  
-_Instance Property:_ hystrix.command.[HystrixCommandKey].execution.isolation.thread.timeoutInMilliseconds  
+_Default Value:_ `1000`  
+_Default Property:_ `hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds`  
+_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.execution.isolation.thread.timeoutInMilliseconds`  
 _How to Set Instance Default:_  
 
 ```java
@@ -126,11 +113,11 @@ HystrixCommandProperties.Setter()
 
 #### execution.isolation.thread.interruptOnTimeout
 
-Whether the thread executing [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) should be interrupted when timeout occurs.
+This property indicates whether the thread executing [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) should be interrupted when a timeout occurs.
 
-_Default Value:_ true  
-_Default Property:_ hystrix.command.default.execution.isolation.thread.interruptOnTimeout  
-_Instance Property:_ hystrix.command.[HystrixCommandKey].execution.isolation.thread.interruptOnTimeout  
+_Default Value:_ `true`  
+_Default Property:_ `hystrix.command.default.execution.isolation.thread.interruptOnTimeout`  
+_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.execution.isolation.thread.interruptOnTimeout`  
 _How to Set Instance Default:_  
 
 ```java
@@ -140,19 +127,19 @@ HystrixCommandProperties.Setter()
 
 #### execution.isolation.semaphore.maxConcurrentRequests
 
-Max number of requests allowed to a [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method when ExecutionIsolationStrategy.SEMAPHORE is used.
+This property sets the maximum number of requests allowed to a [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method when you are using `ExecutionIsolationStrategy.SEMAPHORE`.
 
-If the max concurrent limit is hit then subsequent requests will be rejected.
+If this maximum concurrent limit is hit then subsequent requests will be rejected.
 
-The logic for sizing a semaphore is basically the same as choosing how many threads in a thread-pool but the overhead for a semaphore is far smaller and typically the executions are far faster (sub-millisecond) otherwise threads would be used.
+The logic that you use when you size a semaphore is basically the same as when you choose how many threads to add to a thread-pool, but the overhead for a semaphore is far smaller and typically the executions are far faster (sub-millisecond), otherwise you would be using threads.
 
 > For example, 5000rps on a single instance for in-memory lookups with metrics being gathered has been seen to work with a semaphore of only 2.
 
-The isolation principle is still the same so the semaphore should still be a small percentage of the overall container (ie Tomcat) threadpool, not all of or most of it, otherwise it provides no protection.
+The isolation principle is still the same so the semaphore should still be a small percentage of the overall container (i.e. Tomcat) threadpool, not all of or most of it, otherwise it provides no protection.
 
-_Default Value:_ 10  
-_Default Property:_ hystrix.command.default.execution.isolation.semaphore.maxConcurrentRequests  
-_Instance Property:_ hystrix.command.[HystrixCommandKey].execution.isolation.semaphore.maxConcurrentRequests  
+_Default Value:_ `10`  
+_Default Property:_ `hystrix.command.default.execution.isolation.semaphore.maxConcurrentRequests`  
+_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.execution.isolation.semaphore.maxConcurrentRequests`  
 _How to Set Instance Default:_  
 
 ```java
@@ -162,17 +149,17 @@ HystrixCommandProperties.Setter()
 <a name='CommandFallback'/>
 ### Fallback
 
-Properties that control how [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) is executed. These properties apply to both ExecutionIsolationStrategy.THREAD and ExecutionIsolationStrategy.SEMAPHORE.
+The following properties control how [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) executes. These properties apply to both `ExecutionIsolationStrategy.THREAD` and `ExecutionIsolationStrategy.SEMAPHORE`.
 
 #### fallback.isolation.semaphore.maxConcurrentRequests
 
-Max number of requests allows to a [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) method from the calling thread.
+This property sets the maximum number of requests a [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) method is allowed to make from the calling thread.
 
-If the max concurrent limit is hit then subsequent requests will be rejected and an exception thrown since no fallback could be retrieved.
+If the maximum concurrent limit is hit then subsequent requests will be rejected and an exception thrown since no fallback could be retrieved.
 
-_Default Value:_ 10  
-_Default Property:_ hystrix.command.default.fallback.isolation.semaphore.maxConcurrentRequests  
-_Instance Property:_ hystrix.command.[HystrixCommandKey].fallback.isolation.semaphore.maxConcurrentRequests  
+_Default Value:_ `10`  
+_Default Property:_ `hystrix.command.default.fallback.isolation.semaphore.maxConcurrentRequests`  
+_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.fallback.isolation.semaphore.maxConcurrentRequests`  
 _How to Set Instance Default:_  
 
 ```java
@@ -184,11 +171,11 @@ HystrixCommandProperties.Setter()
 
 Since: 1.2
 
-Whether [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) will be attempted when failure or rejection occurs.
+This property determines whether a call to  [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) will be attempted when failure or rejection occurs.
 
-_Default Value:_ true  
-_Default Property:_ hystrix.command.default.fallback.enabled   
-_Instance Property:_ hystrix.command.[HystrixCommandKey].fallback.enabled  
+_Default Value:_ `true`  
+_Default Property:_ `hystrix.command.default.fallback.enabled`   
+_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.fallback.enabled`  
 _How to Set Instance Default:_  
 
 ```java
@@ -203,11 +190,11 @@ The circuit breaker [properties](http://netflix.github.com/Hystrix/javadoc/index
 
 #### circuitBreaker.enabled
 
-Whether a circuit breaker will be used to track health and short-circuit requests if it trips.
+This property determines whether a circuit breaker will be used to track health and to short-circuit requests if it trips.
 
-_Default Value:_ true   
-_Default Property:_ hystrix.command.default.circuitBreaker.enabled  
-_Instance Property:_ hystrix.command.[HystrixCommandKey].circuitBreaker.enabled  
+_Default Value:_ `true`   
+_Default Property:_ `hystrix.command.default.circuitBreaker.enabled`  
+_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.circuitBreaker.enabled`  
 _How to Set Instance Default:_  
 
 ```java
@@ -217,13 +204,13 @@ HystrixCommandProperties.Setter()
 
 #### circuitBreaker.requestVolumeThreshold
 
-Minimum number of requests in rolling window needed before tripping the circuit will occur.
+This property sets the minimum number of requests in a rolling window that will trip the circuit.
 
-For example, if the value is 20, then if only 19 requests are received in the rolling window (say 10 seconds) the circuit will not trip open even if all 19 failed.
+For example, if the value is 20, then if only 19 requests are received in the rolling window (say a window of 10 seconds) the circuit will not trip open even if all 19 failed.
 
-_Default Value:_ 20  
-_Default Property:_ hystrix.command.default.circuitBreaker.requestVolumeThreshold  
-_Instance Property:_ hystrix.command.[HystrixCommandKey].circuitBreaker.requestVolumeThreshold  
+_Default Value:_ `20`  
+_Default Property:_ `hystrix.command.default.circuitBreaker.requestVolumeThreshold`  
+_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.circuitBreaker.requestVolumeThreshold`  
 _How to Set Instance Default:_  
 
 ```java
@@ -233,11 +220,11 @@ HystrixCommandProperties.Setter()
 
 #### circuitBreaker.sleepWindowInMilliseconds
 
-After tripping the circuit how long to reject requests before allowing attempts again to determine if the circuit should be closed.
+This property sets the amount of time, after tripping the circuit, to reject requests before allowing attempts again to determine if the circuit should again be closed.
 
-_Default Value:_ 5000  
-_Default Property:_ hystrix.command.default.circuitBreaker.sleepWindowInMilliseconds  
-_Instance Property:_ hystrix.command.[HystrixCommandKey].circuitBreaker.sleepWindowInMilliseconds  
+_Default Value:_ `5000`  
+_Default Property:_ `hystrix.command.default.circuitBreaker.sleepWindowInMilliseconds`  
+_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.circuitBreaker.sleepWindowInMilliseconds`  
 _How to Set Instance Default:_  
 
 ```java
@@ -247,11 +234,11 @@ HystrixCommandProperties.Setter()
 
 #### circuitBreaker.errorThresholdPercentage
 
-Error percentage at which the circuit should trip open and start short-circuiting requests to fallback logic.
+This property sets the error percentage at or above which the circuit should trip open and start short-circuiting requests to fallback logic.
 
-_Default Value:_ 50  
-_Default Property:_ hystrix.command.default.circuitBreaker.errorThresholdPercentage  
-_Instance Property:_ hystrix.command.[HystrixCommandKey].circuitBreaker.errorThresholdPercentage  
+_Default Value:_ `50`  
+_Default Property:_ `hystrix.command.default.circuitBreaker.errorThresholdPercentage`  
+_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.circuitBreaker.errorThresholdPercentage`  
 _How to Set Instance Default:_  
 
 ```java
@@ -261,13 +248,13 @@ HystrixCommandProperties.Setter()
 
 #### circuitBreaker.forceOpen
 
-If true the circuit breaker will be forced open (tripped) and reject all requests.
+This property, if `true`, forces the circuit breaker into an open (tripped) state in which it will reject all requests.
 
-This property takes precedence over _circuitBreaker.forceClosed_.
+This property takes precedence over `circuitBreaker.forceClosed`.
 
-_Default Value:_ false  
-_Default Property:_ hystrix.command.default.circuitBreaker.forceOpen  
-_Instance Property:_ hystrix.command.[HystrixCommandKey].circuitBreaker.forceOpen  
+_Default Value:_ `false`  
+_Default Property:_ `hystrix.command.default.circuitBreaker.forceOpen`  
+_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.circuitBreaker.forceOpen`  
 _How to Set Instance Default:_  
 
 ```java
@@ -277,13 +264,13 @@ HystrixCommandProperties.Setter()
 
 #### circuitBreaker.forceClosed
 
-If true the circuit breaker will remain closed and allow requests regardless of the error percentage.
+This property, if `true`, forces the circuit breaker into a closed state in which it will  allow requests regardless of the error percentage.
 
-The _circuitBreaker.forceOpen_ property takes precedence so if it set to true this property does nothing.
+The `circuitBreaker.forceOpen` property takes precedence so if it is set to `true` this property does nothing.
 
-_Default Value:_ false  
-_Default Property:_ hystrix.command.default.circuitBreaker.forceClosed  
-_Instance Property:_ hystrix.command.[HystrixCommandKey].circuitBreaker.forceClosed  
+_Default Value:_ `false`  
+_Default Property:_ `hystrix.command.default.circuitBreaker.forceClosed`  
+_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.circuitBreaker.forceClosed`  
 _How to Set Instance Default:_  
 
 ```java
@@ -294,21 +281,21 @@ HystrixCommandProperties.Setter()
 <a name='CommandMetrics'/>
 ### Metrics
 
-[Properties](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandProperties.html) related to capturing metrics from [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) execution.
+The following [Properties](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandProperties.html) are related to capturing metrics from [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) execution.
 
 #### metrics.rollingStats.timeInMilliseconds
 
-Duration of statistical rolling window in milliseconds. This is how long metrics are kept for the circuit breaker to use and for publishing.
+This property sets the duration of the statistical rolling window, in milliseconds. This is how long Hystrix keeps metrics for the circuit breaker to use and for publishing.
 
-The window is broken into buckets and "roll" by those increments.
+The window is divided into buckets and &ldquo;rolls&rdquo; by these increments.
 
-For example, if set at 10 seconds (10000) with 10 1-second buckets, this following diagram represents how it rolls new buckets on and old ones off:
+For example, if this property is set to 10 seconds (`10000`) with ten 1-second buckets, the following diagram represents how it rolls new buckets on and old ones off:
 
 [[images/rolling-stats-640.png]]
 
-_Default Value:_ 10000  
-_Default Property:_ hystrix.command.default.metrics.rollingStats.timeInMilliseconds  
-_Instance Property:_ hystrix.command.[HystrixCommandKey].metrics.rollingStats.timeInMilliseconds  
+_Default Value:_ `10000`  
+_Default Property:_ `hystrix.command.default.metrics.rollingStats.timeInMilliseconds`  
+_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.metrics.rollingStats.timeInMilliseconds`  
 _How to Set Instance Default:_  
 
 ```java
@@ -318,16 +305,16 @@ HystrixCommandProperties.Setter()
 
 #### metrics.rollingStats.numBuckets
 
-Number of buckets the rolling statistical window is broken into.
+This property sets the number of buckets the rolling statistical window is divided into.
 
-Note: The following must be true "metrics.rollingStats.timeInMilliseconds % metrics.rollingStats.numBuckets == 0" otherwise it will throw an exception.
+**Note:** The following must be true &mdash; &ldquo;`metrics.rollingStats.timeInMilliseconds % metrics.rollingStats.numBuckets == 0`&rdquo; &mdash; otherwise it will throw an exception.
 
 In other words, 10000/10 is okay, so is 10000/20 but 10000/7 is not.
 
-_Default Value:_ 10  
-_Possible Values:_ Any value that metrics.rollingStats.timeInMilliseconds can be evenly divided by. The result however should be buckets measuring 100s or 1000s of milliseconds. Performance at  high volume has not been tested with buckets <100ms.  
-_Default Property:_ hystrix.command.default.metrics.rollingStats.numBuckets  
-_Instance Property:_ hystrix.command.[HystrixCommandKey].metrics.rollingStats.numBuckets  
+_Default Value:_ `10`  
+_Possible Values:_ Any value that `metrics.rollingStats.timeInMilliseconds` can be evenly divided by. The result however should be buckets measuring hundreds or thousands of milliseconds. Performance at high volume has not been tested with buckets &lt;100ms.  
+_Default Property:_ `hystrix.command.default.metrics.rollingStats.numBuckets`  
+_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.metrics.rollingStats.numBuckets`  
 _How to Set Instance Default:_  
 
 ```java
@@ -337,11 +324,11 @@ HystrixCommandProperties.Setter()
 
 #### metrics.rollingPercentile.enabled
 
-Whether execution latencies should be tracked and calculated as percentiles.
+This property indicates whether execution latencies should be tracked and calculated as percentiles.
 
-_Default Value:_ true  
-_Default Property:_ hystrix.command.default.metrics.rollingPercentile.enabled  
-_Instance Property:_ hystrix.command.[HystrixCommandKey].metrics.rollingPercentile.enabled  
+_Default Value:_ `true`  
+_Default Property:_ `hystrix.command.default.metrics.rollingPercentile.enabled`  
+_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.metrics.rollingPercentile.enabled`  
 _How to Set Instance Default:_  
 
 ```java
@@ -351,13 +338,13 @@ HystrixCommandProperties.Setter()
 
 #### metrics.rollingPercentile.timeInMilliseconds
 
-Duration of rolling window in milliseconds that execution times are kept for to allow percentile calculations.
+This property sets the duration of the rolling window in which execution times are kept to allow for percentile calculations, in milliseconds.
 
-The window is broken into buckets and "roll" by those increments. 
+The window is divided into buckets and &ldquo;rolls&rdquo; by those increments. 
 
-_Default Value:_ 60000  
-_Default Property:_ hystrix.command.default.metrics.rollingPercentile.timeInMilliseconds  
-_Instance Property:_ hystrix.command.[HystrixCommandKey].metrics.rollingPercentile.timeInMilliseconds  
+_Default Value:_ `60000`  
+_Default Property:_ `hystrix.command.default.metrics.rollingPercentile.timeInMilliseconds`  
+_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.metrics.rollingPercentile.timeInMilliseconds`  
 _How to Set Instance Default:_  
 
 ```java
@@ -367,16 +354,16 @@ HystrixCommandProperties.Setter()
 
 #### metrics.rollingPercentile.numBuckets
 
-Number of buckets the rollingPercentile window will be broken into.
+This property sets the number of buckets the `rollingPercentile` window will be divided into.
 
-Note: The following must be true "metrics.rollingPercentile.timeInMilliseconds % metrics.rollingPercentile.numBuckets == 0" otherwise it will throw an exception.
+Note: The following must be true &mdash; &ldquo;`metrics.rollingPercentile.timeInMilliseconds % metrics.rollingPercentile.numBuckets == 0`&rdquo; &mdash; otherwise it will throw an exception.
 
 In other words, 60000/6 is okay, so is 60000/60 but 10000/7 is not.
 
-_Default Value:_ 6  
-_Possible Values:_ Any value that metrics.rollingPercentile.timeInMilliseconds can be evenly divided by. The result however should be buckets measuring 1000s of milliseconds. Performance at high volume has not been tested with buckets <1000ms.  
-_Default Property:_ hystrix.command.default.metrics.rollingPercentile.numBuckets  
-_Instance Property:_ hystrix.command.[HystrixCommandKey].metrics.rollingPercentile.numBuckets  
+_Default Value:_ `6`  
+_Possible Values:_ Any value that `metrics.rollingPercentile.timeInMilliseconds` can be evenly divided by. The result however should be buckets measuring thousands of milliseconds. Performance at high volume has not been tested with buckets &lt;1000ms.  
+_Default Property:_ `hystrix.command.default.metrics.rollingPercentile.numBuckets`  
+_Instance Property:_ `hystrix.command.[HystrixCommandKey].metrics.rollingPercentile.numBuckets`  
 _How to Set Instance Default:_  
 
 ```java
@@ -386,15 +373,15 @@ HystrixCommandProperties.Setter()
 
 #### metrics.rollingPercentile.bucketSize
 
-Max number of execution times are kept per bucket. If more executions occur during the time they will loop and start over-writing at the beginning of the bucket. 
+This property sets the maximum number of execution times that are kept per bucket. If more executions occur during the time they will wrap around and start over-writing at the beginning of the bucket. 
 
-For example, if bucket size is set to 100 and represents 10 seconds and 500 executions occur during this time only the last 100 executions will be kept for that 10 second bucket.
+For example, if bucket size is set to 100 and represents a bucket window of 10 seconds, but 500 executions occur during this time, only the last 100 executions will be kept in that 10 second bucket.
 
-Increasing this size increases the amount of memory used to store values and increases time for sorting the lists to do percentile calculations.
+If you increase this size, this also increases the amount of memory needed to store values and increases the time needed for sorting the lists to do percentile calculations.
 
-_Default Value:_ 100   
-_Default Property:_ hystrix.command.default.metrics.rollingPercentile.bucketSize  
-_Instance Property:_ hystrix.command.[HystrixCommandKey].metrics.rollingPercentile.bucketSize  
+_Default Value:_ `100`   
+_Default Property:_ `hystrix.command.default.metrics.rollingPercentile.bucketSize`  
+_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.metrics.rollingPercentile.bucketSize`  
 _How to Set Instance Default:_  
 
 ```java
@@ -404,13 +391,13 @@ HystrixCommandProperties.Setter()
 
 #### metrics.healthSnapshot.intervalInMilliseconds
 
-Time in milliseconds to wait between allowing health snapshots to be taken that calculate success and error percentages and affect circuit breaker status.
+This property sets the time to wait, in milliseconds, between allowing health snapshots to be taken that calculate success and error percentages and affect circuit breaker status.
 
-On high-volume circuits the continual calculation of error percentage can become CPU intensive thus this controls how often it is calculated.
+On high-volume circuits the continual calculation of error percentages can become CPU intensive thus this property allows you to control how often it is calculated.
 
-_Default Value:_ 500  
-_Default Property:_ hystrix.command.default.metrics.healthSnapshot.intervalInMilliseconds  
-_Instance Property:_ hystrix.command.[HystrixCommandKey].metrics.healthSnapshot.intervalInMilliseconds  
+_Default Value:_ `500`  
+_Default Property:_ `hystrix.command.default.metrics.healthSnapshot.intervalInMilliseconds`  
+_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.metrics.healthSnapshot.intervalInMilliseconds`  
 _How to Set Instance Default:_  
 
 ```java
@@ -421,15 +408,15 @@ HystrixCommandProperties.Setter()
 <a name='CommandRequestContext'/>
 ### Request Context
 
-[Properties](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandProperties.html) related to [HystrixRequestContext](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/concurrency/HystrixRequestContext.html) functionality used by [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html).
+These [Properties](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandProperties.html) concern [HystrixRequestContext](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/concurrency/HystrixRequestContext.html) functionality used by [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html).
 
 #### requestCache.enabled
 
-Whether [HystrixCommand.getCacheKey()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getCacheKey\(\)) should be used with [HystrixRequestCache](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixRequestCache.html) to provide de-duplication functionality via request-scoped caching. 
+This property indicates whether [HystrixCommand.getCacheKey()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getCacheKey\(\)) should be used with [HystrixRequestCache](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixRequestCache.html) to provide de-duplication functionality via request-scoped caching. 
 
-_Default Value:_ true  
-_Default Property:_ hystrix.command.default.requestCache.enabled  
-_Instance Property:_ hystrix.command.[HystrixCommandKey].requestCache.enabled  
+_Default Value:_ `true`  
+_Default Property:_ `hystrix.command.default.requestCache.enabled`  
+_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.requestCache.enabled`  
 _How to Set Instance Default:_  
 
 ```java
@@ -439,11 +426,11 @@ HystrixCommandProperties.Setter()
 
 #### requestLog.enabled
 
-Whether [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) execution and events should be logged to [HystrixRequestLog](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixRequestLog.html). 
+This property indicates whether [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) execution and events should be logged to [HystrixRequestLog](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixRequestLog.html). 
 
-_Default Value:_ true  
-_Default Property:_ hystrix.command.default.requestLog.enabled  
-_Instance Property:_ hystrix.command.[HystrixCommandKey].requestLog.enabled  
+_Default Value:_ `true`  
+_Default Property:_ `hystrix.command.default.requestLog.enabled`  
+_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.requestLog.enabled`  
 _How to Set Instance Default:_  
 
 ```java
@@ -454,15 +441,15 @@ HystrixCommandProperties.Setter()
 <a name='Collapser'/>
 ## Collapser Properties
 
-[Properties](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapserProperties.html) for controlling [HystrixCollapser](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html) behavior.
+The following [Properties](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapserProperties.html) control [HystrixCollapser](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html) behavior.
 
 #### maxRequestsInBatch
 
-The maximum number of requests allowed in a batch before triggering a batch execution.
+This property sets the maximum number of requests allowed in a batch before this triggers a batch execution.
 
-_Default Value:_ Integer.MAX_VALUE  
-_Default Property:_ hystrix.collapser.default.maxRequestsInBatch  
-_Instance Property:_ hystrix.collapser.[HystrixCollapserKey].maxRequestsInBatch  
+_Default Value:_ `Integer.MAX_VALUE`  
+_Default Property:_ `hystrix.collapser.default.maxRequestsInBatch`  
+_Instance Property:_ `hystrix.collapser.`[HystrixCollapserKey]`.maxRequestsInBatch`  
 _How to Set Instance Default:_  
 
 ```java
@@ -472,11 +459,11 @@ HystrixCollapserProperties.Setter()
 
 #### timerDelayInMilliseconds
 
-Number of items in batch that will trigger a batch execution before _timerDelayInMilliseconds_ triggers the batch.
+This property sets the number of milliseconds after the creation of the batch that its execution is triggered.
 
-_Default Value:_ 10  
-_Default Property:_ hystrix.collapser.default.timerDelayInMilliseconds  
-_Instance Property:_ hystrix.collapser.[HystrixCollapserKey].timerDelayInMilliseconds  
+_Default Value:_ `10`  
+_Default Property:_ `hystrix.collapser.default.timerDelayInMilliseconds`  
+_Instance Property:_ `hystrix.collapser.`[HystrixCollapserKey]`.timerDelayInMilliseconds`  
 _How to Set Instance Default:_  
 
 ```java
@@ -486,11 +473,11 @@ HystrixCollapserProperties.Setter()
 
 #### requestCache.enabled
 
-Whether request caching is enabled for [HystrixCollapser.execute()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html#execute\(\)) and [HystrixCollapser.queue()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html#queue\(\)) invocations.
+This property indicates whether request caching is enabled for [HystrixCollapser.execute()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html#execute\(\)) and [HystrixCollapser.queue()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html#queue\(\)) invocations.
 
-_Default Value:_ true  
-_Default Property:_ hystrix.collapser.default.requestCache.enabled  
-_Instance Property:_ hystrix.collapser.[HystrixCollapserKey].requestCache.enabled  
+_Default Value:_ `true`  
+_Default Property:_ `hystrix.collapser.default.requestCache.enabled`  
+_Instance Property:_ `hystrix.collapser.`[HystrixCollapserKey]`.requestCache.enabled`  
 _How to Set Instance Default:_  
 
 ```java
@@ -501,42 +488,42 @@ HystrixCollapserProperties.Setter()
 <a name='ThreadPool'/>
 ## ThreadPool Properties
 
-[Properties](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixThreadPoolProperties.html) for controlling thread-pool behavior that [HystrixCommands](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) execute on.
+The following [Properties](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixThreadPoolProperties.html) control the behavior of the thread-pools that [HystrixCommands](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) execute on.
 
 Most of the time the default value of 10 threads will be fine (often it could be made smaller).
 
 To determine if it needs to be larger, a basic formula for calculating the size is:
 
-_requests per second at peak when healthy * 99th percentile latency in seconds + some breathing room_
+_requests per second at peak when healthy &times; 99th percentile latency in seconds + some breathing room_
 
-See the example below to see this formula put into practice.
+See the example below to see how this formula is put into practice.
 
-The general principle is keep the pool as small as possible as it is the primary tool to shed load and prevent resources from becoming blocked if latency occurs.
+The general principle is keep the pool as small as possible, as it is the primary tool to shed load and prevent resources from becoming blocked if latency occurs.
 
-> Netflix API has 30+ of its threadpools set at 10, 2 at 20 and 1 at 25.
+> Netflix API has 30+ of its threadpools set at 10, two at 20, and one at 25.
 
 <a href="images/thread-configuration-1280.png">[[images/thread-configuration-640.png]]</a>
 _(Click for larger view)_
 
-The above diagram shows an example configuration where the dependency has no reason to hit the 99.5th percentile and thus cuts it short at the network timeout layer and immediately retries with the expectation to get median latency most of the time, and accomplish this all within the 300ms thread timeout.
+The above diagram shows an example configuration in which the dependency has no reason to hit the 99.5th percentile and therefore it cuts it short at the network timeout layer and immediately retries with the expectation that it will get median latency most of the time, and will be able to accomplish this all within the 300ms thread timeout.
 
-If the dependency has legitimate reasons to sometimes hit the 99.5th percentile (i.e. cache miss with lazy generation) then the network timeout will be set higher than it, such as at 325ms with 0 or 1 retries and the thread timeout set higher (350ms+).
+If the dependency has legitimate reasons to sometimes hit the 99.5th percentile (such as cache miss with lazy generation) then the network timeout will be set higher than it, such as at 325ms with 0 or 1 retries and the thread timeout set higher (350ms+).
 
-The threadpool is sized at 10 to handle a burst of 99th percentile requests, but when everything is healthy this threadpool will typically only have 1 or 2 threads active at any given time to serve mostly 40ms median calls.
+The thread-pool is sized at 10 to handle a burst of 99th percentile requests, but when everything is healthy this threadpool will typically only have 1 or 2 threads active at any given time to serve mostly 40ms median calls.
 
-When configured correctly a timeout at the HystrixCommand layer should be rare, but the protection is there in case something other than network latency affects the time, or the combination of connect+read+retry+connect+read in a worst case scenario still exceeds the configured overall timeout.
+When you configure it correctly a timeout at the `HystrixCommand` layer should be rare, but the protection is there in case something other than network latency affects the time, or the combination of connect+read+retry+connect+read in a worst case scenario still exceeds the configured overall timeout.
 
 The aggressiveness of configurations and tradeoffs in each direction are different for each dependency.
 
-Configurations can be changed in realtime as needed as performance characteristics change or when problems are found all without risking the taking down of the entire app if problems or misconfigurations occur.
+You can change configurations in real-time as needed as performance characteristics change or when problems are found, all without the risk of taking down the entire app if problems or misconfigurations occur.
 
 #### coreSize
 
-Core thread-pool size. This is the maximum number of concurrent [HystrixCommands](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) that can be executed.
+This property sets the core thread-pool size. This is the maximum number of [HystrixCommands](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) that can execute concurrently.
 
-_Default Value:_ 10  
-_Default Property:_ hystrix.threadpool.default.coreSize  
-_Instance Property:_ hystrix.threadpool.[HystrixThreadPoolKey].coreSize  
+_Default Value:_ `10`  
+_Default Property:_ `hystrix.threadpool.default.coreSize`  
+_Instance Property:_ `hystrix.threadpool.`[HystrixThreadPoolKey]`.coreSize`  
 _How to Set Instance Default:_  
 
 ```java
@@ -546,19 +533,19 @@ HystrixThreadPoolProperties.Setter()
 
 #### maxQueueSize
 
-Max queue size of BlockingQueue implementation.
+This property sets the maximum queue size of the `BlockingQueue` implementation.
 
-If set to -1 then [SynchronousQueue](http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/SynchronousQueue.html) will be used, otherwise a positive value will be used with [LinkedBlockingQueue](http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/LinkedBlockingQueue.html).
+If you set this to `-1` then [SynchronousQueue](http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/SynchronousQueue.html) will be used, otherwise a positive value will be used with [LinkedBlockingQueue](http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/LinkedBlockingQueue.html).
 
-NOTE: This property only applies at initialization time since queue implementations can't be resized or changed without re-initializing the thread executor which is not supported.
+**Note:** This property only applies at initialization time since queue implementations cannot be resized or changed without re-initializing the thread executor which is not supported.
 
-To overcome this and allow dynamic changes in queue see the _queueSizeRejectionThreshold_ property. 
+If you need to overcome this limitation and to allow dynamic changes in the queue, see the `queueSizeRejectionThreshold` property. 
 
-Changing between SynchronousQueue and LinkedBlockingQueue requires a restart.
+To change between `SynchronousQueue` and `LinkedBlockingQueue` requires a restart.
 
-_Default Value:_ -1  
-_Default Property:_ hystrix.threadpool.default.maxQueueSize  
-_Instance Property:_ hystrix.threadpool.[HystrixThreadPoolKey].maxQueueSize  
+_Default Value:_ `-1`  
+_Default Property:_ `hystrix.threadpool.default.maxQueueSize`  
+_Instance Property:_ `hystrix.threadpool.`[HystrixThreadPoolKey]`.maxQueueSize`  
 _How to Set Instance Default:_  
 
 ```java
@@ -568,15 +555,15 @@ HystrixThreadPoolProperties.Setter()
 
 #### queueSizeRejectionThreshold
 
-Queue size rejection threshold is an artificial "max" size at which rejections will occur even if _maxQueueSize_ has not been reached. This is done because the _maxQueueSize_ of a [BlockingQueue](http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/BlockingQueue.html) can not be dynamically changed and we want to support dynamically changing the queue size that affects rejections.
+This property sets the queue size rejection threshold &mdash; an artificial maximum queue size at which rejections will occur even if `maxQueueSize` has not been reached. This property exists because the `maxQueueSize` of a [BlockingQueue](http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/BlockingQueue.html) cannot be dynamically changed and we want to allow you to dynamically change the queue size that affects rejections.
 
-This is used by HystrixCommand when queuing a thread for execution.
+This is used by `HystrixCommand` when queuing a thread for execution.
 
-NOTE: This property is not applicable if maxQueueSize == -1.
+**Note:** This property is not applicable if `maxQueueSize == -1`.
 
-_Default Value:_ 5  
-_Default Property:_ hystrix.threadpool.default.queueSizeRejectionThreshold  
-_Instance Property:_ hystrix.threadpool.[HystrixThreadPoolKey].queueSizeRejectionThreshold  
+_Default Value:_ `5`  
+_Default Property:_ `hystrix.threadpool.default.queueSizeRejectionThreshold`  
+_Instance Property:_ `hystrix.threadpool.`[HystrixThreadPoolKey]`.queueSizeRejectionThreshold`  
 _How to Set Instance Default:_  
 
 ```java
@@ -586,13 +573,13 @@ HystrixThreadPoolProperties.Setter()
 
 #### keepAliveTimeMinutes
 
-Keep-alive time in minutes.
+This property sets the keep-alive time, in minutes.
 
-This is in practice not used since the corePoolSize and maxPoolSize are set to the same value in the default implementation, but if a custom implementation were used via [[plugin|Plugins]] then this would be available to use.
+This is in practice not used since the `corePoolSize` and `maxPoolSize` are set to the same value in the default implementation, but if you were to use a custom implementation via [[plugin|Plugins]] then this would be available for you to use.
 
-_Default Value:_ 1  
-_Default Property:_ hystrix.threadpool.default.keepAliveTimeMinutes  
-_Instance Property:_ hystrix.threadpool.[HystrixThreadPoolKey].keepAliveTimeMinutes  
+_Default Value:_ `1`  
+_Default Property:_ `hystrix.threadpool.default.keepAliveTimeMinutes`  
+_Instance Property:_ `hystrix.threadpool.`[HystrixThreadPoolKey]`.keepAliveTimeMinutes`  
 _How to Set Instance Default:_  
 
 ```java
@@ -602,13 +589,13 @@ HystrixThreadPoolProperties.Setter()
 
 #### metrics.rollingStats.timeInMilliseconds
 
-Duration of statistical rolling window in milliseconds. This is how long metrics are kept for the thread pool.
+This property sets the duration of the statistical rolling window, in milliseconds. This is how long metrics are kept for the thread pool.
 
-The window is broken into buckets and "roll" by those increments.
+The window is divided into buckets and &ldquo;rolls&rdquo; by those increments.
 
-_Default Value:_ 10000  
-_Default Property:_ hystrix.threadpool.default.metrics.rollingStats.timeInMilliseconds  
-_Instance Property:_ hystrix.threadpool.[HystrixThreadPoolKey].metrics.rollingStats.timeInMilliseconds  
+_Default Value:_ `10000`  
+_Default Property:_ `hystrix.threadpool.default.metrics.rollingStats.timeInMilliseconds`  
+_Instance Property:_ `hystrix.threadpool.`[HystrixThreadPoolKey]`.metrics.rollingStats.timeInMilliseconds`  
 _How to Set Instance Default:_  
 
 ```java
@@ -618,16 +605,16 @@ HystrixThreadPoolProperties.Setter()
 
 #### metrics.rollingStats.numBuckets
 
-Number of buckets the rolling statistical window is broken into.
+This property sets the number of buckets the rolling statistical window is divided into.
 
-Note: The following must be true "metrics.rollingStats.timeInMilliseconds % metrics.rollingStats.numBuckets == 0" otherwise it will throw an exception.
+**Note:** The following must be true &mdash; &ldquo;`metrics.rollingStats.timeInMilliseconds % metrics.rollingStats.numBuckets == 0`&rdquo; &mdash; otherwise it will throw an exception.
 
 In other words, 10000/10 is okay, so is 10000/20 but 10000/7 is not.
 
-_Default Value:_ 10  
-_Possible Values:_ Any value that metrics.rollingStats.timeInMilliseconds can be evenly divided by. The result however should be buckets measuring 100s or 1000s of milliseconds. Performance at  high volume has not been tested with buckets <100ms.  
-_Default Property:_ hystrix.threadpool.default.metrics.rollingPercentile.numBuckets  
-_Instance Property:_ hystrix.threadpool.[HystrixThreadPoolProperties].metrics.rollingPercentile.numBuckets  
+_Default Value:_ `10`  
+_Possible Values:_ Any value that `metrics.rollingStats.timeInMilliseconds` can be evenly divided by. The result however should be buckets measuring hundreds or thousands of milliseconds. Performance at high volume has not been tested with buckets &lt;100ms.  
+_Default Property:_ `hystrix.threadpool.default.metrics.rollingPercentile.numBuckets`  
+_Instance Property:_ `hystrix.threadpool.`[HystrixThreadPoolProperties]`.metrics.rollingPercentile.numBuckets`  
 _How to Set Instance Default:_  
 
 ```java
