@@ -90,7 +90,7 @@ __(8c) Fallback Failed__
 
 If [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) fails and throws an exception then the caller is left to deal with it.
 
-It is considered a poor practice to have a fallback implementation that can fail. You shuold implement your fallback such that it is not performing any logic that could fail.
+It is considered a poor practice to have a fallback implementation that can fail. You should implement your fallback such that it is not performing any logic that could fail.
 
 __(9) Return Successful Response__
 
