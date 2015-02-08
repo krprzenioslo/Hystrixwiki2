@@ -86,16 +86,17 @@ String s2 = new CommandHelloWorld("World").queue().get();
 <a name='Reactive-Execution'/>
 ## Reactive Execution
 
-You can also observe the results of a `HystrixCommand` as an `Observable` by using the [observe()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#observe\(\)) method:
+You can also observe the results of a `HystrixCommand` as an `Observable` by using the [observe()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#observe\(\)) method (which returns a &ldquo;hot&rdquo; Observable), or the [toObservable()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#toObservable\(\)) method (which returns a &ldquo;cold&rdquo; Observable):
 
 ```java
-Observable<String> fs = new CommandHelloWorld("World").observe();
+Observable<String> ho = new CommandHelloWorld("World").observe();
+// or Observable<String> co = new CommandHelloWorld("World").toObservable();
 ```
 
 You then retrieve the value of the command by subscribing to the Observable:
 
 ```java
-fs.subscribe(new Action1<String>() {
+ho.subscribe(new Action1<String>() {
 
     @Override
     public void call(String s) {
