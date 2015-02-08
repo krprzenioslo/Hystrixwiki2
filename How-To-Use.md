@@ -1,7 +1,7 @@
 <a name='Hello-World'/>
 ## Hello World!
 
-Following is a basic "Hello World" implementation of a [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html):
+The following is a basic &ldquo;Hello World&rdquo; implementation of a [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html):
 
 ```java
 public class CommandHelloWorld extends HystrixCommand<String> {
@@ -25,7 +25,7 @@ public class CommandHelloWorld extends HystrixCommand<String> {
 <a name='Synchronous-Execution'/>
 ## Synchronous Execution
 
-Hystrix commands can be executed synchronously with the [execute()](<http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#execute\(\)>) method as follows:
+You can execute Hystrix commands synchronously with the [execute()](<http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#execute\(\)>) method, as in the following example:
 
 ```java
 String s = new CommandHelloWorld("World").execute();
@@ -44,13 +44,13 @@ Execution of this form passes the following tests:
 <a name='Asynchronous-Execution'/>
 ## Asynchronous Execution
 
-Asynchronous execution is performed using the [queue()](<http://netflix.github.com/Hystrix/javadoc/com/netflix/hystrix/HystrixCommand.html#queue\(\)>) method:
+You can execute a `HystrixCommand` asynchronously by using the [queue()](<http://netflix.github.com/Hystrix/javadoc/com/netflix/hystrix/HystrixCommand.html#queue\(\)>) method, as in the following example:
 
 ```java
 Future<String> fs = new CommandHelloWorld("World").queue();
 ```
 
-The value can then be retrieved using the Future:
+You can retrieve the result of the command by using the Future:
 
 ```java
 String s = fs.get();
@@ -86,13 +86,13 @@ String s2 = new CommandHelloWorld("World").queue().get();
 <a name='Reactive-Execution'/>
 ## Reactive Execution
 
-Reactive execution (asynchronous callback) is performed using the [observe()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#observe\(\)) method:
+You can also observe the results of a `HystrixCommand` as an `Observable` by using the [observe()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#observe\(\)) method:
 
 ```java
 Observable<String> fs = new CommandHelloWorld("World").observe();
 ```
 
-The value can then be retrieved by subscribing to the Observable:
+You then retrieve the value of the command by subscribing to the Observable:
 
 ```java
 fs.subscribe(new Action1<String>() {
@@ -153,7 +153,7 @@ public void testObservable() throws Exception {
 }
 ```
 
-Using Java 8 lambdas/closures it would look like this:
+Using Java 8 lambdas/closures is more compact; it would look like this:
 
 ```java
     fWorld.subscribe((v) -> {
@@ -169,12 +169,12 @@ Using Java 8 lambdas/closures it would look like this:
     })
 ```
 
-More information about Observable can be found at https://github.com/ReactiveX/RxJava/wiki/How-To-Use-RxJava
+More information about Observable can be found at http://reactivex.io/documentation/observable.html
 
 <a name='Fallback'/>
 ## Fallback
 
-Graceful degradation can be achieved by adding a [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) implementation that executes for all types of failure such as [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) failure, timeout, thread pool or semaphore rejection and circuit-breaker short-circuiting.
+You can support graceful degradation by adding a [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) implementation that executes for all types of failure such as [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) failure, timeout, thread pool or semaphore rejection, and circuit-breaker short-circuiting. The following example includes such a fallback:
 
 ```java
 public class CommandHelloFailure extends HystrixCommand<String> {
@@ -199,7 +199,7 @@ public class CommandHelloFailure extends HystrixCommand<String> {
 ```
 [View Source](../blob/master/hystrix-examples/src/main/java/com/netflix/hystrix/examples/basic/CommandHelloFailure.java)
 
-This command's [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method will fail on every execution. However, the caller will always receive the value returned by the command's [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) method instead of receiving an exception:
+This command&#8217;s [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method will fail on every execution. However, the caller will always receive the value returned by the command&#8217;s [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) method instead of receiving an exception:
 
 ```java
     @Test
@@ -212,14 +212,14 @@ This command's [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/
 <a name='ErrorPropagation'/>
 ## Error Propagation
 
-All exceptions thrown from the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method except for [HystrixBadRequestException](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/exception/HystrixBadRequestException.html) count as failures and trigger [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) and circuit-breaker logic. You can wrap the exception that you would like to throw in ```HystrixBadRequestException``` and retrieve it via ```getCause()```.
+All exceptions thrown from the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method except for [HystrixBadRequestException](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/exception/HystrixBadRequestException.html) count as failures and trigger [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) and circuit-breaker logic.
 
-The [HystrixBadRequestException](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/exception/HystrixBadRequestException.html) is intended for use cases such as reporting illegal arguments or non-system failures that should not count against the failure metrics and should not trigger fallback logic.
+You can wrap the exception that you would like to throw in ```HystrixBadRequestException``` and retrieve it via ```getCause()```. The [HystrixBadRequestException](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/exception/HystrixBadRequestException.html) is intended for use cases such as reporting illegal arguments or non-system failures that should not count against the failure metrics and should not trigger fallback logic.
 
 <a name='CommandName'/>
 ## Command Name
 
-A command name is by default derived from the class name:
+A command name is, by default, derived from the class name:
 
 ```java
 getClass().getSimpleName();
@@ -244,9 +244,9 @@ HystrixCommandKey.Factory.asKey("HelloWorld")
 <a name='CommandGroup'/>
 ## Command Group
 
-The command group key is used for grouping together commands such as for reporting, alerting, dashboards or team/library ownership.
+Hystrix uses the command group key to group together commands such as for reporting, alerting, dashboards, or team/library ownership.
 
-By default this will be used to define the command thread-pool unless a separate one is defined.
+By default Hystrix uses this to define the command thread-pool unless a separate one is defined.
 
 [HystrixCommandGroupKey](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandGroupKey.html) is an interface and can be implemented as an enum or regular class, but it also has the helper [Factory](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandGroupKey.Factory.html) class to construct and intern instances such as:
 
@@ -257,7 +257,7 @@ HystrixCommandGroupKey.Factory.asKey("ExampleGroup")
 <a name='CommandThreadPool'/>
 ## Command Thread-Pool
 
-The thread-pool key is used to represent a [HystrixThreadPool](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixThreadPool.html) for monitoring, metrics publishing, caching and other such uses. A [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) is associated with a single [HystrixThreadPool](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixThreadPool.html) as retrieved by the [HystrixThreadPoolKey](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixThreadPoolKey.html) injected into it or it defaults to one created using the [HystrixCommandGroupKey](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandGroupKey.html) it is created with.
+The thread-pool key represents a [HystrixThreadPool](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixThreadPool.html) for monitoring, metrics publishing, caching, and other such uses. A [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) is associated with a single [HystrixThreadPool](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixThreadPool.html) as retrieved by the [HystrixThreadPoolKey](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixThreadPoolKey.html) injected into it, or it defaults to one created using the [HystrixCommandGroupKey](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandGroupKey.html) it is created with.
 
 To explicitly define the name pass it in via the [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) constructor:
 
@@ -276,23 +276,23 @@ To explicitly define the name pass it in via the [HystrixCommand](http://netflix
 HystrixThreadPoolKey.Factory.asKey("HelloWorldPool")
 ```
 
-The reason why [HystrixThreadPoolKey](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixThreadPoolKey.html) might be used instead of just a different [HystrixCommandGroupKey](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandGroupKey.html) is that multiple commands may belong to the same "group" of ownership or logical functionality, but certain commands may need to be isolated from each other.
+The reason why you might use [HystrixThreadPoolKey](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixThreadPoolKey.html) instead of just a different [HystrixCommandGroupKey](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandGroupKey.html) is that multiple commands may belong to the same &ldquo;group&rdquo; of ownership or logical functionality, but certain commands may need to be isolated from each other.
 
 Here is a simple example:
 
-* 2 commands used to access Video metadata
-* group name is "VideoMetadata"
-* command A goes against Cassandra
-* command B goes against memcached
+* two commands used to access Video metadata
+* group name is &ldquo;VideoMetadata&rdquo;
+* command A goes against resource #1
+* command B goes against resource #2
 
-If command A becomes latent and saturates its thread-pool it should not prevent command B from executing requests since they each hit different backend resources.
+If command A becomes latent and saturates its thread-pool it should not prevent command B from executing requests since they each hit different back-end resources.
 
 Thus, we logically want these commands grouped together but want them isolated differently and would use [HystrixThreadPoolKey](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixThreadPoolKey.html) to give each of them a different thread-pool.
 
 <a name='Caching'/>
 ## Request Cache
 
-Request caching is enabled by implementing the [getCacheKey()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getCacheKey\(\)) method on a [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) object as follows:
+You enable request caching by implementing the [getCacheKey()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getCacheKey\(\)) method on a [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) object as follows:
 
 ```java
 public class CommandUsingRequestCache extends HystrixCommand<Boolean> {
@@ -317,9 +317,9 @@ public class CommandUsingRequestCache extends HystrixCommand<Boolean> {
 ```
 [View Source](../blob/master/hystrix-examples/src/main/java/com/netflix/hystrix/examples/basic/CommandUsingRequestCache.java)
 
-Since we are now using something that depends on request context we must initialize the [HystrixRequestContext](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/strategy/concurrency/HystrixRequestContext.html).
+Since this depends on request context we must initialize the [HystrixRequestContext](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/strategy/concurrency/HystrixRequestContext.html).
 
-In a simple unit test it is done as follows:
+In a simple unit test you could do this as follows:
 
 ```java
         @Test
@@ -336,9 +336,9 @@ In a simple unit test it is done as follows:
         }
 ```
 
-Typically this context will be initialized and shutdown via a ServletFilter that wraps a user request or some other lifecycle hook.
+Typically this context will be initialized and shut down via a `ServletFilter` that wraps a user request or some other lifecycle hook.
 
-Following is an example showing how commands retrieve their values from the cache (and how you can query an object to know this) within a request context:
+The following is an example that shows how commands retrieve their values from the cache (and how you can query an object to know whether its value came from the cache) within a request context:
 
 ```java
         @Test
@@ -378,9 +378,9 @@ Following is an example showing how commands retrieve their values from the cach
 <a name='Collapsing'/>
 ## Request Collapsing
 
-Request collapsing is a feature that enables automated batching of requests into a single [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) instance execution.
+Request collapsing enables multiple requests to be batched into a single [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) instance execution.
 
-It can use batch size and time as the triggers for executing a batch.
+A collapser can use the batch size and the elapsed time since the creation of the batch as triggers for executing a batch.
 
 Following is a simple example of how to implement a [HystrixCollapser](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html):
 
@@ -434,7 +434,7 @@ public class CommandCollapserGetValueForKey extends HystrixCollapser<List<String
 ```
 [View Source](../blob/master/hystrix-examples/src/main/java/com/netflix/hystrix/examples/basic/CommandCollapserGetValueForKey.java)
 
-The following unit test demonstrates how a collapser is used to automatically batch 4 executions of _CommandCollapserGetValueForKey_ into a single [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) execution:
+The following unit test shows how to use a collapser to automatically batch four executions of `CommandCollapserGetValueForKey` into a single [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) execution:
 
 ```java
 @Test
@@ -471,9 +471,9 @@ public void testCollapser() throws Exception {
 <a name='RequestContextSetup'/>
 ## Request Context Setup
 
-To use request scoped features (request caching, request collapsing, request log) the [HystrixRequestContext](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/concurrent/HystrixRequestContext.html) lifecycle must be managed (or an alternative [HystrixConcurrencyStrategy](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/concurrent/HystrixConcurrencyStrategy.html) implemented).
+To use request-scoped features (request caching, request collapsing, request log) you must manage the [HystrixRequestContext](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/concurrent/HystrixRequestContext.html) lifecycle (or implement an alternative [HystrixConcurrencyStrategy](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/concurrent/HystrixConcurrencyStrategy.html)).
 
-This means that the following must be executed before a request:
+This means that you must execute the following before a request:
 
 ```java
 HystrixRequestContext context = HystrixRequestContext.initializeContext();
@@ -485,7 +485,7 @@ and then this at the end of the request:
 context.shutdown();
 ```
 
-In a standard java web application a Servlet Filter can be used to initialize this lifecycle by implementing a filter similar to this:
+In a standard Java web application, you can use a Servlet Filter to initialize this lifecycle by implementing a filter similar to this:
 
 ```java
 public class HystrixRequestContextServletFilter implements Filter {
@@ -502,7 +502,7 @@ public class HystrixRequestContextServletFilter implements Filter {
 }
 ```
 
-The filter would be enabled for all incoming traffic in the web.xml as follows:
+You could enable the filter for all incoming traffic by adding a section to the `web.xml` as follows:
 
 ```
     <filter>
@@ -519,14 +519,12 @@ The filter would be enabled for all incoming traffic in the web.xml as follows:
 <a name='Common-Patterns'/>
 ## Common Patterns
 
-Following are common uses and patterns of use for [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html).
+In the following sections are common uses and patterns of use for [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html).
 
 <a name='Common-Patterns-FailFast'/>
 ### Fail Fast
 
-The most basic execution is one that does a single thing and has no fallback behavior.
-
-It will throw an exception if any type of failure occurs.
+The most basic execution is one that does a single thing and has no fallback behavior. It will throw an exception if any type of failure occurs.
 
 ```java
 public class CommandThatFailsFast extends HystrixCommand<String> {
@@ -571,11 +569,9 @@ public void testFailure() {
 <a name='Common-Patterns-FailSilent'/>
 ### Fail Silent
 
-Failing silently is the equivalent of returning an empty response or removing functionality.
+Failing silently is the equivalent of returning an empty response or removing functionality. It can be done by returning `null`, an empty Map, empty List, or other such responses.
 
-It can be done by returning _null_, an empty Map, empty List or other such responses.
-
-This is done by implementing a [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) method on the [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) instance:
+You do this by implementing a [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) method on the [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) instance:
 
 [[images/fallback-640.png]]
 
@@ -634,9 +630,9 @@ Another implementation that returns an empty list would look like:
 <a name='Common-Patterns-FallbackStatic'/>
 ### Fallback: Static
 
-Some fallbacks can return default values statically embedded in code that doesn't cause the feature or service to be removed as "fail silent" often does, but would cause default behavior to occur.
+Fallbacks can return default values statically embedded in code. This doesn&#8217;t cause the feature or service to be removed in the way that &ldquo;fail silent&rdquo; often does, but instead causes default behavior to occur.
 
-For example, if a command is returning a true/false based on user credentials but the command execution fails it can default to true:
+For example, if a command returns a true/false based on user credentials but the command execution fails, it can default to true:
 
 ```java
     @Override
@@ -648,15 +644,15 @@ For example, if a command is returning a true/false based on user credentials bu
 <a name='Common-Patterns-FallbackStubbed'/>
 ### Fallback: Stubbed
 
-A stubbed fallback is typically used when a compound object containing multiple fields is being returned, some of which can be determined from other request state while other fields are set to default values.
+You typically use a stubbed fallback when your command returns a compound object containing multiple fields, some of which can be determined from other request state while other fields are set to default values.
 
-Examples of places where state can come from to use in these stubbed values are:
+Examples of places where you might find state appropriate to use in these stubbed values are:
 
 * cookies
 * request arguments and headers
 * responses from previous service requests prior to the current one failing
 
-The stubbed values can be retrieved statically from request scope but typically it is recommended they be injected at command instantiation time for use if they are needed such as this following example demonstrates with the _countryCodeFromGeoLookup_ field:
+Your fallback can retrieve stubbed values statically from the request scope, but typically it is recommended that they be injected at command instantiation time for use if they are needed such as this following example demonstrates in the way it treats the `countryCodeFromGeoLookup` field:
 
 ```java
 public class CommandWithStubbedFallback extends HystrixCommand<UserAccount> {
@@ -738,21 +734,21 @@ The following unit test demonstrates its behavior:
 <a name='Common-Patterns-FallbackCacheViaNetwork'/>
 ### Fallback: Cache via Network
 
-Sometimes if a backend service fails a stale version of data can be retrieved from a cache service such as memcached.
+Sometimes if a back-end service fails, a stale version of data can be retrieved from a cache service such as memcached.
 
-Since the fallback will go over the network it is another point of failure so also needs to be wrapped by a [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html).
+Since the fallback will go over the network it is another possible point of failure and so it also needs to be wrapped by a [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html).
 
 [[images/fallback-via-command-640.png]]
 
-Also important is that the fallback command execute on a separate thread-pool, otherwise the main command becoming latent and filling the thread-pool will prevent the fallback from running if the two commands share the same pool.
+It is important to execute the fallback command on a separate thread-pool, otherwise if the main command were to become latent and fill the thread-pool, this would prevent the fallback from running if the two commands share the same pool.
 
-The following code shows how _CommandWithFallbackViaNetwork_ executes _FallbackViaNetwork_ in its [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) method.
+The following code shows how `CommandWithFallbackViaNetwork` executes `FallbackViaNetwork` in its [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) method.
 
-Also note how if the fallback fails, it also has a fallback implemented which then does a "fail silent" approach of returning null.
+Note how if the fallback fails, it _also_ has a fallback which does the &ldquo;fail silent&rdquo; approach of returning `null`.
 
-To configure the _FallbackViaNetwork_ command to run on a different threadpool than the default 'RemoteServiceX' derived from the [HystrixCommandGroupKey](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandGroupKey.html), it injects _HystrixThreadPoolKey.Factory.asKey("RemoteServiceXFallback")_ into the constructor.
+To configure the `FallbackViaNetwork` command to run on a different threadpool than the default `RemoteServiceX` derived from the [HystrixCommandGroupKey](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandGroupKey.html), it injects `HystrixThreadPoolKey.Factory.asKey("RemoteServiceXFallback")` into the constructor.
 
-This means _CommandWithFallbackViaNetwork_ will run on a thread-pool named "RemoteServiceX" and _FallbackViaNetwork_ will run on a thread-pool named "RemoteServiceXFallback".
+This means `CommandWithFallbackViaNetwork` will run on a thread-pool named `RemoteServiceX` and `FallbackViaNetwork` will run on a thread-pool named `RemoteServiceXFallback`.
 
 ```java
 public class CommandWithFallbackViaNetwork extends HystrixCommand<String> {
@@ -808,23 +804,23 @@ public class CommandWithFallbackViaNetwork extends HystrixCommand<String> {
 <a name='Common-Patterns-PrimarySecondaryWithFallback'/>
 ### Primary + Secondary with Fallback
 
-Some systems have dual-mode behavior - primary and secondary, or primary and failover.
+Some systems have dual-mode behavior &mdash; primary and secondary, or primary and failover.
 
-Sometimes the secondary or failover is considered a failure state and intended only for fallback and in those scenarios it would fit in the same pattern as "Cache via Network" shown above.
+Sometimes the secondary or failover is considered a failure state and it is intended only for fallback; in those scenarios it would fit in the same pattern as &ldquo;Cache via Network&rdquo; described above.
 
-However, if flipping to the secondary system is common, such as a normal part of rolling out new code (sometimes part of how stateful systems handle code pushes) then every time the secondary system is used the primary will be in a failure state, tripping circuit breakers and firing alerts.
+However, if flipping to the secondary system is common, such as a normal part of rolling out new code (sometimes this is part of how stateful systems handle code pushes) then every time the secondary system is used the primary will be in a failure state, tripping circuit breakers and firing alerts.
 
-This is not wanted if for no other reason than avoid the "cry wolf" fatigue that will cause the alerts to be ignored when a real issue is occurring.
+This is not the desired behavior, if for no other reason than to avoid the &ldquo;cry wolf&rdquo; fatigue that will cause alerts to be ignored when a real issue is occurring.
 
-Thus the strategy is instead to treat the switching between primary and secondary as normal, healthy patterns and put a facade in front of them.
+So in such a case the strategy is instead to treat the switching between primary and secondary as normal, healthy patterns and put a fa&ccedil;ade in front of them.
 
 [[images/primary-secondary-example-640.png]]
 
-The primary and secondary [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) implementations would both be thread-isolated since they are doing network traffic and business logic. They may each have very different performance characteristics (often the secondary system is a static cache) so another benefit of separate commands for each is they can be correctly tuned.
+The primary and secondary [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) implementations are thread-isolated since they are doing network traffic and business logic. They may each have very different performance characteristics (often the secondary system is a static cache) so another benefit of separate commands for each is that they can be individually tuned.
 
-These two commands are not exposed publicly but instead hidden behind another [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) that is semaphore-isolated which implements the conditional logic as to whether the primary or secondary command should be invoked. If both primary and secondary fail then the facade command would have a fallback.
+You do not expose these two commands publicly but you instead hide them behind another [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) that is semaphore-isolated and that implements the conditional logic as to whether to invoke the primary or secondary command. If both primary and secondary fail then control switches to the fallback of the fa&ccedil;ade command itself.
 
-The facade [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) can use semaphore-isolation since all of the work it is doing is going through 2 other [HystrixCommands](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) that are already thread-isolated. It is unnecessary to have yet another layer of threading as long as the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method of the facade is not doing any other network calls, retry logic or other "error prone" things.
+The fa&ccedil;ade [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) can use semaphore-isolation since all of the work it is doing is going through two other [HystrixCommands](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) that are already thread-isolated. It is unnecessary to have yet another layer of threading as long as the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method of the fa&ccedil;ade is not doing any other network calls, retry logic, or other &ldquo;error prone&rdquo; things.
 
 ```java
 public class CommandFacadeWithPrimarySecondary extends HystrixCommand<String> {
@@ -943,9 +939,9 @@ public class CommandFacadeWithPrimarySecondary extends HystrixCommand<String> {
 <a name='Common-Patterns-Semaphore'/>
 ### Client Doesn't Perform Network Access
 
-When wrapping behavior that does not perform network access where latency is a concern or the threading overhead is unacceptable the [executionIsolationStrategy](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandProperties.html#executionIsolationStrategy\(\)) property can be set to [ExecutionIsolationStrategy.SEMAPHORE](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandProperties.ExecutionIsolationStrategy.html) and semaphore isolation will be used instead.
+When you wrap behavior that does not perform network access, but where latency is a concern or the threading overhead is unacceptable, you can set the [executionIsolationStrategy](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandProperties.html#executionIsolationStrategy\(\)) property to [ExecutionIsolationStrategy.SEMAPHORE](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandProperties.ExecutionIsolationStrategy.html) and Hystrix will use semaphore isolation instead.
 
-The following shows how this property is set as the default for a command via code (it can also be overridden via dynamic properties at runtime).
+The following shows how to set this property as the default for a command via code (you can also override it via dynamic properties at runtime).
 
 ```java
 public class CommandUsingSemaphoreIsolation extends HystrixCommand<String> {
@@ -973,7 +969,7 @@ public class CommandUsingSemaphoreIsolation extends HystrixCommand<String> {
 <a name='Common-Patterns-GetSetGet'/>
 ### Get-Set-Get with Request Cache Invalidation
 
-If a Get-Set-Get use case is needed where the Get receives enough traffic that request caching is desired but sometimes a Set occurs on another command that should invalidate the cache within the same request, this can be performed using [HystrixRequestCache.clear()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixRequestCache.html).
+If you are implementing a Get-Set-Get use case where the Get receives enough traffic that request caching is desired but sometimes a Set occurs on another command that should invalidate the cache within the same request, you can invalidate the cache by calling [HystrixRequestCache.clear()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixRequestCache.html).
 
 Here is an example implementation:
 
@@ -1070,9 +1066,9 @@ The unit test that confirms the behavior is:
 <a name='MigratingLibrary'/>
 ## Migrating a Library to Hystrix
 
-When migrating an existing client library to use Hystrix each of the "service methods" should be replaced with a [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html).
+When you are migrating an existing client library to use Hystrix, you should replace each of the &ldquo;service methods&rdquo with a [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html).
 
-The service methods should then forward calls to the HystrixCommand and not have any business logic in them.
+The service methods should then forward calls to the `HystrixCommand` and not have any additional business logic in them.
 
 Thus, before migration a service library may look like this:
 
