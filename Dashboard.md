@@ -1,21 +1,21 @@
-The Hystrix Dashboard enables realtime monitoring of Hystrix metrics.
+The Hystrix Dashboard allows you to monitor Hystrix metrics in real time.
 
-Use of this dashboard improved Netflix operations by reducing discovery and recovery times during operational events. The duration of most production incidents (already less frequent due to Hystrix) became far shorter, with diminished impact, due to the realtime insights into system behavior.
+When Netflix began to use this dashboard, their operations improved by reducing the time needed to discover and recover from operational events. The duration of most production incidents (already less frequent due to Hystrix) became far shorter, with diminished impact, due to the real-time insights into system behavior provided by the Hystrix Dashboard.
 
 <a href="images/hystrix-dashboard-single-row.png">[[images/hystrix-dashboard-single-row-640.png]]</a>
 _(Click for larger view.)_
 
-When a circuit is failing then it changes colors (gradient from green through yellow, orange and red) such as this: 
+When a &ldquo;circuit&rdquo; is failing it changes colors (on a gradient from green through yellow, orange, and red) like this: 
 
 [[images/dashboard-example-open-circuit-640.png]]
 
-The diagram below shows one "circuit" from the dashboard along with explanations of what all of the data represents.
+The diagram below shows one circuit from the dashboard along with explanations of what all of the data represents.
 
-We've purposefully tried to pack a lot of information into the dashboard so that engineers can quickly consume and correlate data.
+Hystrix packs a lot of information into the dashboard so that engineers can quickly consume and correlate data.
 
 [[images/dashboard-annoted-circuit-640.png]]
 
-It allows monitoring a single server or a cluster of servers aggregated using <a href="https://github.com/Netflix/Turbine">Turbine</a> with low latency (typically around 1 or 2 seconds when aggregating a cluster, subsecond with a single server).
+The Hystrix Dashboard allows you to monitor a single server or a cluster of servers aggregated using <a href="https://github.com/Netflix/Turbine">Turbine</a>, with low latency (typically around 1 or 2 seconds when aggregating a cluster, subsecond with a single server).
 
 [[images/dashboard-direct-vs-turbine-640.png]]
 
@@ -26,6 +26,8 @@ _(Click for larger view.)_
 
 # Run via Gradle
 
+Here is how to run the dashboard by issuing a Gradle command:
+
 ```
 $ git clone git@github.com:Netflix/Hystrix.git
 $ cd Hystrix/hystrix-dashboard
@@ -33,18 +35,20 @@ $ ../gradlew jettyRun
 > Building > :hystrix-dashboard:jettyRun > Running at http://localhost:7979/hystrix-dashboard
 ```
 
-Once running, open <a href="http://localhost:7979/hystrix-dashboard">http://localhost:7979/hystrix-dashboard</a>.
+Once you see that the dashboard has reached the &ldquo;Running&rdquo; state, open <a href="http://localhost:7979/hystrix-dashboard">http://localhost:7979/hystrix-dashboard</a>.
 
-# Installation of Dashboard
+# Installing the Dashboard
 
 ### Download
 
-1) Download <a href="http://search.maven.org/#browse%7C1045347652">hystrix-dashboard-#.#.#.war</a>  
-2) Install in servlet container such as <a href="http://tomcat.apache.org/download-70.cgi">Apache Tomcat 7</a>
+1. Download <a href="http://search.maven.org/#browse%7C1045347652">hystrix-dashboard-#.#.#.war</a>  
+1. Install it in a servlet container such as <a href="http://tomcat.apache.org/download-70.cgi">Apache Tomcat 7</a>
 
-Usage examples below will assume installation to /webapps/hystrix-dashboard.war
+The usage examples below will assume that you install it into `/webapps/hystrix-dashboard.war`
 
 ### Build
+
+To build the Hystrix Dashboard with Gradle and then install it into the servlet container, issue the following commands:
 
 ```
 ./gradlew build
@@ -63,12 +67,14 @@ See its [README](https://github.com/Netflix/Hystrix/blob/master/hystrix-contrib/
 
 ### Download
 
-1) Download <a href="https://github.com/downloads/Netflix/Turbine/turbine-web-1.0.0.war">turbine-web-1.0.0.war</a>  
-2) Install in servlet container such as <a href="http://tomcat.apache.org/download-70.cgi">Apache Tomcat 7</a>
+1. Download <a href="https://github.com/downloads/Netflix/Turbine/turbine-web-1.0.0.war">turbine-web-1.0.0.war</a>  
+1. Install in servlet container such as <a href="http://tomcat.apache.org/download-70.cgi">Apache Tomcat 7</a>
 
-Usage examples below will assume installation to /webapps/turbine.war
+The usage examples below will assume that you install it to `/webapps/turbine.war`
 
 ### Build
+
+To build Turbine with Gradle and then install it into the servlet container, issue the following commands:
 
 ```
 git clone git://github.com/Netflix/Turbine.git
@@ -78,37 +84,35 @@ cp turbine-web/build/libs/turbine-web-*.war ./apache-tomcat-7.*/webapps/turbine.
 
 ### Configure Hosts Discovery
 
-Turbine configuration details can be found on its [Configuration Wiki](https://github.com/Netflix/Turbine/wiki/Configuration-(1.x)). It also supports custom plugins for [Instance Discovery](https://github.com/Netflix/Turbine/wiki/Plugging-in-your-own-InstanceDiscovery-(1.x)).
+You can find Turbine configuration details on its [Configuration Wiki](https://github.com/Netflix/Turbine/wiki/Configuration-(1.x)). It also supports custom plugins for [Instance Discovery](https://github.com/Netflix/Turbine/wiki/Plugging-in-your-own-InstanceDiscovery-(1.x)).
 
-To get started as a "Hello World!" example a static configuration file pointing to specific instances can be used such as the following.
+To get started as a &ldquo;Hello World!&rdquo; example, you can use a static configuration file pointing to specific instances, such as the following.
 
-Create a file config.properties that lists hosts to aggregate.
-
-This example includes 2 EC2 instances:
+Create a file, `config.properties`, that lists hosts to aggregate. This example includes two EC2 instances:
 
 ```
 turbine.ConfigPropertyBasedDiscovery.default.instances=ec2-72-44-38-203.compute-1.amazonaws.com,ec2-23-20-84-255.compute-1.amazonaws.com
 turbine.instanceUrlSuffix=:8080/hystrix.stream
 ```
 
-The 'turbine.instanceUrlSuffix' property is what will be appended to each hostname to create a URL that will result in the [hystrix-metrics-event-stream](Hystrix/tree/master/hystrix-contrib/hystrix-metrics-event-stream).
+The value of the `turbine.instanceUrlSuffix` property will be appended to each hostname to create a URL that will result in the [hystrix-metrics-event-stream](Hystrix/tree/master/hystrix-contrib/hystrix-metrics-event-stream).
 
-The config.properties file can be:
+The `config.properties` file can be:
 
-- placed on the classpath such as in /WEB-INF/classes
+- placed on the classpath such as in `/WEB-INF/classes`
 - specified using a [JVM property](https://github.com/Netflix/archaius/wiki/Getting-Started) such as 
 
 ```
 -Darchaius.configurationSource.additionalUrls=file:///path/to/config.properties
 ```
 
-You can test that Turbine is correctly accessing instances and streaming metrics like this:
+You can test that Turbine is correctly accessing instances and streaming metrics by issuing a command like this:
 
 ```
 curl http://hostname:port/turbine/turbine.stream
 ```
 
-If successful you should see something like this:
+If that command is successful you should see something like this:
 
 ```
 $ curl http://ec2-23-20-84-255.compute-1.amazonaws.com:8080/turbine/turbine.stream
@@ -128,27 +132,25 @@ To monitor a single server you would use a URL such as:
 http://hostname:port/application/hystrix.stream
 ```
 
-To monitor an aggregate stream via Turbine it would be like:
+To monitor an aggregate stream via Turbine the URL would be like this:
 
 ```
 http://hostname:port/turbine/turbine.stream
 ```
 
-The landing page does nothing more than generate the /monitor/monitor.html URLs that can then be bookmarked.
+The landing page does nothing more than generate the `/monitor/monitor.html` URLs that you can then bookmark.
 
-The 'delay' parameter controls the latency that is injected between polling cycles on the server to slow down the stream. This can be used to reduce the network and CPU usage on the client.
+The `delay` parameter controls the latency that is injected between polling cycles on the server to slow down the stream. You can use this to reduce the network and CPU usage on the client.
 
-The 'title' parameter is used by the monitor.html page to display a nice title instead of the raw URL.
+The `title` parameter is used by the `monitor.html` page to display a nice title in the browser instead of the raw URL.
 
 # Customizing and Embedding
 
-We expect that many will want to embed the dashboard functionality into their own existing dashboards.
+Because you may want to embed the dashboard functionality into your own existing dashboard, the app is very simple &mdash; primary just HTML, Javascript, and CSS, in modules that can be dropped into any app.
 
-To accommodate this we have kept the app very simple - primary just HTML, Javascript and CSS in modules that can be dropped into any app.
+The only portion that is server-side is a [proxy servlet](https://github.com/Netflix/Hystrix/blob/master/hystrix-dashboard/src/main/java/com/netflix/hystrix/dashboard/stream/ProxyStreamServlet.java) that proxies streams between the browser and back end, since EventSource CORS support is still [a work in progress](https://bugs.webkit.org/show_bug.cgi?id=61862).
 
-The only portion that is server side is a [proxy servlet](https://github.com/Netflix/Hystrix/blob/master/hystrix-dashboard/src/main/java/com/netflix/hystrix/dashboard/stream/ProxyStreamServlet.java) used to proxy streams between the browser and backend since EventSource CORS support is still [a work in progress](https://bugs.webkit.org/show_bug.cgi?id=61862).
-
-Displaying HystrixCommand monitors on an existing page is as simple as importing the javascript module, instantiating it with a DIV to use and giving it an EventStream:
+To display `HystrixCommand` monitors on an existing page, simply import the javascript module, instantiate it with a `div`, and give it an `EventStream`, like this:
 
 ```javascript
 var hystrixMonitor = new HystrixCommandMonitor('dependencies', {includeDetailIcon:false});
