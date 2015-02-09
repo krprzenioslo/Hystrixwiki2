@@ -25,8 +25,8 @@ K value = command.execute();
 
 ```java
 Future<K> value = command.queue();
-Observable<K> ohValue = command.observe(); // hot Observable, not shown in diagram above
-Observable<K> ocValue = command.toObservable(); // cold Observable, not shown in diagram above
+Observable<K> ohValue = command.observe(); // hot Observable
+Observable<K> ocValue = command.toObservable(); // cold Observable
 ```
 
 The synchronous call [execute()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#execute\(\)) invokes [queue().get()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#queue\(\)) unless the command is specified to not run in a thread.
