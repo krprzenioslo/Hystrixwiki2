@@ -86,7 +86,9 @@ String s2 = new CommandHelloWorld("World").queue().get();
 <a name='Reactive-Execution'/>
 ## Reactive Execution
 
-You can also observe the results of a `HystrixCommand` as an `Observable` by using the [observe()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#observe\(\)) method (which returns a &ldquo;hot&rdquo; Observable that executes the command immediately, though because the Observable is filtered through a `ReplaySubject` you are not in danger of losing any items that it emits before you have a chance to subscribe), or the [toObservable()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#toObservable\(\)) method (which returns a &ldquo;cold&rdquo; Observable that won&#8217;t execute the command and begin emitting its results until you subscribe to the Observable):
+You can also observe the results of a `HystrixCommand` as an `Observable` by using one of the following methods:
+* [observe()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#observe\(\)) &mdash; returns a &ldquo;hot&rdquo; Observable that executes the command immediately, though because the Observable is filtered through a `ReplaySubject` you are not in danger of losing any items that it emits before you have a chance to subscribe
+* [toObservable()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#toObservable\(\)) &mdash; returns a &ldquo;cold&rdquo; Observable that won&#8217;t execute the command and begin emitting its results until you subscribe to the Observable
 
 ```java
 Observable<String> ho = new CommandHelloWorld("World").observe();
