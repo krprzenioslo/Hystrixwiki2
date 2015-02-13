@@ -1,3 +1,28 @@
+## Contents
+
+1. <a href="#Hello-World">&ldquo;Hello World!&rdquo;</a>
+1. <a href="#Synchronous-Execution">Synchronous Execution</a>
+1. <a href="#Asynchronous-Execution">Asynchronous Execution</a>
+1. <a href="#Reactive-Execution">Reactive Execution</a>
+1. <a href="#Fallback">Fallback</a>
+1. <a href="#ErrorPropagation">Error Propagation</a>
+1. <a href="#CommandName">Command Name</a>
+1. <a href="#CommandGroup">Command Group</a>
+1. <a href="#CommandThreadPool">Command Thread-Pool</a>
+1. <a href="#Caching">Request Cache</a>
+1. <a href="#Collapsing">Request Collapsing</a>
+1. <a href="#RequestContextSetup">Request Context Setup</a>
+1. <a href="#Common-Patterns">Common Patterns:</a>
+  1. <a href="#Common-Patterns-FailFast">Fail Fast</a>
+  1. <a href="#Common-Patterns-FailSilent">Fail Silent</a>
+  1. <a href="#Common-Patterns-FallbackStatic">Fallback: Static</a>
+  1. <a href="#Common-Patterns-FallbackStubbed">Fallback: Stubbed</a>
+  1. <a href="#Common-Patterns-FallbackCacheViaNetwork">Fallback: Cache via Network</a>
+  1. <a href="#Common-Patterns-PrimarySecondaryWithFallback">Primary + Secondary with Fallback</a>
+  1. <a href="#Common-Patterns-Sempahore">Client Doesn&#8217;t Perform Network Access</a>
+  1. <a href="#Common-Patterns-GetSetGet">Get-Set-Get with Request Cache Invalidation</a>
+1. <a href="#MigratingLibrary">Migrating a Library to Hystrix</a>
+
 <a name='Hello-World'/>
 ## Hello World!
 
