@@ -1,3 +1,12 @@
+## Contents
+
+1. <a href="#Flow">Flow Chart</a>
+1. <a href="#CircuitBreaker">Circuit Breaker</a>
+1. <a href="#Isolation">Isolation</a>
+1. <a href="#Threads">Threads & Thread Pools</a>
+1. <a href="#RequestCollapsing">Request Collapsing</a>
+1. <a href="#RequestCaching">Request Caching</a>
+
 <a name='Flow'/>
 ## Flow Chart
 
@@ -112,6 +121,7 @@ Hystrix employs the bulkhead pattern to isolate dependencies from each other and
 
 [[images/soa-5-isolation-focused-640.png]]
 
+<a name='Threads'/>
 ### Threads & Thread Pools
 
 Clients (libraries, network calls, etc) execute on separate threads. This isolates them from the calling thread (Tomcat thread pool) so that the caller may &ldquo;walk away&rdquo; from a dependency call that is taking too long.
