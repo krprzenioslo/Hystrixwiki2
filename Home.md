@@ -3,8 +3,8 @@
 1. <a href="#what">What Is Hystrix?</a>
 1. <a href="#purpose">What Is Hystrix For?</a>
 1. <a href="#problem">What Problem Does Hystrix Solve?</a>
-1. <a name="#principles">What Design Principles Underlie Hystrix?</a>
-1. <a name="#how">How Does Hystrix Accomplish Its Goals?</a>
+1. <a href="#principles">What Design Principles Underlie Hystrix?</a>
+1. <a href="#how">How Does Hystrix Accomplish Its Goals?</a>
 
 <a name="what" />
 ## What Is Hystrix?
