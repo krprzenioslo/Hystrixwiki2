@@ -6,7 +6,7 @@
 1. <a name="#principles">What Design Principles Underlie Hystrix?</a>
 1. <a name="#how">How Does Hystrix Accomplish Its Goals?</a>
 
-<a id="what" />
+<a name="what" />
 ## What Is Hystrix?
 
 In a distributed environment, inevitably some of the many service dependencies will fail.  Hystrix is a library that helps you control the interactions between these distributed services by adding latency tolerance and fault tolerance logic.  Hystrix does this by isolating points of access between the services, stopping cascading failures across them, and providing fallback options, all of which improve your system&#8217;s overall resiliency.
@@ -23,7 +23,7 @@ The following links provide more context around Hystrix and the challenges that 
 * [&ldquo;Application Resilience in a Service-oriented Architecture&rdquo;](http://programming.oreilly.com/2013/06/application-resilience-in-a-service-oriented-architecture.html)
 * [&ldquo;Application Resilience Engineering & Operations at Netflix&rdquo;] (https://speakerdeck.com/benjchristensen/application-resilience-engineering-and-operations-at-netflix)
 
-<a id="purpose" />
+<a name="purpose" />
 ## What Is Hystrix For?
 
 Hystrix is designed to do the following:
@@ -33,7 +33,7 @@ Hystrix is designed to do the following:
 * Fallback and gracefully degrade when possible.
 * Enable near real-time monitoring, alerting, and operational control.
 
-<a id="problem" />
+<a name="problem" />
 ## What Problem Does Hystrix Solve?
 
 Applications in complex distributed architectures have dozens of dependencies, each of which will inevitably fail at some point.  If the host application is not isolated from these external failures, it risks being taken down with them.
@@ -72,7 +72,7 @@ Network connections fail or degrade. Services and servers fail or become slow. N
 
 All of these represent failure and latency that needs to be isolated and managed so that a single failing dependency can&#8217;t take down an entire application or system.
 
-<a id="principles" />
+<a name="principles" />
 ## What Design Principles Underlie Hystrix?
 
 Hystrix works by:
@@ -84,7 +84,7 @@ Hystrix works by:
 * Optimizing for time-to-recovery by means of low latency propagation of configuration changes and support for dynamic property changes in most aspects of Hystrix, which allows you to make real-time operational modifications with low latency feedback loops.
 * Protecting against failures in the entire dependency client execution, not just in the network traffic.
 
-<a id="how" />
+<a name="how" />
 ## How Does Hystrix Accomplish Its Goals?
 
 Hystrix does this by:
