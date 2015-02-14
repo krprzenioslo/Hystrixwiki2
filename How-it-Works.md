@@ -120,7 +120,7 @@ The precise way that the circuit opening and closing occurs is as follows:
 1. And assuming that the error percentage exceeds the threshold error percentage  (`HystrixCommandProperties.circuitBreakerErrorThresholdPercentage()`)...
 1. Then the circuit-breaker transitions from `CLOSED` to `OPEN`.
 1. While it is open, it short-circuits all requests made against that circuit-breaker.
-1. After some amount of time (`HystrixCommandProperties.circuitBreakerSleepWindowInMilliseconds()`), the next request is let through. If the request fails, the circuit-breaker stays `OPEN` for the duration of the sleep window. If the request succeeds, the circuit-breaker transitions to `CLOSED` and the logic in **1.** takes over again.
+1. After some amount of time (`HystrixCommandProperties.circuitBreakerSleepWindowInMilliseconds()`), the next single request is let through (this is the `HALF-OPEN` state). If the request fails, the circuit-breaker returns to the `OPEN` state for the duration of the sleep window. If the request succeeds, the circuit-breaker transitions to `CLOSED` and the logic in **1.** takes over again.
 
 <a name='Isolation'/>
 ## Isolation
