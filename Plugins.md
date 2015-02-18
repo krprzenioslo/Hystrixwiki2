@@ -63,21 +63,25 @@ You can implement the [HystrixConcurrencyStrategy](http://netflix.github.com/Hys
 
 A [HystrixCommandExecutionHook](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/executionhook/HystrixCommandExecutionHook.html) implementation gives you access to the execution lifecycle of a `HystrixInvokable` (`HystrixCommand` or `HystrixObservableCommand`) so that you can inject behavior, logging, override responses, alter thread state, etc. You do this by overriding one or more of the following hooks:
 
-* **`onStart`** — Hystrix calls this before the `HystrixInvokable` begins executing
-* **`onEmit`** — Hystrix calls this whenever the `HystrixInvokable` emits a value
-* **`onError`** — Hystrix calls this if the `HystrixInvokable` fails with an exception
-* **`onSuccess`** — Hystrix calls this if the `HystrixInvokable` completes successfully
-* **`onThreadStart`** — Hystrix calls this at the start of thread execution if the `HystrixInvokable` is a `HystrixCommand` executed using the `THREAD` `ExecutionIsolationStrategy`
-* **`onThreadComplete`** — Hystrix calls this at the completion of thread execution if the `HystrixInvokable` is a `HystrixCommand` executed using the `THREAD` `ExecutionIsolationStrategy`
-* **`onExecutionStart`** — Hystrix calls this when the user-defined execution method in the `HystrixInvokable` begins
-* **`onExecutionEmit`** — Hystrix calls this whenever the user-defined execution method in the `HystrixInvokable` emits a value
-* **`onExecutionError`** — Hystrix calls this when the user-defined execution method in the `HystrixInvokable` fails with an exception
-* **`onExecutionSuccess`** — Hystrix calls this when the user-defined execution method in the `HystrixInvokable` completes successfully
-* **`onFallbackStart`** — Hystrix calls this if the fallback method in the `HystrixInvokable` starts
-* **`onFallbackEmit`** — Hystrix calls this whenever the fallback method in the `HystrixInvokable` emits a value
-* **`onFallbackError`** — Hystrix calls this if the fallback method in the `HystrixInvokable` fails with an exception
-* **`onFallbackSuccess`** — Hystrix calls this if the fallback method in the `HystrixInvokable` completes successfully
-* **`onCacheHit`** — Hystrix calls this if the response to the `HystrixInvokable` is found in the `HystrixRequestCache`
+<table><thead>
+ <tr><th><code>HystrixCommandExecutionHook</code> method</th><th>when Hystrix calls the method</th></tr>
+</thead><tbody>
+ <tr><td><b><code>onStart</code></b></td><td>before the <code>HystrixInvokable</code> begins executing</td></tr>
+ <tr><td><b><code>onEmit</code></b></td><td>whenever the <code>HystrixInvokable</code> emits a value</td></tr>
+ <tr><td><b><code>onError</code></b></td><td>if the <code>HystrixInvokable</code> fails with an exception</td></tr>
+ <tr><td><b><code>onSuccess</code></b></td><td>if the <code>HystrixInvokable</code> completes successfully</td></tr>
+ <tr><td><b><code>onThreadStart</code></b></td><td>at the start of thread execution if the <code>HystrixInvokable</code> is a <code>HystrixCommand</code> executed using the <code>THREAD</code> <code>ExecutionIsolationStrategy</code></td></tr>
+ <tr><td><b><code>onThreadComplete</code></b></td><td>at the completion of thread execution if the <code>HystrixInvokable</code> is a <code>HystrixCommand</code> executed using the <code>THREAD</code> <code>ExecutionIsolationStrategy</code></td></tr>
+ <tr><td><b><code>onExecutionStart</code></b></td><td>when the user-defined execution method in the <code>HystrixInvokable</code> begins</td></tr>
+ <tr><td><b><code>onExecutionEmit</code></b></td><td>whenever the user-defined execution method in the <code>HystrixInvokable</code> emits a value</td></tr>
+ <tr><td><b><code>onExecutionError</code></b></td><td>when the user-defined execution method in the <code>HystrixInvokable</code> fails with an exception</td></tr>
+ <tr><td><b><code>onExecutionSuccess</code></b></td><td>when the user-defined execution method in the <code>HystrixInvokable</code> completes successfully</td></tr>
+ <tr><td><b><code>onFallbackStart</code></b></td><td>if the fallback method in the <code>HystrixInvokable</code> starts</td></tr>
+ <tr><td><b><code>onFallbackEmit</code></b></td><td>whenever the fallback method in the <code>HystrixInvokable</code> emits a value</td></tr>
+ <tr><td><b><code>onFallbackError</code></b></td><td>if the fallback method in the <code>HystrixInvokable</code> fails with an exception</td></tr>
+ <tr><td><b><code>onFallbackSuccess</code></b></td><td>if the fallback method in the <code>HystrixInvokable</code> completes successfully</td></tr>
+ <tr><td><b><code>onCacheHit</code></b></td><td>if the response to the <code>HystrixInvokable</code> is found in the <code>HystrixRequestCache</code></td></tr>
+</tbody></table>
 
 <a name="howtouse" />
 ## How to Use
