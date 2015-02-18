@@ -10,7 +10,6 @@
 1. <a href="#howtouse">How to Use</a>
 1. <a href="#abstractvsinterface">Abstract vs. Interface</a>
 
-
 <a name="plugins" />
 ## Plugins
 
@@ -62,7 +61,23 @@ You can implement the [HystrixConcurrencyStrategy](http://netflix.github.com/Hys
 <a name="commandexecutionhook" />
 ### Command Execution Hook
 
-A [HystrixCommandExecutionHook](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/executionhook/HystrixCommandExecutionHook.html) implementation gets access to the execution lifecycle of a [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) in order to inject behavior, logging, override responses, alter thread state, etc.
+A [HystrixCommandExecutionHook](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/executionhook/HystrixCommandExecutionHook.html) implementation gives you access to the execution lifecycle of a `HystrixInvokable` (`HystrixCommand` or `HystrixObservableCommand`) so that you can inject behavior, logging, override responses, alter thread state, etc. You do this by overriding one or more of the following hooks:
+
+* **`onStart`** — Hystrix calls this before the `HystrixInvokable` begins executing
+* **`onEmit`** — Hystrix calls this whenever the `HystrixInvokable` emits a value
+* **`onError`** — Hystrix calls this if the `HystrixInvokable` fails with an exception
+* **`onSuccess`** — Hystrix calls this if the `HystrixInvokable` completes successfully
+* **`onThreadStart`** — Hystrix calls this at the start of thread execution if the `HystrixInvokable` is a `HystrixCommand` executed using the `THREAD` `ExecutionIsolationStrategy`
+* **`onThreadComplete`** — Hystrix calls this at the completion of thread execution if the `HystrixInvokable` is a `HystrixCommand` executed using the `THREAD` `ExecutionIsolationStrategy`
+* **`onExecutionStart`** — Hystrix calls this when the user-defined execution method in the `HystrixInvokable` begins
+* **`onExecutionEmit`** — Hystrix calls this whenever the user-defined execution method in the `HystrixInvokable` emits a value
+* **`onExecutionError`** — Hystrix calls this when the user-defined execution method in the `HystrixInvokable` fails with an exception
+* **`onExecutionSuccess`** — Hystrix calls this when the user-defined execution method in the `HystrixInvokable` completes successfully
+* **`onFallbackStart`** — Hystrix calls this if the fallback method in the `HystrixInvokable` starts
+* **`onFallbackEmit`** — Hystrix calls this whenever the fallback method in the `HystrixInvokable` emits a value
+* **`onFallbackError`** — Hystrix calls this if the fallback method in the `HystrixInvokable` fails with an exception
+* **`onFallbackSuccess`** — Hystrix calls this if the fallback method in the `HystrixInvokable` completes successfully
+* **`onCacheHit`** — Hystrix calls this if the response to the `HystrixInvokable` is found in the `HystrixRequestCache`
 
 <a name="howtouse" />
 ## How to Use
