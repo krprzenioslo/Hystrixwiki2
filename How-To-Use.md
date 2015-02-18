@@ -4,6 +4,7 @@
 1. <a href="#Synchronous-Execution">Synchronous Execution</a>
 1. <a href="#Asynchronous-Execution">Asynchronous Execution</a>
 1. <a href="#Reactive-Execution">Reactive Execution</a>
+1. <a href="#Reactive-Commands">Reactive Commands</a>
 1. <a href="#Fallback">Fallback</a>
 1. <a href="#ErrorPropagation">Error Propagation</a>
 1. <a href="#CommandName">Command Name</a>
@@ -198,6 +199,13 @@ Using Java 8 lambdas/closures is more compact; it would look like this:
 ```
 
 More information about Observable can be found at http://reactivex.io/documentation/observable.html
+
+<a name='Reactive-Commands' />
+## Reactive Commands
+
+Rather than converting a `HystrixCommand` into an `Observable` using the methods described above, you can also create a [`HystrixObservableCommand`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixObservableCommand.java) that is a specialized version of `HystrixCommand` meant to wrap Observables.
+
+In such a case, instead of overriding the `run` method with your command logic (as you would with an ordinary `HystrixCommand`), you would override the `construct` method so that it would return the Observable you intend to wrap. You may also, optionally, override the `resumeWithFallback` method to return a second Observable that will be subscribed to if the first one fails.
 
 <a name='Fallback'/>
 ## Fallback
