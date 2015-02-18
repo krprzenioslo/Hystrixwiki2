@@ -1,15 +1,34 @@
+## Contents
+
+1. <a href="#plugins">Plugins</a>
+1. <a href="#plugintypes">Plugin Types</a>
+  1. <a href="#eventnotifier">Event Notifier</a>
+  1. <a href="#metricspublisher">Metrics Publisher</a>
+  1. <a href="#propertiesstrategy">Properties Strategy</a>
+  1. <a href="#concurrencystrategy">Concurrency Strategy</a>
+  1. <a href="#commandexecutionhook">Command Execution Hook</a>
+1. <a href="#howtouse">How to Use</a>
+1. <a href="#abstractvsinterface">Abstract vs. Interface</a>
+
+
+<a name="plugins" />
+## Plugins
+
 You can modify the behavior of Hystrix, or add additional behavior to it, by implementing plugins.
 
 You register these plugins by means of the [HystrixPlugins](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/HystrixPlugins.html) service. Hystrix will then apply them to all [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) and [HystrixCollapser](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html) implementations, overriding all others.
 
+<a name="plugintypes" />
 ## Plugin Types
 
 Following are introductions to each of the different plugins that you can implement ([the Javadocs](http://netflix.github.com/Hystrix/javadoc/index.html) contain more detail):
 
+<a name="eventnotifier" />
 ### Event Notifier
 
 Events that occur during `HystrixCommand` execution are trigged on the [HystrixEventNotifier](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/eventnotifier/HystrixEventNotifier.html) to give an opportunity for alerting and statistics-collection.
 
+<a name="metricspublisher">
 ### Metrics Publisher
 
 Each instance of metrics being captured (such as for all `HystrixCommands` with a given `HystrixCommandKey`) will ask the [HystrixMetricsPublisher](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/metrics/HystrixMetricsPublisher.html) for an implementation and initialize it.
@@ -18,12 +37,14 @@ This gives the implementation the opportunity to receive the metrics data object
 
 The default implementation publishes them to [Servo](https://github.com/Netflix/servo) which is an in-memory system that supports various mechanisms of retrieving the data such as through pollers or JMX.
 
+<a name="propertiesstrategy">
 ### Properties Strategy
 
 If you implement a custom [HystrixPropertiesStrategy](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/properties/HystrixPropertiesStrategy.html), this gives you full control over how properties are defined for the system.
 
 The default implementation uses [Archaius](https://github.com/Netflix/archaius).
 
+<a name="concurrencystrategy">
 ### Concurrency Strategy
 
 Hystrix uses implementations of `ThreadLocal`, `Callable`, `Runnable`, `ThreadPoolExecutor`, and `BlockingQueue` as part its thread isolation and request-scoped functionality. 
@@ -38,10 +59,12 @@ You can implement the [HystrixConcurrencyStrategy](http://netflix.github.com/Hys
 
 * The `getRequestVariable()` method expects an implementation of [HystrixRequestVariable<T>](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/concurrency/HystrixRequestVariable.html) that functions like a `ThreadLocal` except scoped to the request &mdash; available on all threads within the request. Generally it will be easier and sufficient to just use the [HystrixRequestContext](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/concurrency/HystrixRequestContext.html) with its own default implementation of [HystrixRequestVariable](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/concurrency/HystrixRequestVariable.html).
 
+<a name="commandexecutionhook" />
 ### Command Execution Hook
 
 A [HystrixCommandExecutionHook](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/executionhook/HystrixCommandExecutionHook.html) implementation gets access to the execution lifecycle of a [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) in order to inject behavior, logging, override responses, alter thread state, etc.
 
+<a name="howtouse" />
 ## How to Use
 
 This is how you register a plugin globally:
@@ -50,6 +73,7 @@ This is how you register a plugin globally:
 HystrixPlugins.getInstance().registerEventNotifier(ACustomHystrixEventNotifierDefaultStrategy.getInstance());
 ```
 
+<a name="abstractvsinterface" />
 ## Abstract vs. Interface
 
 Each of the plugins shown above exposes the base as an abstract class to be extended rather than as an interface to be implemented.
