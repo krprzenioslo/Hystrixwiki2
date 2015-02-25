@@ -203,9 +203,9 @@ More information about Observable can be found at http://reactivex.io/documentat
 <a name='Reactive-Commands' />
 ## Reactive Commands
 
-Rather than converting a `HystrixCommand` into an `Observable` using the methods described above, you can also create a [`HystrixObservableCommand`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixObservableCommand.java) that is a specialized version of `HystrixCommand` meant to wrap Observables.
+Rather than converting a `HystrixCommand` into an `Observable` using the methods described above, you can also create a [`HystrixObservableCommand`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixObservableCommand.java) that is a specialized version of `HystrixCommand` meant to wrap Observables. A `HystrixObservableCommand` is capable of wrapping Observables that emit multiple items, whereas ordinary `HystrixCommands`, even when converted into Observables, will never emit more than one item.
 
-In such a case, instead of overriding the `run` method with your command logic (as you would with an ordinary `HystrixCommand`), you would override the `construct` method so that it would return the Observable you intend to wrap.
+In such a case, instead of overriding the `run` method with your command logic (as you would with an ordinary `HystrixCommand`), you would override the `construct` method so that it returns the Observable you intend to wrap.
 
 <a name='Fallback'/>
 ## Fallback
