@@ -205,12 +205,12 @@ More information about Observable can be found at http://reactivex.io/documentat
 
 Rather than converting a `HystrixCommand` into an `Observable` using the methods described above, you can also create a [`HystrixObservableCommand`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixObservableCommand.java) that is a specialized version of `HystrixCommand` meant to wrap Observables.
 
-In such a case, instead of overriding the `run` method with your command logic (as you would with an ordinary `HystrixCommand`), you would override the `construct` method so that it would return the Observable you intend to wrap. You may also, optionally, override the `resumeWithFallback` method to return a second Observable that will be subscribed to if the first one fails.
+In such a case, instead of overriding the `run` method with your command logic (as you would with an ordinary `HystrixCommand`), you would override the `construct` method so that it would return the Observable you intend to wrap.
 
 <a name='Fallback'/>
 ## Fallback
 
-You can support graceful degradation by adding a [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) implementation that executes for all types of failure such as [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) failure, timeout, thread pool or semaphore rejection, and circuit-breaker short-circuiting. The following example includes such a fallback:
+You can support graceful degradation by adding a [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) implementation to an ordinary `HystrixCommand`. Hystrix will execute this fallback for all types of failure such as [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) failure, timeout, thread pool or semaphore rejection, and circuit-breaker short-circuiting. The following example includes such a fallback:
 
 ```java
 public class CommandHelloFailure extends HystrixCommand<String> {
@@ -245,12 +245,16 @@ This command&#8217;s [run()](http://netflix.github.com/Hystrix/javadoc/index.htm
     }
 ```
 
+For a `HystrixObservableCommand` you instead may override the `resumeWithFallback` method so that it returns a second Observable that will be subscribed to if the first one fails. Note that because an Observable may fail after having already emitted one or more values, your fallback should not assume that it will be emitting the only values that the resulting `HystrixObservableCommand` emits.
+
 <a name='ErrorPropagation'/>
 ## Error Propagation
 
 All exceptions thrown from the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method except for [HystrixBadRequestException](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/exception/HystrixBadRequestException.html) count as failures and trigger [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) and circuit-breaker logic.
 
 You can wrap the exception that you would like to throw in ```HystrixBadRequestException``` and retrieve it via ```getCause()```. The [HystrixBadRequestException](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/exception/HystrixBadRequestException.html) is intended for use cases such as reporting illegal arguments or non-system failures that should not count against the failure metrics and should not trigger fallback logic.
+
+In the case of a `HystrixObservableCommand`, non-recoverable errors are returned via `onError` notifications from the resulting Observable, and fallbacks are accomplished by falling back to a second Observable that Hystrix obtains through the `resumeWithFallback` method that you implement.
 
 <a name='CommandName'/>
 ## Command Name
