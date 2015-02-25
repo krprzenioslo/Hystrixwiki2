@@ -207,6 +207,10 @@ Rather than converting a `HystrixCommand` into an `Observable` using the methods
 
 In such a case, instead of overriding the `run` method with your command logic (as you would with an ordinary `HystrixCommand`), you would override the `construct` method so that it returns the Observable you intend to wrap.
 
+To obtain an Observable representation of the `HystrixObservableCommand`, use one of the following two methods:
+* [observe()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixObservableCommand.html#observe\(\)) &mdash; returns a &ldquo;hot&rdquo; Observable that subscribes to the underlying Observable immediately, though because it is filtered through a `ReplaySubject` you are not in danger of losing any items that it emits before you have a chance to subscribe to the resulting Observable
+* [toObservable()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixObservableCommand.html#toObservable\(\)) &mdash; returns a &ldquo;cold&rdquo; Observable that won&#8217;t subscribe to the underlying Observable until you subscribe to the resulting Observable
+
 <a name='Fallback'/>
 ## Fallback
 
