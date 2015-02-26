@@ -40,41 +40,32 @@ Each [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/n
 * _String_ `commandGroup`
 * _Number_ `currentTime`
 
-### Cumulative Counts ([Counter](https://github.com/Netflix/servo/blob/master/servo-core/src/main/java/com/netflix/servo/monitor/Counter.java))
+### Cumulative and Rolling Event Counts
+Cumulative counts ([`Counter`](https://github.com/Netflix/servo/blob/master/servo-core/src/main/java/com/netflix/servo/monitor/Counter.java)) represent the number of events since the start of the application. 
 
-The following represent cumulative counts since the start of the application.
+Rolling counts ([`Gauge`](https://github.com/Netflix/servo/blob/master/servo-core/src/main/java/com/netflix/servo/monitor/Gauge.java)) are configured by [[metrics.rollingStats.* properties|Configuration]]. They are &ldquo;point in time&rdquo; counts representing the last _x_ seconds (for example 10 seconds).
 
-* _Long_ `countCollapsedRequests`
-* _Long_ `countExceptionsThrown`
-* _Long_ `countFailure`
-* _Long_ `countFallbackFailure`
-* _Long_ `countFallbackRejection`
-* _Long_ `countFallbackSuccess`
-* _Long_ `countResponsesFromCache`
-* _Long_ `countSemaphoreRejected`
-* _Long_ `countShortCircuited`
-* _Long_ `countSuccess`
-* _Long_ `countThreadPoolRejected`
-* _Long_ `countTimeout`
-
-### Rolling Counts ([Gauge](https://github.com/Netflix/servo/blob/master/servo-core/src/main/java/com/netflix/servo/monitor/Gauge.java))
-
-The following are rolling counts as configured by [[metrics.rollingStats.* properties|Configuration]].
-
-These are &ldquo;point in time&rdquo; counts representing the last _x_ seconds (for example 10 seconds).
-
-* _Number_ `rollingCountCollapsedRequests`
-* _Number_ `rollingCountExceptionsThrown`
-* _Number_ `rollingCountFailure`
-* _Number_ `rollingCountFallbackFailure`
-* _Number_ `rollingCountFallbackRejection`
-* _Number_ `rollingCountFallbackSuccess`
-* _Number_ `rollingCountResponsesFromCache`
-* _Number_ `rollingCountSemaphoreRejected`
-* _Number_ `rollingCountShortCircuited`
-* _Number_ `rollingCountSuccess`
-* _Number_ `rollingCountThreadPoolRejected`
-* _Number_ `rollingCountTimeout`
+<table>
+ <thead>
+  <tr><th>Event</th><th>Cumulative Count (Long)</th><th>Rolling Count (Number)</th></tr>
+ </thead><tbody>
+  <tr><td><code>BAD_REQUEST</code></td><td><code>countBadRequests</code></td><td><code>rollingCountBadRequests</code></td></tr>
+  <tr><td><code>COLLAPSED</code></td><td><code>countCollapsedRequests</code></td><td><code>rollingCountCollapsedRequests</code></td></tr>
+  <tr><td><code>EMIT</code></td><td><code>countEmit</code></td><td><code>rollingCountEmit</code></td></tr>
+  <tr><td><code>EXCEPTION_THROWN</code></td><td><code>countExceptionsThrown</code></td><td><code>rollingCountExceptionsThrown</code></td></tr>
+  <tr><td><code>FAILURE</code></td><td><code>countFailure</code></td><td><code>rollingCountFailure</code></td></tr>
+  <tr><td><code>FALLBACK_EMIT</code></td><td><code>countFallbackEmit</code></td><td><code>rollingCountFallbackEmit</code></td></tr>
+  <tr><td><code>FALLBACK_FAILURE</code></td><td><code>countFallbackFailure</code></td><td><code>rollingCountFallbackFailure</code></td></tr>
+  <tr><td><code>FALLBACK_REJECTION</code></td><td><code>countFallbackRejection</code></td><td><code>rollingCountFallbackRejection</code></td></tr>
+  <tr><td><code>FALLBACK_SUCCESS</code></td><td><code>countFallbackSuccess</code></td><td><code>rollingCountFallbackSuccess</code></td></tr>
+  <tr><td><code>RESPONSE_FROM_CACHE</code></td><td><code>countResponsesFromCache</code></td><td><code>rollingCountResponsesFromCache</code></td></tr>
+  <tr><td><code>SEMAPHORE_REJECTED</code></td><td><code>countSemaphoreRejected</code></td><td><code>rollingCountSemaphoreRejected</code></td></tr>
+  <tr><td><code>SHORT_CIRCUITED</code></td><td><code>countShortCircuited</code></td><td><code>rollingCountShortCircuited</code></td></tr>
+  <tr><td><code>SUCCESS</code></td><td><code>countSuccess</code></td><td><code>rollingCountSuccess</code></td></tr>
+  <tr><td><code>THREAD_POOL_REJECTED</code></td><td><code>countThreadPoolRejected</code></td><td><code>rollingCountThreadPoolRejected</code></td></tr>
+  <tr><td><code>TIMEOUR</code></td><td><code>countTimeout</code></td><td><code>rollingCountTimeout</code></td></tr>
+ </tbody>
+</table>
 
 ### Latency Percentiles: HystrixCommand.run() Execution ([Gauge](https://github.com/Netflix/servo/blob/master/servo-core/src/main/java/com/netflix/servo/monitor/Gauge.java))
 
