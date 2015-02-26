@@ -63,7 +63,7 @@ Rolling counts ([`Gauge`](https://github.com/Netflix/servo/blob/master/servo-cor
   <tr><td><code>SHORT_CIRCUITED</code></td><td><code>countShortCircuited</code></td><td><code>rollingCountShortCircuited</code></td></tr>
   <tr><td><code>SUCCESS</code></td><td><code>countSuccess</code></td><td><code>rollingCountSuccess</code></td></tr>
   <tr><td><code>THREAD_POOL_REJECTED</code></td><td><code>countThreadPoolRejected</code></td><td><code>rollingCountThreadPoolRejected</code></td></tr>
-  <tr><td><code>TIMEOUR</code></td><td><code>countTimeout</code></td><td><code>rollingCountTimeout</code></td></tr>
+  <tr><td><code>TIMEOUT</code></td><td><code>countTimeout</code></td><td><code>rollingCountTimeout</code></td></tr>
  </tbody>
 </table>
 
