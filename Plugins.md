@@ -76,9 +76,9 @@ A [HystrixCommandExecutionHook](http://netflix.github.com/Hystrix/javadoc/index.
  <tr><td><b><code>onExecutionEmit</code></b></td><td>whenever the user-defined execution method in the <code>HystrixInvokable</code> emits a value</td></tr>
  <tr><td><b><code>onExecutionError</code></b></td><td>when the user-defined execution method in the <code>HystrixInvokable</code> fails with an exception</td></tr>
  <tr><td><b><code>onExecutionSuccess</code></b></td><td>when the user-defined execution method in the <code>HystrixInvokable</code> completes successfully</td></tr>
- <tr><td><b><code>onFallbackStart</code></b></td><td>if the fallback method in the <code>HystrixInvokable</code> starts</td></tr>
+ <tr><td><b><code>onFallbackStart</code></b></td><td>if the <code>HystrixInvokable</code> attempts to call the fallback method</td></tr>
  <tr><td><b><code>onFallbackEmit</code></b></td><td>whenever the fallback method in the <code>HystrixInvokable</code> emits a value</td></tr>
- <tr><td><b><code>onFallbackError</code></b></td><td>if the fallback method in the <code>HystrixInvokable</code> fails with an exception</td></tr>
+ <tr><td><b><code>onFallbackError</code></b></td><td>if the fallback method in the <code>HystrixInvokable</code> fails with an exception or does not exist when a call attempt is made</td></tr>
  <tr><td><b><code>onFallbackSuccess</code></b></td><td>if the fallback method in the <code>HystrixInvokable</code> completes successfully</td></tr>
  <tr><td><b><code>onCacheHit</code></b></td><td>if the response to the <code>HystrixInvokable</code> is found in the <code>HystrixRequestCache</code></td></tr>
 </tbody></table>
