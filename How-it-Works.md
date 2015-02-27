@@ -17,7 +17,7 @@ _(Click for larger view)_
 
 __(1) Construct HystrixCommand Command Object__
 
-You first construct a [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) object with the necessary arguments for making the call to the dependency.
+You first construct a [`HystrixCommand`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) object with the necessary arguments for making the call to the dependency.
 
 For example:
 ```java
@@ -38,7 +38,9 @@ Observable<K> ohValue = command.observe(); // hot Observable
 Observable<K> ocValue = command.toObservable(); // cold Observable
 ```
 
-The synchronous call [execute()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#execute\(\)) invokes [queue().get()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#queue\(\)) unless the command is specified to not run in a thread.
+The synchronous call [`execute()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#execute\(\)) invokes [`queue()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#queue\(\))`.get()`.
+
+`queue()` in turn invokes [`toObservable()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/AbstractCommand.html#toObservable\(\))[`.toBlocking().toFuture()`](http://reactivex.io/documentation/operators/to.html). Which is to say that ultimately every `HystrixCommand` is backed by an [`Observable`](http://reactivex.io/documentation/observable.html) implementation.
 
 __(3) Is Circuit Open?__
 
