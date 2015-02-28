@@ -563,7 +563,7 @@ You could enable the filter for all incoming traffic by adding a section to the 
 <a name='Common-Patterns'/>
 ## Common Patterns
 
-In the following sections are common uses and patterns of use for [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html).
+In the following sections are common uses and patterns of use for `HystrixCommand` and `HystrixObservableCommand`.
 
 <a name='Common-Patterns-FailFast'/>
 ### Fail Fast
@@ -610,6 +610,20 @@ public void testFailure() {
     }
 }
 ```
+#### `HystrixObservableCommand` Equivalent
+The equivalent Fail-Fast solution for a `HystrixObservableCommand` would involve overriding the `resumeWithFallback` method as follows:
+
+```java
+    @Override
+    protected Observable<String> resumeWithFallback() {
+        if (throwException) {
+            return Observable.error(new Throwable("failure from CommandThatFailsFast"));
+        } else {
+            return Observable.just("success");
+        }
+    }
+```
+
 <a name='Common-Patterns-FailSilent'/>
 ### Fail Silent
 
@@ -671,6 +685,16 @@ Another implementation that returns an empty list would look like:
     }
 ```
 
+#### `HystrixObservableCommand` Equivalent
+The equivalent Fail-Silently solution for a `HystrixObservableCommand` would involve overriding the `resumeWithFallback` method as follows:
+
+```java
+    @Override
+    protected Observable<String> resumeWithFallback() {
+        return Observable.empty();
+    }
+```
+
 <a name='Common-Patterns-FallbackStatic'/>
 ### Fallback: Static
 
@@ -682,6 +706,16 @@ For example, if a command returns a true/false based on user credentials but the
     @Override
     protected Boolean getFallback() {
         return true;
+    }
+```
+
+#### `HystrixObservableCommand` Equivalent
+The equivalent Static solution for a `HystrixObservableCommand` would involve overriding the `resumeWithFallback` method as follows:
+
+```java
+    @Override
+    protected Observable<Boolean> resumeWithFallback() {
+        return Observable.just( true );
     }
 ```
 
@@ -780,7 +814,7 @@ The following unit test demonstrates its behavior:
 
 Sometimes if a back-end service fails, a stale version of data can be retrieved from a cache service such as memcached.
 
-Since the fallback will go over the network it is another possible point of failure and so it also needs to be wrapped by a [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html).
+Since the fallback will go over the network it is another possible point of failure and so it also needs to be wrapped by a `HystrixCommand` or `HystrixObservableCommand`.
 
 [[images/fallback-via-command-640.png]]
 
