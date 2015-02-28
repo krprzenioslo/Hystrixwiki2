@@ -1,6 +1,15 @@
 ## Contents
 
 1. <a href="#Flow">Flow Chart</a>
+  1. Construct a `HystrixCommand` or `HystrixObservableCommand` Object
+  1. Execute the Command
+  1. Is the Response Cached?
+  1. Is the Circuit Open?
+  1. Is the Thread Pool/Queue/Semaphore Full?
+  1. `HystrixObservableCommand.construct()` or `HystrixCommand.run()`
+  1. Calculate Circuit Health
+  1. Get the Fallback
+  1. Return the Successful Response
 1. <a href="#CircuitBreaker">Circuit Breaker</a>
 1. <a href="#Isolation">Isolation</a>
 1. <a href="#Threads">Threads & Thread Pools</a>
@@ -15,88 +24,92 @@ The following diagram shows what happens when you make a request to a service de
 <a href="images/hystrix-command-flow-chart.png">[[images/hystrix-command-flow-chart-640.png]]
 _(Click for larger view)_ </a>
 
-__(1) Construct HystrixCommand Command Object__
+### 1. Construct a `HystrixCommand` or `HystrixObservableCommand` Object
 
-You first construct a [`HystrixCommand`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) object with the necessary arguments for making the call to the dependency.
+The first step is to construct a `HystrixCommand` or `HystrixObservableCommand` object to represent the request you are making to the dependency. Pass the constructor any arguments that will be needed when the request is made.
 
-For example:
+Construct a [`HystrixCommand`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) object if the dependency is expected to return a single response. For example:
 ```java
 HystrixCommand command = new HystrixCommand(arg1, arg2);
 ```
 
-__(2) Execution Synchronously or Asynchronously__
-
-You can then choose to execute the command either synchronously or asychronously:
-
+Construct a [`HystrixObservableCommand`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixObservableCommand.html) object if the dependency is expected to return an Observable that emits responses. For example:
 ```java
-K value = command.execute();
+HystrixObservableCommand command = new HystrixObservableCommand(arg1, arg2);
 ```
 
+### 2. Execute the Command
+
+There are four ways you can execute the command, by using one of the following four methods of your Hystrix command object (the first two are only applicable to simple `HystrixCommand` objects and are not available for the `HystrixObservableCommand`):
+* [`execute()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#execute\(\)) &mdash; blocks, then returns the single response received from the dependency (or throws an exception in case of an error)
+* [`queue()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#queue\(\)) &mdash; returns a `Future` with which you can obtain the single response from the dependency
+* [`observe()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/AbstractCommand.html#observe\(\)) &mdash; subscribes to the `Observable` that represents the response(s) from the dependency and returns an `Observable` that replicates that source `Observable`
+* [`toObservable()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/AbstractCommand.html#toObservable\(\)) &mdash; returns an `Observable` that, when you subscribe to it, will execute the Hystrix command and emit its responses
 ```java
-Future<K> value = command.queue();
-Observable<K> ohValue = command.observe(); // hot Observable
-Observable<K> ocValue = command.toObservable(); // cold Observable
+K             value   = command.execute();
+Future<K>     fValue  = command.queue();
+Observable<K> ohValue = command.observe();
+Observable<K> ocValue = command.toObservable();
 ```
 
-The synchronous call [`execute()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#execute\(\)) invokes [`queue()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#queue\(\))`.get()`.
+The synchronous call `execute()` invokes `queue().get()`. `queue()` in turn invokes `toObservable().toBlocking().toFuture()`. Which is to say that ultimately every `HystrixCommand` is backed by an [`Observable`](http://reactivex.io/documentation/observable.html) implementation, even those commands that are intended to return single, simple values.
 
-`queue()` in turn invokes [`toObservable()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/AbstractCommand.html#toObservable\(\))[`.toBlocking().toFuture()`](http://reactivex.io/documentation/operators/to.html). Which is to say that ultimately every `HystrixCommand` is backed by an [`Observable`](http://reactivex.io/documentation/observable.html) implementation.
+### 3. Is the Response Cached?
 
-__(3) Is The Response Cached?__
+If request caching is enabled for this command, and if the response to the request is available in the cache, this cached response will be immediately returned in the form of an `Observable`. (See <a href="#RequestCaching">&ldquo;Request Caching&rdquo;</a> below.)
 
-If request caching is enabled for this command, and if the response to the request is available in the cache, this cached response will be immediately returned in the form of an `Observable`.
+### 4. Is the Circuit Open?
 
-__(4) Is Circuit Open?__
+When you execute the command, Hystrix checks with the circuit-breaker to see if the circuit is open.
 
-When you execute the command, Hystrix first checks with the circuit-breaker to ask, &ldquo;Is the circuit open?&rdquo;
+If the circuit is open (or &ldquo;tripped&rdquo;) then Hystrix will not execute the command but will route the flow to (8) Get the Fallback.
 
-If the circuit is open (or &ldquo;tripped&rdquo;) then Hystrix will not execute the command but will route the flow to (8) [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)).
+If the circuit is closed then the flow proceeds to (5) to check if there is capacity available to run the command.
 
-If the circuit is closed then the flow proceeds to (4) to check if there is capacity available to run the command.
+### 5. Is the Thread Pool/Queue/Semaphore Full?
 
-__(5) Is Thread Pool/Queue/Semaphore Full?__
+If the thread-pool and queue (or semaphore, if not running in a thread) that are associated with the command are full then Hystrix will not execute the command but will immediately route the flow to (8) Get the Fallback.
 
-If the thread-pool and queue (or semaphore, if not running in a thread) that are associated with the command are full then Hystrix will not execute the command but will immediately route the flow to (8) [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)).
+### 6. `HystrixObservableCommand.construct()` or `HystrixCommand.run()`
 
-__(6) HystrixCommand.run()__
+Here, Hystrix invokes the request to the dependency by means of the method you have written for this purpose, one of the following:
+* [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) &mdash; returns a single response or throws an exception
+* [HystrixObservableCommand.construct()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixObservableCommand.html#construct\(\)) &mdash; returns an Observable that emits the response(s) or sends an `onError` notification
 
-Here, Hystrix executes the concrete implementation of the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method.
+If you have configured the command to run within a thread and the `run()` or `construct()` method exceeds the command&#8217;s timeout value, the thread will throw a `TimeoutException`. In that case Hystrix routes the response through 8. Get the Fallback, and it discards the eventual return value `run()` or `construct()` method if that method does not cancel/interrupt. (If the command does not run within a thread then this logic will not be applicable.)
 
-If you have configured the command to run within a thread and the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method exceeds the command&#8217;s timeout value, the thread will throw a `TimeoutException`. In that case Hystrix routes the response through _(8) [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\))_ and it discards the eventual return value of the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method (if it does not cancel/interrupt).
+If the command did not throw any exceptions and it returned a response, Hystrix returns this response after it performs some some logging and metrics reporting. In the case of `run()`, Hystrix returns an `Observable` that emits the single response and then makes an `onCompleted` notification; in the case of `construct()` Hystrix returns the same `Observable` returned by `construct()`.
 
-If the command does not run within a thread then this logic will not be applicable.
-
-Hystrix routes application flow based on the response from the _(6) [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\))_ method.
-
-If the command did not throw any exceptions and it returned a response, Hystrix returns this response after it performs some some logging and metrics reporting.
-
-__(7) Calculate Circuit Health__
+### 7. Calculate Circuit Health
 
 Hystrix reports successes, failures, rejections, and timeouts to the circuit breaker, which maintains a rolling set of counters that calculate statistics.
 
 It uses these stats to determine when the circuit should &ldquo;trip,&rdquo; at which point it short-circuits any subsequent requests until a recovery period elapses, upon which it closes the circuit again after first checking certain health checks.
 
-__(8) Failed Response__
+### 8. Get the Fallback
 
-If the command did throw an exception, Hystrix marks it as &ldquo;failed&rdquo &mdash; which will contribute to potentially tripping the circuit &mdash; and routes application flow to [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)).
-
-Hystrix reverts to the fallback whenever a command execution fails: when an exception is thrown by (6) [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\))), when the command is _(4) short-circuited_ because the circuit is open, or when the command&#8217;s _(5) thread pool and queue or semaphore_ are at capacity.
+Hystrix reverts to the fallback whenever a command execution fails: when an exception is thrown by `construct()` or `run()` (6.), when the command is short-circuited because the circuit is open (4.), or when the command&#8217;s thread pool and queue or semaphore are at capacity (5.).
 
 The fallback provides a generic response, without any network dependency, from an in-memory cache or via other static logic.
 
-_If you must use a network call in the fallback, you should do so by means of another [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html)._
+_If you must use a network call in the fallback, you should do so by means of another `HystrixCommand` or `HystrixObservableCommand`._
 
-If you have not implemented [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) Hystrix throws an exception and the caller is left to deal with it.
+In the case of a `HystrixCommand`, to provide fallback logic you implement [`HystrixCommand.getFallback()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) which returns a fallback value.
 
-If the fallback returns a response then Hystrix will return it to the caller.
+In the case of a `HystrixObservableCommand`, to provide fallback logic you implement [`HystrixObservableCommand.resumeWithFallback()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixObservableCommand.html#resumeWithFallback\(\)) which returns an Observable that emits a fallback value or values.
 
-If [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) fails and throws an exception then the caller is left to deal with it.
+If the fallback returns a response then Hystrix will return it to the caller. In the case of a `HystrixCommand.getFallback()`, it will return an Observable that emits the value returned from the method. In the case of `HystrixObservableCommand.resumeWithFallback()` it will return the same Observable returned from the method. If the fallback throws an exception or if you did not implement `HystrixCommand.getFallback()` or `HystrixObservableCommand.resumeWithFallback()`, Hystrix returns an Observable that emits nothing and immediately terminates with an `onError` notification.
 
 It is considered a poor practice to have a fallback implementation that can fail. You should implement your fallback such that it is not performing any logic that could fail.
 
-__(9) Return Successful Response__
+### 9. Return the Successful Response
 
-If Hystrix receives a successful response it will return this response to the caller.
+If the Hystrix command succeeds, it will return the response or responses to the caller in the form of an `Observable`. Depending on how you have invoked the command in step 2, above, this `Observable` may be transformed before it is returned to you:
+
+* `.toObservable()` &mdash; returns the `Observable` unchanged; you must `subscribe` to it in order to actually begin the flow that leads to the execution of the command
+* `.observe()` &mdash; subscribes to the `Observable` immediately and begins the flow that executes the command; returns an Observable that, when you `subscribe` to it, replays the emissions and notifications received
+* `.queue()` &mdash; converts the `Observable` into a `BlockingObservable` so that it can be converted into a `Future,` then returns this `Future`
+* `.execute()` &mdash; obtains a `Future` in the same manner as does `.queue()` and then calls `get()` on this `Future` to obtain the single value emitted by the `Observable`
 
 <a name='CircuitBreaker'/>
 ## Circuit Breaker
