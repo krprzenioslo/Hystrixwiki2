@@ -126,10 +126,10 @@ If the Hystrix command succeeds, it will return the response or responses to the
 <a name='CircuitBreaker'/>
 ## Circuit Breaker
 
-The following diagram shows how a [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) interacts with a [HystrixCircuitBreaker](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCircuitBreaker.html) and its flow of logic and decision-making, including how the counters behave in the circuit breaker.
+The following diagram shows how a `HystrixCommand` or `HystrixObservableCommand` interacts with a [`HystrixCircuitBreaker`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCircuitBreaker.html) and its flow of logic and decision-making, including how the counters behave in the circuit breaker.
 
-<a href="images/circuit-breaker-1280.png">[[images/circuit-breaker-640.png]]</a>
-_(Click for larger view)_
+<a href="images/circuit-breaker-1280.png">[[images/circuit-breaker-640.png]]
+_(Click for larger view)_</a>
 
 The precise way that the circuit opening and closing occurs is as follows:
 
@@ -153,12 +153,12 @@ Clients (libraries, network calls, etc) execute on separate threads. This isolat
 
 Hystrix uses separate, per-dependency thread pools as a way of constraining any given dependency so latency on the underlying executions will saturate the available threads only in that pool.
 
-<a href="images/request-example-with-latency-1280.png">[[images/request-example-with-latency-640.png]]</a>
-_(Click for larger view)_
+<a href="images/request-example-with-latency-1280.png">[[images/request-example-with-latency-640.png]]
+_(Click for larger view)_</a>
 
-It is possible for you to protect against failure without the use of thread pools, but this requires the client being trusted to fail very quickly (network connect/read timeouts and retry configuration) and always behaving well.
+It is possible for you to protect against failure without the use of thread pools, but this requires the client being trusted to fail very quickly (network connect/read timeouts and retry configuration) and to always behave well.
 
-Netflix chose the use of threads and thread-pools to achieve isolation for many reasons including:
+Netflix, in its design of Hystrix, chose the use of threads and thread-pools to achieve isolation for many reasons including:
 
 * Many applications execute dozens (and sometimes well over 100) different back-end service calls against dozens of different services developed by as many different teams. 
 * Each service provides its own client library.
@@ -172,8 +172,8 @@ Netflix chose the use of threads and thread-pools to achieve isolation for many 
 * Most network access is performed synchronously.
 * Failure and latency can occur in the client-side code as well, not just in the network call.
 
-<a href="images/isolation-options-1280.png">[[images/isolation-options-640.png]]</a>
-_(Click for larger view)_
+<a href="images/isolation-options-1280.png">[[images/isolation-options-640.png]]
+_(Click for larger view)_</a>
 
 #### Benefits of Thread Pools
 
@@ -182,7 +182,7 @@ The benefits of isolation via threads in their own thread pools are:
 * The application is fully protected from runaway client libraries. The pool for a given dependency library can fill up without impacting the rest of the application.
 * The application can accept new client libraries with far lower risk. If an issue occurs, it is isolated to the library and doesn&#8217;t affect everything else.
 * When a failed client becomes healthy again, the thread pool will clear up and the application immediately resumes healthy performance, as opposed to a long recovery when the entire Tomcat container is overwhelmed.
-* If a client library is misconfigured, the health of a thread pool will quickly demonstrate this (via increased errors, latency, timeouts, rejections, etc.) and you can handle it (typically in real-time via dynamic properties), without affecting application functionality.
+* If a client library is misconfigured, the health of a thread pool will quickly demonstrate this (via increased errors, latency, timeouts, rejections, etc.) and you can handle it (typically in real-time via dynamic properties) without affecting application functionality.
 * If a client service changes performance characteristics (which happens often enough to be an issue) which in turn cause a need to tune properties (increasing/decreasing timeouts, changing retries, etc.) this again becomes visible through thread pool metrics (errors, latency, timeouts, rejections) and can be handled without impacting other clients, requests, or users.
 * Beyond the isolation benefits, having dedicated thread pools provides built-in concurrency which can be leveraged to build asynchronous facades on top of synchronous client libraries (similar to how the Netflix API built a reactive, fully-asynchronous Java API on top of Hystrix commands).
 
@@ -198,14 +198,14 @@ Netflix, in designing this system, decided to accept the cost of this overhead i
 
 #### Cost of Threads
 
-Hystrix measures the latency when it executes the `run()` method on the child thread as well as the total end-to-end time on the parent thread. This way you can see the cost of Hystrix overhead (threading, metrics, logging, circuit breaker, etc.).
+Hystrix measures the latency when it executes the `construct()` or `run()` method on the child thread as well as the total end-to-end time on the parent thread. This way you can see the cost of Hystrix overhead (threading, metrics, logging, circuit breaker, etc.).
 
-The Netflix API processes 10+ billion `HystrixCommand` executions per day using thread isolation. Each API instance has 40+ thread-pools with 5&ndash;20 threads in each (most are set to 10).
+The Netflix API processes 10+ billion Hystrix Command executions per day using thread isolation. Each API instance has 40+ thread-pools with 5&ndash;20 threads in each (most are set to 10).
 
-The following diagram represents one [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) being executed at 60 requests-per-second on a single API instance (of about 350 total threaded executions per second per server):
+The following diagram represents one `HystrixCommand` being executed at 60 requests-per-second on a single API instance (of about 350 total threaded executions per second per server):
 
-<a href="images/thread-cost-60rps-original.png">[[images/thread-cost-60rps-640.png]]</a>
-_(Click for larger view)_
+<a href="images/thread-cost-60rps-original.png">[[images/thread-cost-60rps-640.png]]
+_(Click for larger view)_</a>
 
 At the median (and lower) there is no cost to having a separate thread.
 
@@ -219,13 +219,9 @@ For circuits that wrap very low-latency requests (such as those that primarily h
 
 ### Semaphores
 
-You can use semaphores (or counters) to limit the number of concurrent calls to any given dependency, instead of using thread pool/queue sizes.
+You can use semaphores (or counters) to limit the number of concurrent calls to any given dependency, instead of using thread pool/queue sizes. This allows Hystrix to shed load without using thread pools but it does not allow for timing out and walking away. If you trust the client and you only want load shedding, you could use this approach.
 
-This allows Hystrix to shed load without using thread pools but it does not allow for timing out and walking away.
-
-So, if you trust the client and you only want load shedding, you could use this approach.
-
-[HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) supports semaphores in 2 places:
+`HystrixCommand` and `HystrixObservableCommand` support semaphores in 2 places:
 
 * **Fallback:** When Hystrix retrieves fallbacks it always does so on the calling Tomcat thread.
 * **Execution:** If you set the property `execution.isolation.strategy` to `SEMAPHORE` then Hystrix will use semaphores instead of threads to limit the number of concurrent parent threads that invoke the command.
@@ -239,26 +235,26 @@ Semaphore rejection will start once the limit is hit but the threads filling the
 <a name='RequestCollapsing'/>
 ## Request Collapsing
 
-You can front a [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) with a request collapser ([HystrixCollapser](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html) is the abstract parent) with which you can collapse multiple requests into a single back-end dependency call.
+You can front a `HystrixCommand` with a request collapser ([`HystrixCollapser`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html) is the abstract parent) with which you can collapse multiple requests into a single back-end dependency call.
 
 The following diagram shows the number of threads and network connections in two scenarios: first without and then with request collapsing (assuming all connections are &ldquo;concurrent&rdquo; within a short time window, in this case 10ms).
 
-<a href="images/collapser-1280.png">[[images/collapser-640.png]]</a>
-_(Click for larger view)_
+<a href="images/collapser-1280.png">[[images/collapser-640.png]]
+_(Click for larger view)_</a>
 
-### Why use with request collapsing?
+### Why Use Request Collapsing?
 
-Use request collapsing to reduce the number of threads and network connections needed to perform concurrent [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) executions. Request collapsing does this in an automated manner that does not force all developers of a codebase to coordinate the manual batching of requests.
+Use request collapsing to reduce the number of threads and network connections needed to perform concurrent `HystrixCommand` executions. Request collapsing does this in an automated manner that does not force all developers of a codebase to coordinate the manual batching of requests.
 
-#### Global Context (Across all Tomcat Threads)
+#### Global Context (Across All Tomcat Threads)
 
 The ideal type of collapsing is done at the global application level, so that requests from _any user_ on any Tomcat thread can be collapsed together.
 
-For example, if you configure a [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) to support batching for any user on requests to a dependency that retrieves movie ratings, then when any user thread in the same JVM makes such a request, Hystrix will add its request along with any others into the same collapsed network call.
+For example, if you configure a `HystrixCommand` to support batching for any user on requests to a dependency that retrieves movie ratings, then when any user thread in the same JVM makes such a request, Hystrix will add its request along with any others into the same collapsed network call.
 
 #### User Request Context (Single Tomcat Thread)
 
-If you configure a [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) to only handle batch requests for _a single user_, then Hystrix can collapse requests from within a single Tomcat thread (request).
+If you configure a `HystrixCommand` to only handle batch requests for _a single user_, then Hystrix can collapse requests from within a single Tomcat thread (request).
 
 For example, if a user wants to load bookmarks for 300 video objects, instead of executing 300 network calls, Hystrix can combine them all into one.
 
@@ -278,7 +274,7 @@ By pushing the collapsing logic down to the Hystrix layer, it doesn&#8217;t matt
 
 The `getSomeAttribute()` method can be put wherever it fits best and be called in whatever manner suits the usage pattern and the collapser will automatically batch calls into time windows.
 
-#### What is the cost of request collapsing?
+#### What Is the Cost of Request Collapsing?
 
 The cost of enabling request collapsing is an increased latency before the actual command is executed. The maximum cost is the size of the batch window.
 
@@ -290,22 +286,22 @@ If, however, a particular command is heavily utilized concurrently and can batch
 
 #### Collapser Flow
 
-<a href="images/collapser-flow-1280.png">[[images/collapser-flow-640.png]]</a>
-_(Click for larger view)_
+<a href="images/collapser-flow-1280.png">[[images/collapser-flow-640.png]]
+_(Click for larger view)_</a>
 
 <a name='RequestCaching'/>
 ## Request Caching
 
-[HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) implementations can define a cache key which is then used to de-dupe calls within a request context in a concurrent-aware manner.
+`HystrixCommand` and `HystrixObservableCommand` implementations can define a cache key which is then used to de-dupe calls within a request context in a concurrent-aware manner.
 
 Here is an example flow involving an HTTP request lifecycle and two threads doing work within that request:
 
-<a href="images/request-cache-1280.png">[[images/request-cache-640.png]]</a>
-_(Click for larger view)_
+<a href="images/request-cache-1280.png">[[images/request-cache-640.png]]
+_(Click for larger view)_</a>
 
 The benefits of request caching are:
 
-* Different code paths can execute [HystrixCommands](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) without concern of duplicate work. 
+* Different code paths can execute Hystrix Commands without concern of duplicate work. 
 
 This is particularly beneficial in large codebases where many developers are implementing different pieces of functionality.
 
@@ -323,6 +319,6 @@ Instead of potentially returning a different value (or fallback) each time the c
 
 * Eliminates duplicate thread executions.
 
-Since the request cache sits in front of the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method invocation, Hystrix can de-dupe calls before they result in thread execution. 
+Since the request cache sits in front of the `construct()` or `run()` method invocation, Hystrix can de-dupe calls before they result in thread execution. 
 
-If Hystrix didn&#8217;t implement the request cache functionality then each command would need to implement it themselves inside the `run` method, which would put it after a thread is queued and executed. 
+If Hystrix didn&#8217;t implement the request cache functionality then each command would need to implement it themselves inside the `construct` or `run` method, which would put it after a thread is queued and executed. 
