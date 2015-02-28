@@ -12,8 +12,8 @@
 
 The following diagram shows what happens when you make a request to a service dependency by means of Hystrix:
 
-<a href="images/hystrix-flow-chart-original.png">[[images/hystrix-flow-chart-640.png]]</a>
-_(Click for larger view)_
+<a href="images/hystrix-command-flow-chart.png">[[images/hystrix-command-flow-chart-640.png]]
+_(Click for larger view)_ </a>
 
 __(1) Construct HystrixCommand Command Object__
 
@@ -42,7 +42,11 @@ The synchronous call [`execute()`](http://netflix.github.com/Hystrix/javadoc/ind
 
 `queue()` in turn invokes [`toObservable()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/AbstractCommand.html#toObservable\(\))[`.toBlocking().toFuture()`](http://reactivex.io/documentation/operators/to.html). Which is to say that ultimately every `HystrixCommand` is backed by an [`Observable`](http://reactivex.io/documentation/observable.html) implementation.
 
-__(3) Is Circuit Open?__
+__(3) Is The Response Cached?__
+
+If request caching is enabled for this command, and if the response to the request is available in the cache, this cached response will be immediately returned in the form of an `Observable`.
+
+__(4) Is Circuit Open?__
 
 When you execute the command, Hystrix first checks with the circuit-breaker to ask, &ldquo;Is the circuit open?&rdquo;
 
@@ -50,31 +54,21 @@ If the circuit is open (or &ldquo;tripped&rdquo;) then Hystrix will not execute 
 
 If the circuit is closed then the flow proceeds to (4) to check if there is capacity available to run the command.
 
-__(4) Is Thread Pool/Queue/Semaphore Full?__
+__(5) Is Thread Pool/Queue/Semaphore Full?__
 
 If the thread-pool and queue (or semaphore, if not running in a thread) that are associated with the command are full then Hystrix will not execute the command but will immediately route the flow to (8) [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)).
 
-__(5) HystrixCommand.run()__
+__(6) HystrixCommand.run()__
 
 Here, Hystrix executes the concrete implementation of the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method.
-
-__(5a) Command Timeout__
 
 If you have configured the command to run within a thread and the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method exceeds the command&#8217;s timeout value, the thread will throw a `TimeoutException`. In that case Hystrix routes the response through _(8) [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\))_ and it discards the eventual return value of the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method (if it does not cancel/interrupt).
 
 If the command does not run within a thread then this logic will not be applicable.
 
-__(6) Is Command Successful?__
-
-Hystrix routes application flow based on the response from the _(5) [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\))_ method.
-
-__(6a) Successful Response__
+Hystrix routes application flow based on the response from the _(6) [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\))_ method.
 
 If the command did not throw any exceptions and it returned a response, Hystrix returns this response after it performs some some logging and metrics reporting.
-
-__(6b) Failed Response__
-
-If the command did throw an exception, Hystrix marks it as &ldquo;failed&rdquo &mdash; which will contribute to potentially tripping the circuit &mdash; and routes application flow to _(8) [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\))._
 
 __(7) Calculate Circuit Health__
 
@@ -82,23 +76,19 @@ Hystrix reports successes, failures, rejections, and timeouts to the circuit bre
 
 It uses these stats to determine when the circuit should &ldquo;trip,&rdquo; at which point it short-circuits any subsequent requests until a recovery period elapses, upon which it closes the circuit again after first checking certain health checks.
 
-__(8) HystrixCommand.getFallback()__
+__(8) Failed Response__
 
-Hystrix reverts to the fallback whenever a command execution fails: when an exception is thrown by (5) [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\))), when the command is _(3) short-circuited_ because the circuit is open, or when the command&#8217;s _(4) thread pool and queue or semaphore_ are at capacity.
+If the command did throw an exception, Hystrix marks it as &ldquo;failed&rdquo &mdash; which will contribute to potentially tripping the circuit &mdash; and routes application flow to [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)).
+
+Hystrix reverts to the fallback whenever a command execution fails: when an exception is thrown by (6) [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\))), when the command is _(4) short-circuited_ because the circuit is open, or when the command&#8217;s _(5) thread pool and queue or semaphore_ are at capacity.
 
 The fallback provides a generic response, without any network dependency, from an in-memory cache or via other static logic.
 
 _If you must use a network call in the fallback, you should do so by means of another [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html)._
 
-__(8a) Fallback Not Implemented__
-
 If you have not implemented [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) Hystrix throws an exception and the caller is left to deal with it.
 
-__(8b) Fallback Successful__
-
 If the fallback returns a response then Hystrix will return it to the caller.
-
-__(8c) Fallback Failed__
 
 If [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) fails and throws an exception then the caller is left to deal with it.
 
@@ -106,7 +96,7 @@ It is considered a poor practice to have a fallback implementation that can fail
 
 __(9) Return Successful Response__
 
-If Hystrix receives a _(6a) successful response_ it will return this response to the caller.
+If Hystrix receives a successful response it will return this response to the caller.
 
 <a name='CircuitBreaker'/>
 ## Circuit Breaker
