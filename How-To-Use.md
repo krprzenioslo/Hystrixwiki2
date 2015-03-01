@@ -84,7 +84,7 @@ public class CommandHelloWorld extends HystrixObservableCommand<String> {
 <a name='Synchronous-Execution'/>
 ## Synchronous Execution
 
-You can execute Hystrix commands synchronously with the [execute()](<http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#execute\(\)>) method, as in the following example:
+You can execute a `HystrixCommand` synchronously with the [execute()](<http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#execute\(\)>) method, as in the following example:
 
 ```java
 String s = new CommandHelloWorld("World").execute();
@@ -99,6 +99,10 @@ Execution of this form passes the following tests:
             assertEquals("Hello Bob!", new CommandHelloWorld("Bob").execute());
         }
 ```
+
+#### `HystrixObservableCommand` Equivalent
+
+There is no simple equivalent to `execute` for a `HystrixObservableCommand`, but if you know that the `Observable` produced by such a command must always produce only a single value, you can mimic the behavior of `execute` by applying `.toBlocking().toFuture().get()` to the `Observable`.
 
 <a name='Asynchronous-Execution'/>
 ## Asynchronous Execution
@@ -142,12 +146,16 @@ String s1 = new CommandHelloWorld("World").execute();
 String s2 = new CommandHelloWorld("World").queue().get();
 ```
 
+#### `HystrixObservableCommand` Equivalent
+
+There is no simple equivalent to `queue` for a `HystrixObservableCommand`, but if you know that the `Observable` produced by such a command must always produce only a single value, you can mimic the behavior of `queue` by applying the RxJava operators `.toBlocking().toFuture()` to the `Observable`.
+
 <a name='Reactive-Execution'/>
 ## Reactive Execution
 
 You can also observe the results of a `HystrixCommand` as an `Observable` by using one of the following methods:
-* [observe()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#observe\(\)) &mdash; returns a &ldquo;hot&rdquo; Observable that executes the command immediately, though because the Observable is filtered through a `ReplaySubject` you are not in danger of losing any items that it emits before you have a chance to subscribe
-* [toObservable()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#toObservable\(\)) &mdash; returns a &ldquo;cold&rdquo; Observable that won&#8217;t execute the command and begin emitting its results until you subscribe to the Observable
+* [`observe()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#observe\(\)) &mdash; returns a &ldquo;hot&rdquo; Observable that executes the command immediately, though because the Observable is filtered through a `ReplaySubject` you are not in danger of losing any items that it emits before you have a chance to subscribe
+* [`toObservable()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#toObservable\(\)) &mdash; returns a &ldquo;cold&rdquo; Observable that won&#8217;t execute the command and begin emitting its results until you subscribe to the Observable
 
 ```java
 Observable<String> ho = new CommandHelloWorld("World").observe();
@@ -236,18 +244,18 @@ More information about Observable can be found at http://reactivex.io/documentat
 <a name='Reactive-Commands' />
 ## Reactive Commands
 
-Rather than converting a `HystrixCommand` into an `Observable` using the methods described above, you can also create a [`HystrixObservableCommand`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixObservableCommand.java) that is a specialized version of `HystrixCommand` meant to wrap Observables. A `HystrixObservableCommand` is capable of wrapping Observables that emit multiple items, whereas ordinary `HystrixCommands`, even when converted into Observables, will never emit more than one item.
+Rather than converting a `HystrixCommand` into an `Observable` using the methods described above, you can also create a `HystrixObservableCommand` that is a specialized version of `HystrixCommand` meant to wrap Observables. A `HystrixObservableCommand` is capable of wrapping Observables that emit multiple items, whereas ordinary `HystrixCommands`, even when converted into Observables, will never emit more than one item.
 
 In such a case, instead of overriding the `run` method with your command logic (as you would with an ordinary `HystrixCommand`), you would override the `construct` method so that it returns the Observable you intend to wrap.
 
 To obtain an Observable representation of the `HystrixObservableCommand`, use one of the following two methods:
-* [observe()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixObservableCommand.html#observe\(\)) &mdash; returns a &ldquo;hot&rdquo; Observable that subscribes to the underlying Observable immediately, though because it is filtered through a `ReplaySubject` you are not in danger of losing any items that it emits before you have a chance to subscribe to the resulting Observable
-* [toObservable()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixObservableCommand.html#toObservable\(\)) &mdash; returns a &ldquo;cold&rdquo; Observable that won&#8217;t subscribe to the underlying Observable until you subscribe to the resulting Observable
+* [`observe()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixObservableCommand.html#observe\(\)) &mdash; returns a &ldquo;hot&rdquo; Observable that subscribes to the underlying Observable immediately, though because it is filtered through a `ReplaySubject` you are not in danger of losing any items that it emits before you have a chance to subscribe to the resulting Observable
+* [`toObservable()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixObservableCommand.html#toObservable\(\)) &mdash; returns a &ldquo;cold&rdquo; Observable that won&#8217;t subscribe to the underlying Observable until you subscribe to the resulting Observable
 
 <a name='Fallback'/>
 ## Fallback
 
-You can support graceful degradation by adding a [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) implementation to an ordinary `HystrixCommand`. Hystrix will execute this fallback for all types of failure such as [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) failure, timeout, thread pool or semaphore rejection, and circuit-breaker short-circuiting. The following example includes such a fallback:
+You can support graceful degradation in an ordinary `HystrixCommand` by adding a [`getFallback()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) implementation. Hystrix will execute this fallback for all types of failure such as `run()` failure, timeout, thread pool or semaphore rejection, and circuit-breaker short-circuiting. The following example includes such a fallback:
 
 ```java
 public class CommandHelloFailure extends HystrixCommand<String> {
@@ -272,7 +280,7 @@ public class CommandHelloFailure extends HystrixCommand<String> {
 ```
 [View Source](../blob/master/hystrix-examples/src/main/java/com/netflix/hystrix/examples/basic/CommandHelloFailure.java)
 
-This command&#8217;s [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method will fail on every execution. However, the caller will always receive the value returned by the command&#8217;s [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) method instead of receiving an exception:
+This command&#8217;s `run()` method will fail on every execution. However, the caller will always receive the value returned by the command&#8217;s `getFallback()` method instead of receiving an exception:
 
 ```java
     @Test
@@ -282,16 +290,22 @@ This command&#8217;s [run()](http://netflix.github.com/Hystrix/javadoc/index.htm
     }
 ```
 
-For a `HystrixObservableCommand` you instead may override the `resumeWithFallback` method so that it returns a second Observable that will be subscribed to if the first one fails. Note that because an Observable may fail after having already emitted one or more values, your fallback should not assume that it will be emitting the only values that the resulting `HystrixObservableCommand` emits.
+#### `HystrixObservableCommand` Equivalent
+
+For a `HystrixObservableCommand` you instead may override the `resumeWithFallback` method so that it returns a second `Observable` that will take over from the primary `Observable` if it fails. Note that because an `Observable` may fail after having already emitted one or more items, your fallback should not assume that it will be emitting the only values that the observer will see.
+
+Internally, Hystrix uses the RxJava [`onErrorResumeNext`](http://reactivex.io/documentation/operators/catch.html) operator to seamlessly transition between the primary and fallback `Observable` in case of an error.
 
 <a name='ErrorPropagation'/>
 ## Error Propagation
 
-All exceptions thrown from the [run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method except for [HystrixBadRequestException](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/exception/HystrixBadRequestException.html) count as failures and trigger [getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) and circuit-breaker logic.
+All exceptions thrown from the `run()` method except for [`HystrixBadRequestException`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/exception/HystrixBadRequestException.html) count as failures and trigger `getFallback()` and circuit-breaker logic.
 
-You can wrap the exception that you would like to throw in ```HystrixBadRequestException``` and retrieve it via ```getCause()```. The [HystrixBadRequestException](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/exception/HystrixBadRequestException.html) is intended for use cases such as reporting illegal arguments or non-system failures that should not count against the failure metrics and should not trigger fallback logic.
+You can wrap the exception that you would like to throw in `HystrixBadRequestException` and retrieve it via `getCause()`. The `HystrixBadRequestException` is intended for use cases such as reporting illegal arguments or non-system failures that should not count against the failure metrics and should not trigger fallback logic.
 
-In the case of a `HystrixObservableCommand`, non-recoverable errors are returned via `onError` notifications from the resulting Observable, and fallbacks are accomplished by falling back to a second Observable that Hystrix obtains through the `resumeWithFallback` method that you implement.
+#### `HystrixObservableCommand` Equivalent
+
+In the case of a `HystrixObservableCommand`, non-recoverable errors are returned via `onError` notifications from the resulting `Observable`, and fallbacks are accomplished by falling back to a second Observable that Hystrix obtains through the `resumeWithFallback` method that you implement.
 
 <a name='CommandName'/>
 ## Command Name
@@ -302,7 +316,7 @@ A command name is, by default, derived from the class name:
 getClass().getSimpleName();
 ```
 
-To explicitly define the name pass it in via the [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) constructor:
+To explicitly define the name pass it in via the `HystrixCommand` or `HystrixObservableCommand` constructor:
 
 ```java
     public CommandHelloWorld(String name) {
@@ -312,7 +326,7 @@ To explicitly define the name pass it in via the [HystrixCommand](http://netflix
     }
 ```
 
-[HystrixCommandKey](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandKey.html) is an interface and can be implemented as an enum or regular class, but it also has the helper [Factory](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandKey.Factory.html) class to construct and intern instances such as:
+[`HystrixCommandKey`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandKey.html) is an interface and can be implemented as an enum or regular class, but it also has the helper [`Factory`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandKey.Factory.html) class to construct and intern instances such as:
 
 ```java
 HystrixCommandKey.Factory.asKey("HelloWorld")
@@ -325,7 +339,7 @@ Hystrix uses the command group key to group together commands such as for report
 
 By default Hystrix uses this to define the command thread-pool unless a separate one is defined.
 
-[HystrixCommandGroupKey](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandGroupKey.html) is an interface and can be implemented as an enum or regular class, but it also has the helper [Factory](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandGroupKey.Factory.html) class to construct and intern instances such as:
+[`HystrixCommandGroupKey`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandGroupKey.html) is an interface and can be implemented as an enum or regular class, but it also has the helper [`Factory`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandGroupKey.Factory.html) class to construct and intern instances such as:
 
 ```java
 HystrixCommandGroupKey.Factory.asKey("ExampleGroup")
@@ -334,9 +348,9 @@ HystrixCommandGroupKey.Factory.asKey("ExampleGroup")
 <a name='CommandThreadPool'/>
 ## Command Thread-Pool
 
-The thread-pool key represents a [HystrixThreadPool](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixThreadPool.html) for monitoring, metrics publishing, caching, and other such uses. A [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) is associated with a single [HystrixThreadPool](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixThreadPool.html) as retrieved by the [HystrixThreadPoolKey](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixThreadPoolKey.html) injected into it, or it defaults to one created using the [HystrixCommandGroupKey](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandGroupKey.html) it is created with.
+The thread-pool key represents a [`HystrixThreadPool`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixThreadPool.html) for monitoring, metrics publishing, caching, and other such uses. A `HystrixCommand` is associated with a single `HystrixThreadPool` as retrieved by the [`HystrixThreadPoolKey`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixThreadPoolKey.html) injected into it, or it defaults to one created using the `HystrixCommandGroupKey` it is created with.
 
-To explicitly define the name pass it in via the [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) constructor:
+To explicitly define the name pass it in via the `HystrixCommand` or `HystrixObservableCommand` constructor:
 
 ```java
     public CommandHelloWorld(String name) {
@@ -347,13 +361,13 @@ To explicitly define the name pass it in via the [HystrixCommand](http://netflix
     }
 ```
 
-[HystrixThreadPoolKey](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixThreadPoolKey.html) is an interface and can be implemented as an enum or regular class, but it also has the helper [Factory](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixThreadPoolKey.Factory.html) class to construct and intern instances such as:
+[`HystrixThreadPoolKey`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixThreadPoolKey.html) is an interface and can be implemented as an enum or regular class, but it also has the helper [`Factory`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixThreadPoolKey.Factory.html) class to construct and intern instances such as:
 
 ```java
 HystrixThreadPoolKey.Factory.asKey("HelloWorldPool")
 ```
 
-The reason why you might use [HystrixThreadPoolKey](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixThreadPoolKey.html) instead of just a different [HystrixCommandGroupKey](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandGroupKey.html) is that multiple commands may belong to the same &ldquo;group&rdquo; of ownership or logical functionality, but certain commands may need to be isolated from each other.
+The reason why you might use `HystrixThreadPoolKey` instead of just a different `HystrixCommandGroupKey` is that multiple commands may belong to the same &ldquo;group&rdquo; of ownership or logical functionality, but certain commands may need to be isolated from each other.
 
 Here is a simple example:
 
@@ -364,12 +378,12 @@ Here is a simple example:
 
 If command A becomes latent and saturates its thread-pool it should not prevent command B from executing requests since they each hit different back-end resources.
 
-Thus, we logically want these commands grouped together but want them isolated differently and would use [HystrixThreadPoolKey](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixThreadPoolKey.html) to give each of them a different thread-pool.
+Thus, we logically want these commands grouped together but want them isolated differently and would use `HystrixThreadPoolKey` to give each of them a different thread-pool.
 
 <a name='Caching'/>
 ## Request Cache
 
-You enable request caching by implementing the [getCacheKey()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getCacheKey\(\)) method on a [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) object as follows:
+You enable request caching by implementing the [`getCacheKey()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getCacheKey\(\)) method on a `HystrixCommand` or `HystrixObservableCommand` object as follows:
 
 ```java
 public class CommandUsingRequestCache extends HystrixCommand<Boolean> {
@@ -394,7 +408,7 @@ public class CommandUsingRequestCache extends HystrixCommand<Boolean> {
 ```
 [View Source](../blob/master/hystrix-examples/src/main/java/com/netflix/hystrix/examples/basic/CommandUsingRequestCache.java)
 
-Since this depends on request context we must initialize the [HystrixRequestContext](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/strategy/concurrency/HystrixRequestContext.html).
+Since this depends on request context we must initialize the [`HystrixRequestContext`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/strategy/concurrency/HystrixRequestContext.html).
 
 In a simple unit test you could do this as follows:
 
@@ -455,11 +469,11 @@ The following is an example that shows how commands retrieve their values from t
 <a name='Collapsing'/>
 ## Request Collapsing
 
-Request collapsing enables multiple requests to be batched into a single [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) instance execution.
+Request collapsing enables multiple requests to be batched into a single `HystrixCommand` instance execution.
 
 A collapser can use the batch size and the elapsed time since the creation of the batch as triggers for executing a batch.
 
-Following is a simple example of how to implement a [HystrixCollapser](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html):
+Following is a simple example of how to implement a [`HystrixCollapser`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html):
 
 ```java
 public class CommandCollapserGetValueForKey extends HystrixCollapser<List<String>, String, Integer> {
@@ -511,7 +525,7 @@ public class CommandCollapserGetValueForKey extends HystrixCollapser<List<String
 ```
 [View Source](../blob/master/hystrix-examples/src/main/java/com/netflix/hystrix/examples/basic/CommandCollapserGetValueForKey.java)
 
-The following unit test shows how to use a collapser to automatically batch four executions of `CommandCollapserGetValueForKey` into a single [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) execution:
+The following unit test shows how to use a collapser to automatically batch four executions of `CommandCollapserGetValueForKey` into a single `HystrixCommand` execution:
 
 ```java
 @Test
@@ -548,7 +562,7 @@ public void testCollapser() throws Exception {
 <a name='RequestContextSetup'/>
 ## Request Context Setup
 
-To use request-scoped features (request caching, request collapsing, request log) you must manage the [HystrixRequestContext](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/concurrent/HystrixRequestContext.html) lifecycle (or implement an alternative [HystrixConcurrencyStrategy](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/concurrent/HystrixConcurrencyStrategy.html)).
+To use request-scoped features (request caching, request collapsing, request log) you must manage the [`HystrixRequestContext`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/concurrent/HystrixRequestContext.html) lifecycle (or implement an alternative [`HystrixConcurrencyStrategy`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/concurrent/HystrixConcurrencyStrategy.html)).
 
 This means that you must execute the following before a request:
 
