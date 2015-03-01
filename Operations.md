@@ -1,6 +1,6 @@
 Hystrix is not only a tool for resilience engineering but also for operations. 
 
-This page attempts to share some of what has been learned in operating a system with 100+ `HystrixCommand` types, 40+ thread pools, and 10+ billion thread-isolated and 200+ billion semaphore-isolated command executions per day.
+This page attempts to share some of what has been learned in operating a system with 100+ Hystrix Command types, 40+ thread pools, and 10+ billion thread-isolated and 200+ billion semaphore-isolated command executions per day.
 
 The screenshots and incidents described on this page come from the Netflix API system and represent either real production issues or [Latency Monkey](http://techblog.netflix.com/2011/07/netflix-simian-army.html) simulations against production.
 
@@ -37,7 +37,7 @@ Hystrix measures and reports metrics with millisecond granularity. This reveals 
 
 This granularity at which metrics are captured by Hystrix is something many software systems don&#8217;t have, so these reports can cause undue worry. 
 
-In this screenshot from the Netflix API dashboard that monitors `HystrixCommands` in production you can see the orange and purple numbers that show timeouts and threadpool rejections occurring for a small number of requests in a 10-second statistical window representing 243 servers.
+In this screenshot from the Netflix API dashboard that monitors Hystrix Commands in production you can see the orange and purple numbers that show timeouts and threadpool rejections occurring for a small number of requests in a 10-second statistical window representing 243 servers.
 
 [[images/circuit-identity-jitter-640.png]]
 
@@ -55,9 +55,9 @@ Some of the causes:
 
 ## When Things Are Latent
 
-If you notice latancy, don&#8217;t react by jumping to reconfigure things. If a `HystrixCommand` is shedding load it&#8217;s doing what it&#8217;s supposed to _(assuming you configured it correctly when it was healthy, of course &mdash; see above)_.
+If you notice latancy, don&#8217;t react by jumping to reconfigure things. If a Hystrix Command is shedding load it&#8217;s doing what it&#8217;s supposed to _(assuming you configured it correctly when it was healthy, of course &mdash; see above)_.
 
-In the early days as Hystrix was being adopted at Netflix it was a common reaction when a circuit (what we internally call a `HystrixCommand`/`CircuitBreaker` pairing) became latent to dynamically change properties to increase thread-pools, queues, timeouts, and so forth to &ldquo;try and give it some breathing room&rdquo; and get it working again. But that is the opposite of what you should do. If you configured the command correctly for a healthy system and it is now rejecting, timing out, and/or short-circuiting then you should concentrate on fixing the underlying root cause.
+In the early days as Hystrix was being adopted at Netflix it was a common reaction when a circuit (what we internally call a `Hystrix[Observable]Command`/`CircuitBreaker` pairing) became latent to dynamically change properties to increase thread-pools, queues, timeouts, and so forth to &ldquo;try and give it some breathing room&rdquo; and get it working again. But that is the opposite of what you should do. If you configured the command correctly for a healthy system and it is now rejecting, timing out, and/or short-circuiting then you should concentrate on fixing the underlying root cause.
 
 Don&#8217;t make the mistake of responding by giving the command more resources that it can use up (at an extreme if you behave that way, you DDOS yourself by increasing the size of thread-pools, queues, timeouts, semaphores, and the like.)
 
