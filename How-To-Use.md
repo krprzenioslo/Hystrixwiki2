@@ -27,7 +27,7 @@
 <a name='Hello-World'/>
 ## Hello World!
 
-The following is a basic &ldquo;Hello World&rdquo; implementation of a [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html):
+The following is a basic &ldquo;Hello World&rdquo; implementation of a [`HystrixCommand`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html):
 
 ```java
 public class CommandHelloWorld extends HystrixCommand<String> {
@@ -47,6 +47,39 @@ public class CommandHelloWorld extends HystrixCommand<String> {
 }
 ```
 [View Source](../blob/master/hystrix-examples/src/main/java/com/netflix/hystrix/examples/basic/CommandHelloWorld.java)
+
+#### `HystrixObservableCommand` Equivalent
+An equivalent Hello World solution that uses a [`HystrixObservableCommand`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixObservableCommand.html) instead of a `HystrixCommand` would involve overriding the `construct` method as follows:
+```java
+public class CommandHelloWorld extends HystrixObservableCommand<String> {
+
+    private final String name;
+
+    public CommandHelloWorld(String name) {
+        super(HystrixCommandGroupKey.Factory.asKey("ExampleGroup"));
+        this.name = name;
+    }
+
+    @Override
+    protected String construct() {
+        return Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(Subscriber<? super String> observer) {
+                try {
+                    if (!observer.isUnsubscribed()) {
+                        // a real example would do work like a network call here
+                        observer.onNext("Hello");
+                        observer.onNext(name + "!");
+                        observer.onCompleted();
+                    }
+                } catch (Exception e) {
+                    observer.onError(e);
+                }
+            }
+         } );
+    }
+}
+```
 
 <a name='Synchronous-Execution'/>
 ## Synchronous Execution
