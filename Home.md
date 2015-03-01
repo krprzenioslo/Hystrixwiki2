@@ -88,8 +88,8 @@ Hystrix works by:
 ## How Does Hystrix Accomplish Its Goals?
 
 Hystrix does this by:
-* Wrapping all calls to external systems (or &ldquo;dependencies&rdquo;) in a `HystrixCommand` object which typically executes within a separate thread (this is an example of the [command pattern](http://en.wikipedia.org/wiki/Command_pattern)).
-* Timing-out calls that take longer than thresholds you define. There is a default, but for most dependenciesyou custom-set these timeouts by means of &ldquo;properties&rdquo; so that they are slightly higher than the measured 99.5<sup>th</sup> percentile performance for each dependency.
+* Wrapping all calls to external systems (or &ldquo;dependencies&rdquo;) in a `HystrixCommand` or `HystrixObservableCommand` object which typically executes within a separate thread (this is an example of the [command pattern](http://en.wikipedia.org/wiki/Command_pattern)).
+* Timing-out calls that take longer than thresholds you define. There is a default, but for most dependencies you custom-set these timeouts by means of &ldquo;properties&rdquo; so that they are slightly higher than the measured 99.5<sup>th</sup> percentile performance for each dependency.
 * Maintaining a small thread-pool (or semaphore) for each dependency; if it becomes full, requests destined for that dependency will be immediately rejected instead of queued up.
 * Measuring successes, failures (exceptions thrown by client), timeouts, and thread rejections.
 * Tripping a circuit-breaker to stop all requests to a particular service for a period of time, either manually or automatically if the error percentage for the service passes a threshold.
