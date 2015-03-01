@@ -38,7 +38,7 @@ If you need to download the jars instead of using a build system, create a Maven
 		<dependency>
 			<groupId>com.netflix.hystrix</groupId>
 			<artifactId>hystrix-core</artifactId>
-			<version>1.2.2</version>
+			<version>x.y.z</version>
 			<scope/>
 		</dependency>
 	</dependencies>
