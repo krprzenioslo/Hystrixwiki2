@@ -44,7 +44,7 @@
 
 Hystrix uses [Archaius](https://github.com/Netflix/archaius) for the default implementation of properties for configuration.
 
-The documentation below describes the default [HystrixPropertiesStrategy](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/properties/HystrixPropertiesStrategy.html) implementation that is used unless you override it by using a [[plugin|Plugins]].
+The documentation below describes the default [`HystrixPropertiesStrategy`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/properties/HystrixPropertiesStrategy.html) implementation that is used unless you override it by using a [[plugin|Plugins]].
 
 Each property has four levels of precedence:
 
@@ -52,13 +52,13 @@ __1. Global default from code__
 
 This is the default if none of the following 3 are set.
 
-The global default is shown as &ldquo;_Default Value_&rdquo; in the examples below.
+The global default is shown as &ldquo;**Default Value**&rdquo; in the tables below.
 
 __2. Dynamic global default property__
 
 You can change a global default value by using properties.
 
-The global default property name is shown as &ldquo;_Default Property_&rdquo; in the examples below.
+The global default property name is shown as &ldquo;**Default Property**&rdquo; in the tables below.
 
 Example:
 
@@ -70,25 +70,25 @@ HystrixCommandProperties.Setter()
 You would insert a command of this sort into a `HystrixCommand` constructor in a manner similar to this:
 
 ```java
-    public HystrixCommandInstance(int id) {
-        super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("ExampleGroup"))
-                .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
-                        .withExecutionIsolationThreadTimeoutInMilliseconds(500)));
-        this.id = id;
-    }
+public HystrixCommandInstance(int id) {
+    super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("ExampleGroup"))
+            .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
+                   .withExecutionIsolationThreadTimeoutInMilliseconds(500)));
+    this.id = id;
+}
 ```
 
 __4. Dynamic instance property__
 
 You can set instance-specific values dynamically which override the preceding three levels of defaults.
 
-The dynamic instance property name is shown as &ldquo;_Instance Property_&rdquo; in the examples below.
+The dynamic instance property name is shown as &ldquo;**Instance Property**&rdquo; in the tables below.
 
 Example:
 
-> _Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.execution.isolation.thread.timeoutInMilliseconds`
+<table><tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.execution.isolation.thread.timeoutInMilliseconds</tt></td></tr></table>
 
-Replace the [[HystrixCommandKey|http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandKey.html]] portion of the property with the [[HystrixCommandKey.name()|http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandKey.html#name\(\)]] value of whichever `HystrixCommand` you are targeting.
+Replace the [_`HystrixCommandKey`_](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandKey.html) portion of the property with the [`HystrixCommandKey.name()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandKey.html#name\(\)) value of whichever `HystrixCommand` you are targeting.
 
 For example, if the key was named &ldquo;`SubscriberGetAccount`&rdquo; then the property name would be:
 
@@ -97,21 +97,20 @@ For example, if the key was named &ldquo;`SubscriberGetAccount`&rdquo; then the 
 <a name="CommandProperties" />
 ## Command Properties
 
-The following [Properties](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandProperties.html) control [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) behavior:
+The following [Properties](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandProperties.html) control [`HystrixCommand`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) behavior:
 
 <a name='CommandExecution'/>
 ### Execution
 
-The following Properties control how [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) executes.
+The following Properties control how [`HystrixCommand.run()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) executes.
 
 <a name="execution.isolation.strategy" />
 #### execution.isolation.strategy
 
-This property indicates which isolation strategy [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) executes with, one of the following two choices:
+This property indicates which isolation strategy `HystrixCommand.run()` executes with, one of the following two choices:
 
-`THREAD` - it executes on a separate thread and concurrent requests are limited by the number of threads in the thread-pool
-
-`SEMAPHORE` - it executes on the calling thread and concurrent requests are limited by the semaphore count
+* `THREAD` &mdash; it executes on a separate thread and concurrent requests are limited by the number of threads in the thread-pool
+* `SEMAPHORE` &mdash; it executes on the calling thread and concurrent requests are limited by the semaphore count
 
 ##### Thread or Semaphore
 
@@ -121,62 +120,56 @@ Commands executed in threads have an extra layer of protection against latencies
 
 Generally the only time you should use semaphore isolation (`SEMAPHORE`) is when the call is so high volume (hundreds per second, per instance) that the overhead of separate threads is too high; this typically only applies to non-network calls.
 
->Netflix API has 100+ commands running in 40+ thread pools and only a handful of those commands are not running in a thread - those that fetch metadata from an in-memory cache or that are fa&ccedil;ades to thread-isolated commands (see [[&ldquo;Primary + Secondary with Fallback&rdquo; pattern|https://github.com/Netflix/Hystrix/wiki/How-To-Use#common-patterns]] for more information on this).
+>Netflix API has 100+ commands running in 40+ thread pools and only a handful of those commands are not running in a thread - those that fetch metadata from an in-memory cache or that are fa&ccedil;ades to thread-isolated commands (see [&ldquo;Primary + Secondary with Fallback&rdquo; pattern](https://github.com/Netflix/Hystrix/wiki/How-To-Use#common-patterns) for more information on this).
 
 <a href="images/isolation-options-1280.png">[[images/isolation-options-640.png]]</a>
 _(Click for larger view)_
 
 See [[how isolation works|How-it-Works#isolation]] for more information about this decision.
 
-_Default Value:_ `THREAD` (see `ExecutionIsolationStrategy.THREAD`)  
-_Possible Values:_ `THREAD`, `SEMAPHORE`
-_Default Property:_ `hystrix.command.default.execution.isolation.strategy`  
-_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.execution.isolation.strategy`  
-_How to Set Instance Default:_  
-
-```java
-// to use thread isolation
+<table> <tbody>
+ <tr><th>Default Value</th><td><tt>THREAD</tt> (see <tt>ExecutionIsolationStrategy.THREAD</tt>)</td></tr>
+ <tr><th>Possible Values</th><td><tt>THREAD</tt>, <tt>SEMAPHORE</tt></td></tr>
+ <tr><th>Default Property</th><td><tt>hystrix.command.default.execution.isolation.strategy</tt></td></tr>
+ <tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.execution.isolation.strategy</tt></td></tr>
+ <tr><th>How to Set Instance Default:</th><td><pre>// to use thread isolation
 HystrixCommandProperties.Setter()
    .withExecutionIsolationStrategy(ExecutionIsolationStrategy.THREAD)
 // to use semaphore isolation
 HystrixCommandProperties.Setter()
-   .withExecutionIsolationStrategy(ExecutionIsolationStrategy.SEMAPHORE)
-```
+   .withExecutionIsolationStrategy(ExecutionIsolationStrategy.SEMAPHORE)</pre></td></tr>
+</tbody></table>
 
 <a name="execution.isolation.thread.timeoutInMilliseconds" />
 #### execution.isolation.thread.timeoutInMilliseconds
 
-This property sets the time in milliseconds after which the calling thread will timeout, walk away from the [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) execution, mark the [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) as a TIMEOUT, and perform fallback logic. This property only applies when you use  `ExecutionIsolationStrategy.THREAD`.
+This property sets the time in milliseconds after which the calling thread will timeout, walk away from the `HystrixCommand.run()` execution, mark the `HystrixCommand` as a TIMEOUT, and perform fallback logic. This property only applies when you use  `ExecutionIsolationStrategy.THREAD`.
 
-_Default Value:_ `1000`  
-_Default Property:_ `hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds`  
-_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.execution.isolation.thread.timeoutInMilliseconds`  
-_How to Set Instance Default:_  
-
-```java
-HystrixCommandProperties.Setter()
-   .withExecutionIsolationThreadTimeoutInMilliseconds(int value)
-```
+<table><tbody>
+ <tr><th>Default Value</th><td><tt>1000</tt></td></tr>
+ <tr><th>Default Property</th><td><tt>hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds</tt></td></tr>
+ <tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.execution.isolation.thread.timeoutInMilliseconds</tt></td></tr>
+ <tr><th>How to Set Instance Default</th><td><pre>HystrixCommandProperties.Setter()
+   .withExecutionIsolationThreadTimeoutInMilliseconds(int value)</pre></td></tr>
+</tbody></table>
 
 <a name="execution.isolation.thread.interruptOnTimeout" />
 #### execution.isolation.thread.interruptOnTimeout
 
 This property indicates whether the thread executing [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) should be interrupted when a timeout occurs.
 
-_Default Value:_ `true`  
-_Default Property:_ `hystrix.command.default.execution.isolation.thread.interruptOnTimeout`  
-_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.execution.isolation.thread.interruptOnTimeout`  
-_How to Set Instance Default:_  
-
-```java
-HystrixCommandProperties.Setter()
-   .withExecutionIsolationThreadInterruptOnTimeout(boolean value)
-```
+<table><tbody>
+ <tr><th>Default Value</th><td><tt>true</tt></td></tr>
+ <tr><th>Default Property</th><td><tt>hystrix.command.default.execution.isolation.thread.interruptOnTimeout</tt></td></tr>
+ <tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.execution.isolation.thread.interruptOnTimeout</tt></td></tr>
+ <tr><th>How to Set Instance Default</th><td><pre>HystrixCommandProperties.Setter()
+   .withExecutionIsolationThreadInterruptOnTimeout(boolean value)</pre></td></tr>
+</tbody></table>
 
 <a name="execution.isolation.semaphore.maxConcurrentRequests" />
 #### execution.isolation.semaphore.maxConcurrentRequests
 
-This property sets the maximum number of requests allowed to a [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method when you are using `ExecutionIsolationStrategy.SEMAPHORE`.
+This property sets the maximum number of requests allowed to a `HystrixCommand.run()` method when you are using `ExecutionIsolationStrategy.SEMAPHORE`.
 
 If this maximum concurrent limit is hit then subsequent requests will be rejected.
 
@@ -184,38 +177,35 @@ The logic that you use when you size a semaphore is basically the same as when y
 
 > For example, 5000rps on a single instance for in-memory lookups with metrics being gathered has been seen to work with a semaphore of only 2.
 
-The isolation principle is still the same so the semaphore should still be a small percentage of the overall container (i.e. Tomcat) threadpool, not all of or most of it, otherwise it provides no protection.
+The isolation principle is still the same so the semaphore should still be a small percentage of the overall container (i.e. Tomcat) thread pool, not all of or most of it, otherwise it provides no protection.
 
-_Default Value:_ `10`  
-_Default Property:_ `hystrix.command.default.execution.isolation.semaphore.maxConcurrentRequests`  
-_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.execution.isolation.semaphore.maxConcurrentRequests`  
-_How to Set Instance Default:_  
+<table><tbody>
+ <tr><th>Default Value</th><td><tt>10</tt></td></tr>
+ <tr><th>Default Property</th><td><tt>hystrix.command.default.execution.isolation.semaphore.maxConcurrentRequests</tt></td></tr>
+ <tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.execution.isolation.semaphore.maxConcurrentRequests</tt></td></tr>
+ <tr><th>How to Set Instance Default</th><td><pre>HystrixCommandProperties.Setter()
+   .withExecutionIsolationSemaphoreMaxConcurrentRequests(int value)</pre></td></tr>
+</tbody></table>
 
-```java
-HystrixCommandProperties.Setter()
-   .withExecutionIsolationSemaphoreMaxConcurrentRequests(int value)
-```
 <a name='CommandFallback'/>
 ### Fallback
 
-The following properties control how [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) executes. These properties apply to both `ExecutionIsolationStrategy.THREAD` and `ExecutionIsolationStrategy.SEMAPHORE`.
+The following properties control how [`HystrixCommand.getFallback()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) executes. These properties apply to both `ExecutionIsolationStrategy.THREAD` and `ExecutionIsolationStrategy.SEMAPHORE`.
 
 <a name="fallback.isolation.semaphore.maxConcurrentRequests" />
 #### fallback.isolation.semaphore.maxConcurrentRequests
 
-This property sets the maximum number of requests a [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) method is allowed to make from the calling thread.
+This property sets the maximum number of requests a `HystrixCommand.getFallback()` method is allowed to make from the calling thread.
 
 If the maximum concurrent limit is hit then subsequent requests will be rejected and an exception thrown since no fallback could be retrieved.
 
-_Default Value:_ `10`  
-_Default Property:_ `hystrix.command.default.fallback.isolation.semaphore.maxConcurrentRequests`  
-_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.fallback.isolation.semaphore.maxConcurrentRequests`  
-_How to Set Instance Default:_  
-
-```java
-HystrixCommandProperties.Setter()
-   .withFallbackIsolationSemaphoreMaxConcurrentRequests(int value)
-```
+<table><tbody>
+ <tr><th>Default Value</th><td><tt>10</tt></td></tr>
+ <tr><th>Default Property</th><td><tt>hystrix.command.default.fallback.isolation.semaphore.maxConcurrentRequests</tt></td></tr>
+ <tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.fallback.isolation.semaphore.maxConcurrentRequests</tt></td></tr>
+ <tr><th>How to Set Instance Default</th><td><pre>HystrixCommandProperties.Setter()
+   .withFallbackIsolationSemaphoreMaxConcurrentRequests(int value)</pre></td></tr>
+</tbody></table>
 
 <a name="fallback.enabled" />
 #### fallback.enabled
@@ -224,15 +214,13 @@ Since: 1.2
 
 This property determines whether a call to  [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) will be attempted when failure or rejection occurs.
 
-_Default Value:_ `true`  
-_Default Property:_ `hystrix.command.default.fallback.enabled`   
-_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.fallback.enabled`  
-_How to Set Instance Default:_  
-
-```java
-HystrixCommandProperties.Setter()
-   .withFallbackEnabled(boolean value)
-```
+<table><tbody>
+ <tr><th>Default Value</th><td><tt>true</tt></td></tr>
+ <tr><th>Default Property</th><td><tt>hystrix.command.default.fallback.enabled</tt></td></tr>
+ <tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.fallback.enabled</tt></td></tr>
+ <tr><th>How to Set Instance Default</th><td><pre>HystrixCommandProperties.Setter()
+   .withFallbackEnabled(boolean value)</pre></td></tr>
+</tbody></table>
 
 <a name="CommandCircuitBreaker" />
 ### Circuit Breaker
@@ -244,15 +232,13 @@ The circuit breaker [properties](http://netflix.github.com/Hystrix/javadoc/index
 
 This property determines whether a circuit breaker will be used to track health and to short-circuit requests if it trips.
 
-_Default Value:_ `true`   
-_Default Property:_ `hystrix.command.default.circuitBreaker.enabled`  
-_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.circuitBreaker.enabled`  
-_How to Set Instance Default:_  
-
-```java
-HystrixCommandProperties.Setter()
-   .withCircuitBreakerEnabled(boolean value)
-```
+<table><tbody>
+ <tr><th>Default Value</th><td><tt>true</tt></td></tr>
+ <tr><th>Default Property</th><td><tt>hystrix.command.default.circuitBreaker.enabled</tt></td></tr>
+ <tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.circuitBreaker.enabled</tt></td></tr>
+ <tr><th>How to Set Instance Default</th><td><pre>HystrixCommandProperties.Setter()
+   .withCircuitBreakerEnabled(boolean value)</pre></td></tr>
+</tbody></table>
 
 <a name="circuitBreaker.requestVolumeThreshold" />
 #### circuitBreaker.requestVolumeThreshold
@@ -261,15 +247,13 @@ This property sets the minimum number of requests in a rolling window that will 
 
 For example, if the value is 20, then if only 19 requests are received in the rolling window (say a window of 10 seconds) the circuit will not trip open even if all 19 failed.
 
-_Default Value:_ `20`  
-_Default Property:_ `hystrix.command.default.circuitBreaker.requestVolumeThreshold`  
-_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.circuitBreaker.requestVolumeThreshold`  
-_How to Set Instance Default:_  
-
-```java
-HystrixCommandProperties.Setter()
-   .withCircuitBreakerRequestVolumeThreshold(int value)
-```
+<table><tbody>
+ <tr><th>Default Value</th><td><tt>20</tt></td></tr>
+ <tr><th>Default Property</th><td><tt>hystrix.command.default.circuitBreaker.requestVolumeThreshold</tt></td></tr>
+ <tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.circuitBreaker.requestVolumeThreshold</tt></td></tr>
+ <tr><th>How to Set Instance Default</th><td><pre>HystrixCommandProperties.Setter()
+   .withCircuitBreakerRequestVolumeThreshold(int value)</pre></td></tr>
+</tbody></table>
 
 <a name="circuitBreaker.sleepWindowInMilliseconds" />
 #### circuitBreaker.sleepWindowInMilliseconds
