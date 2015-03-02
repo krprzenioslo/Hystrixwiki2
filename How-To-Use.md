@@ -856,6 +856,44 @@ The following unit test demonstrates its behavior:
     }
 ```
 
+#### `HystrixObservableCommand` Equivalent
+The equivalent Stubbed solution for a `HystrixObservableCommand` would involve overriding the `resumeWithFallback` method to return an `Observable` that emits the stub responses. A version equivalent to the previous example would look like this:
+
+```java
+@Override
+protected Observable<Boolean> resumeWithFallback() {
+    return Observable.just( new UserAccount(customerId, "Unknown Name",
+                                            countryCodeFromGeoLookup, true, true, false) );
+}
+```
+
+But if you are expecting to emit multiple items from your `Observable`, you may be more interested in generating stubs for only those items that the original `Observable` had not yet emitted before it failed. Here is a simple example to show how you might accomplish this &mdash; it keeps track of the last item emitted from the main `Observable` so that the fallback knows where to pick up to continue the sequence:
+
+```java
+@Override
+protected Observable<Integer> construct() {
+    return Observable.just(1, 2, 3)
+            .concatWith(Observable.<Integer> error(new RuntimeException("forced error")))
+            .doOnNext(new Action1<Integer>() {
+                @Override
+                public void call(Integer t1) {
+                    lastSeen = t1;
+                }
+                
+            })
+            .subscribeOn(Schedulers.computation());
+}
+
+@Override
+protected Observable<Integer> resumeWithFallback() {
+    if (lastSeen < 4) {
+        return Observable.range(lastSeen + 1, 4 - lastSeen);
+    } else {
+        return Observable.empty();
+    }
+}
+```
+
 <a name='Common-Patterns-FallbackCacheViaNetwork'/>
 ### Fallback: Cache via Network
 
