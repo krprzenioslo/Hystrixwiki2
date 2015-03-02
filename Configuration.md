@@ -344,31 +344,27 @@ This property sets the number of buckets the rolling statistical window is divid
 
 In other words, 10000/10 is okay, so is 10000/20 but 10000/7 is not.
 
-_Default Value:_ `10`  
-_Possible Values:_ Any value that `metrics.rollingStats.timeInMilliseconds` can be evenly divided by. The result however should be buckets measuring hundreds or thousands of milliseconds. Performance at high volume has not been tested with buckets &lt;100ms.  
-_Default Property:_ `hystrix.command.default.metrics.rollingStats.numBuckets`  
-_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.metrics.rollingStats.numBuckets`  
-_How to Set Instance Default:_  
-
-```java
-HystrixCommandProperties.Setter()
-   .withMetricsRollingStatisticalWindowBuckets(int value)
-```
+<table><tbody>
+ <tr><th>Default Value</th><td><tt>10</tt></th></tr>
+ <tr><th>Possible Values</th><td>Any value that <tt>metrics.rollingStats.timeInMilliseconds</tt> can be evenly divided by. The result however should be buckets measuring hundreds or thousands of milliseconds. Performance at high volume has not been tested with buckets &lt;100ms.</th></tr>
+ <tr><th>Default Property</th><td><tt>hystrix.command.default.metrics.rollingStats.numBuckets</tt></th></tr>
+ <tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.metrics.rollingStats.numBuckets</tt></th></tr>
+ <tr><th>How to Set Instance Default</th><td><pre>HystrixCommandProperties.Setter()
+   .withMetricsRollingStatisticalWindowBuckets(int value)</pre></td></tr>
+</tbody></table>
 
 <a name="metrics.rollingPercentile.enabled" />
 #### metrics.rollingPercentile.enabled
 
 This property indicates whether execution latencies should be tracked and calculated as percentiles.
 
-_Default Value:_ `true`  
-_Default Property:_ `hystrix.command.default.metrics.rollingPercentile.enabled`  
-_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.metrics.rollingPercentile.enabled`  
-_How to Set Instance Default:_  
-
-```java
-HystrixCommandProperties.Setter()
-   .withMetricsRollingPercentileEnabled(boolean value)
-```
+<table><tbody>
+ <tr><th>Default Value</th><td><tt>true</tt></th></tr>
+ <tr><th>Default Property</th><td><tt>hystrix.command.default.metrics.rollingPercentile.enabled</tt></th></tr>
+ <tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.metrics.rollingPercentile.enabled</tt></th></tr>
+ <tr><th>How to Set Instance Default</th><td><pre>HystrixCommandProperties.Setter()
+   .withMetricsRollingPercentileEnabled(boolean value)</pre></td></tr>
+</tbody></table>
 
 <a name="metrics.rollingPercentile.timeInMilliseconds" />
 #### metrics.rollingPercentile.timeInMilliseconds
@@ -377,15 +373,13 @@ This property sets the duration of the rolling window in which execution times a
 
 The window is divided into buckets and &ldquo;rolls&rdquo; by those increments. 
 
-_Default Value:_ `60000`  
-_Default Property:_ `hystrix.command.default.metrics.rollingPercentile.timeInMilliseconds`  
-_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.metrics.rollingPercentile.timeInMilliseconds`  
-_How to Set Instance Default:_  
-
-```java
-HystrixCommandProperties.Setter()
-   .withMetricsRollingPercentileWindowInMilliseconds(int value)
-```
+<table><tbody>
+ <tr><th>Default Value</th><td><tt>60000</tt></td></tr>
+ <tr><th>Default Property</th><td><tt>hystrix.command.default.metrics.rollingPercentile.timeInMilliseconds</tt></td></tr>
+ <tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.metrics.rollingPercentile.timeInMilliseconds</tt></td></tr>
+ <tr><th>How to Set Instance Default</th><td><pre>HystrixCommandProperties.Setter()
+   .withMetricsRollingPercentileWindowInMilliseconds(int value)</pre></td></tr>
+</tbody></table>
 
 <a name="metrics.rollingPercentile.numBuckets" />
 #### metrics.rollingPercentile.numBuckets
@@ -396,16 +390,14 @@ Note: The following must be true &mdash; &ldquo;`metrics.rollingPercentile.timeI
 
 In other words, 60000/6 is okay, so is 60000/60 but 10000/7 is not.
 
-_Default Value:_ `6`  
-_Possible Values:_ Any value that `metrics.rollingPercentile.timeInMilliseconds` can be evenly divided by. The result however should be buckets measuring thousands of milliseconds. Performance at high volume has not been tested with buckets &lt;1000ms.  
-_Default Property:_ `hystrix.command.default.metrics.rollingPercentile.numBuckets`  
-_Instance Property:_ `hystrix.command.[HystrixCommandKey].metrics.rollingPercentile.numBuckets`  
-_How to Set Instance Default:_  
-
-```java
-HystrixCommandProperties.Setter()
-   .withMetricsRollingPercentileWindowBuckets(int value)
-```
+<table><tbody>
+ <tr><th>Default Value</th><td><tt>6</tt></td></tr>
+ <tr><th>Possible Values</th><td>Any value that <tt>metrics.rollingPercentile.timeInMilliseconds</tt> can be evenly divided by. The result however should be buckets measuring thousands of milliseconds. Performance at high volume has not been tested with buckets &lt;1000ms.</tt></td></tr>
+ <tr><th>Default Property</th><td><tt>hystrix.command.default.metrics.rollingPercentile.numBuckets</tt></td></tr>
+ <tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.metrics.rollingPercentile.numBuckets</tt></td></tr>
+ <tr><th>How to Set Instance Default</th><td><pre>HystrixCommandProperties.Setter()
+   .withMetricsRollingPercentileWindowBuckets(int value)</pre></td></tr>
+</tbody></table>
 
 <a name="metrics.rollingPercentile.bucketSize" />
 #### metrics.rollingPercentile.bucketSize
@@ -416,15 +408,13 @@ For example, if bucket size is set to 100 and represents a bucket window of 10 s
 
 If you increase this size, this also increases the amount of memory needed to store values and increases the time needed for sorting the lists to do percentile calculations.
 
-_Default Value:_ `100`   
-_Default Property:_ `hystrix.command.default.metrics.rollingPercentile.bucketSize`  
-_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.metrics.rollingPercentile.bucketSize`  
-_How to Set Instance Default:_  
-
-```java
-HystrixCommandProperties.Setter()
-   .withMetricsRollingPercentileBucketSize(int value)
-```
+<table><tbody>
+ <tr><th>Default Value</th><td><tt>100</tt></td></tr>
+ <tr><th>Default Property</th><td><tt>hystrix.command.default.metrics.rollingPercentile.bucketSize</tt></td></tr>
+ <tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.metrics.rollingPercentile.bucketSize</tt></td></tr>
+ <tr><th>How to Set Instance Default</th><td><pre>HystrixCommandProperties.Setter()
+   .withMetricsRollingPercentileBucketSize(int value)</pre></td></tr>
+</tbody></table>
 
 <a name="metrics.healthSnapshot.intervalInMilliseconds" />
 #### metrics.healthSnapshot.intervalInMilliseconds
@@ -433,15 +423,13 @@ This property sets the time to wait, in milliseconds, between allowing health sn
 
 On high-volume circuits the continual calculation of error percentages can become CPU intensive thus this property allows you to control how often it is calculated.
 
-_Default Value:_ `500`  
-_Default Property:_ `hystrix.command.default.metrics.healthSnapshot.intervalInMilliseconds`  
-_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.metrics.healthSnapshot.intervalInMilliseconds`  
-_How to Set Instance Default:_  
-
-```java
-HystrixCommandProperties.Setter()
-   .withMetricsHealthSnapshotIntervalInMilliseconds(int value)
-```
+<table><tbody>
+ <tr><th>Default Value</th><td><tt>500</tt></td></tr>
+ <tr><th>Default Property</th><td><tt>hystrix.command.default.metrics.healthSnapshot.intervalInMilliseconds</tt></td></tr>
+ <tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.metrics.healthSnapshot.intervalInMilliseconds</tt></td></tr>
+ <tr><th>How to Set Instance Default</th><td><pre>HystrixCommandProperties.Setter()
+   .withMetricsHealthSnapshotIntervalInMilliseconds(int value)</pre></td></tr>
+</tbody></table>
 
 <a name="CommandRequestContext" />
 ### Request Context
