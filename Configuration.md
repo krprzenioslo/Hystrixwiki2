@@ -260,30 +260,26 @@ For example, if the value is 20, then if only 19 requests are received in the ro
 
 This property sets the amount of time, after tripping the circuit, to reject requests before allowing attempts again to determine if the circuit should again be closed.
 
-_Default Value:_ `5000`  
-_Default Property:_ `hystrix.command.default.circuitBreaker.sleepWindowInMilliseconds`  
-_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.circuitBreaker.sleepWindowInMilliseconds`  
-_How to Set Instance Default:_  
-
-```java
-HystrixCommandProperties.Setter()
-   .withCircuitBreakerSleepWindowInMilliseconds(int value)
-```
+<table><tbody>
+ <tr><th>Default Value</th><td><tt>5000</tt></td></tr>
+ <tr><th>Default Property</th><td><tt>hystrix.command.default.circuitBreaker.sleepWindowInMilliseconds</tt></td></tr>
+ <tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.circuitBreaker.sleepWindowInMilliseconds</tt></td></tr>
+ <tr><th>How to Set Instance Default</th><td><pre>HystrixCommandProperties.Setter()
+   .withCircuitBreakerSleepWindowInMilliseconds(int value)</pre></td></tr>
+</tbody></table>
 
 <a name="circuitBreaker.errorThresholdPercentage" />
 #### circuitBreaker.errorThresholdPercentage
 
 This property sets the error percentage at or above which the circuit should trip open and start short-circuiting requests to fallback logic.
 
-_Default Value:_ `50`  
-_Default Property:_ `hystrix.command.default.circuitBreaker.errorThresholdPercentage`  
-_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.circuitBreaker.errorThresholdPercentage`  
-_How to Set Instance Default:_  
-
-```java
-HystrixCommandProperties.Setter()
-   .withCircuitBreakerErrorThresholdPercentage(int value)
-```
+<table><tbody>
+ <tr><th>Default Value</th><td><tt>50</tt></td></tr>
+ <tr><th>Default Property</th><td><tt>hystrix.command.default.circuitBreaker.errorThresholdPercentage</tt></td></tr>
+ <tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.circuitBreaker.errorThresholdPercentage</tt></td></tr>
+ <tr><th>How to Set Instance Default</th><td><pre>HystrixCommandProperties.Setter()
+   .withCircuitBreakerErrorThresholdPercentage(int value)</pre></td></tr>
+</tbody></table>
 
 <a name="circuitBreaker.forceOpen" />
 #### circuitBreaker.forceOpen
@@ -292,15 +288,13 @@ This property, if `true`, forces the circuit breaker into an open (tripped) stat
 
 This property takes precedence over `circuitBreaker.forceClosed`.
 
-_Default Value:_ `false`  
-_Default Property:_ `hystrix.command.default.circuitBreaker.forceOpen`  
-_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.circuitBreaker.forceOpen`  
-_How to Set Instance Default:_  
-
-```java
-HystrixCommandProperties.Setter()
-   .withCircuitBreakerForceOpen(boolean value)
-```
+<table><tbody>
+ <tr><th>Default Value</th><td><tt>false</tt></td></tr>
+ <tr><th>Default Property</th><td><tt>hystrix.command.default.circuitBreaker.forceOpen</tt></td></tr>
+ <tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.circuitBreaker.forceOpen</tt></td></tr>
+ <tr><th>How to Set Instance Default</th><td><pre>HystrixCommandProperties.Setter()
+   .withCircuitBreakerForceOpen(boolean value)</pre></td></tr>
+</tbody></table>
 
 <a name="circuitBreaker.forceClosed" />
 #### circuitBreaker.forceClosed
@@ -309,15 +303,13 @@ This property, if `true`, forces the circuit breaker into a closed state in whic
 
 The `circuitBreaker.forceOpen` property takes precedence so if it is set to `true` this property does nothing.
 
-_Default Value:_ `false`  
-_Default Property:_ `hystrix.command.default.circuitBreaker.forceClosed`  
-_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.circuitBreaker.forceClosed`  
-_How to Set Instance Default:_  
-
-```java
-HystrixCommandProperties.Setter()
-   .withCircuitBreakerForceClosed(boolean value)
-```
+<table><tbody>
+ <tr><th>Default Value</th><td><tt>false</tt></td></tr>
+ <tr><th>Default Property</th><td><tt>hystrix.command.default.circuitBreaker.forceClosed</tt></td></tr>
+ <tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.circuitBreaker.forceClosed</tt></td></tr>
+ <tr><th>How to Set Instance Default</th><td><pre>HystrixCommandProperties.Setter()
+   .withCircuitBreakerForceClosed(boolean value)</pre></td></tr>
+</tbody></table>
 
 <a name="CommandMetrics" />
 ### Metrics
@@ -335,15 +327,13 @@ For example, if this property is set to 10 seconds (`10000`) with ten 1-second b
 
 [[images/rolling-stats-640.png]]
 
-_Default Value:_ `10000`  
-_Default Property:_ `hystrix.command.default.metrics.rollingStats.timeInMilliseconds`  
-_Instance Property:_ `hystrix.command.`[HystrixCommandKey]`.metrics.rollingStats.timeInMilliseconds`  
-_How to Set Instance Default:_  
-
-```java
-HystrixCommandProperties.Setter()
-   .withMetricsRollingStatisticalWindowInMilliseconds(int value)
-```
+<table><tbody>
+ <tr><th>Default Value</th><td><tt>10000</tt></td></tr>
+ <tr><th>Default Property</th><td><tt>hystrix.command.default.metrics.rollingStats.timeInMilliseconds</tt></td></tr>
+ <tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.metrics.rollingStats.timeInMilliseconds</tt></td></tr>
+ <tr><th>How to Set Instance Default</th><td><pre>HystrixCommandProperties.Setter()
+   .withMetricsRollingStatisticalWindowInMilliseconds(int value)</pre></td></tr>
+</tbody></table>
 
 <a name="metrics.rollingStats.numBuckets" />
 #### metrics.rollingStats.numBuckets
