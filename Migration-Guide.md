@@ -1,4 +1,5 @@
 ## Changes from 1.3.x to 1.4.x
+* Addition of HystrixObservableCommand.  See [#321](https://github.com/Netflix/Hystrix/issues/602) for full description of design
 * Timeouts now apply to semaphore-isolated commands as well as thread-isolated commands.  Before 1.4.x, semaphore-isolated commands could not timeout.  They now have a timeout registered on another (HystrixTimer) thread, which triggers the timeout flow.  If you use semaphore-isolated commands, they will now see timeouts.  As all HystrixCommands have a [default timeout](https://github.com/Netflix/Hystrix/wiki/Configuration#execution.isolation.thread.timeoutInMilliseconds), this potentially affects all semaphore-isolated commands.
 * Timeouts now fire on `HystrixCommand.queue()`, even if the caller never calls `get()` on the resulting Future.  Before 1.4.x, only calls to `get()` triggered the timeout mechanism to take effect.
 * Execution hooks changed to more closely match the Observable model.  The hooks from 1.3 still exist and still get invoked, but are now deprecated. See https://github.com/Netflix/Hystrix/issues/682 for all the details
@@ -14,3 +15,5 @@
 
 
 ## (Proposed) changes from 1.4.x to 1.5.x
+* Remove deprecated hooks [#684](https://github.com/Netflix/Hystrix/issues/684)
+* Scalar asynchronous command [#602](https://github.com/Netflix/Hystrix/issues/602)
