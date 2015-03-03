@@ -118,6 +118,9 @@ It is considered a poor practice to have a fallback implementation that can fail
 
 If the Hystrix command succeeds, it will return the response or responses to the caller in the form of an `Observable`. Depending on how you have invoked the command in step 2, above, this `Observable` may be transformed before it is returned to you:
 
+<a href="images/hystrix-return-flow.png">[[images/hystrix-return-flow-640.png]]
+_(Click for larger view)_ </a>
+
 * `.toObservable()` &mdash; returns the `Observable` unchanged; you must `subscribe` to it in order to actually begin the flow that leads to the execution of the command
 * `.observe()` &mdash; subscribes to the `Observable` immediately and begins the flow that executes the command; returns an Observable that, when you `subscribe` to it, replays the emissions and notifications received
 * `.queue()` &mdash; converts the `Observable` into a `BlockingObservable` so that it can be converted into a `Future,` then returns this `Future`
