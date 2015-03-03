@@ -17,3 +17,4 @@
 ## (Proposed) changes from 1.4.x to 1.5.x
 * Remove deprecated hooks [#684](https://github.com/Netflix/Hystrix/issues/684)
 * Scalar asynchronous command [#602](https://github.com/Netflix/Hystrix/issues/602)
+* Upgrade to Java8 [#702](https://github.com/Netflix/Hystrix/issues/702)
