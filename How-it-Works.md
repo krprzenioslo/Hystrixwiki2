@@ -85,7 +85,7 @@ Here, Hystrix invokes the request to the dependency by means of the method you h
 * [`HystrixCommand.run()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) &mdash; returns a single response or throws an exception
 * [`HystrixObservableCommand.construct()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixObservableCommand.html#construct\(\)) &mdash; returns an Observable that emits the response(s) or sends an `onError` notification
 
-If you have configured the command to run within a thread and the `run()` or `construct()` method exceeds the command&#8217;s timeout value, the thread will throw a `TimeoutException`. In that case Hystrix routes the response through 8. Get the Fallback, and it discards the eventual return value `run()` or `construct()` method if that method does not cancel/interrupt. (If the command does not run within a thread then this logic will not be applicable.)
+If the `run()` or `construct()` method exceeds the command&#8217;s timeout value, the thread will throw a `TimeoutException`. In that case Hystrix routes the response through 8. Get the Fallback, and it discards the eventual return value `run()` or `construct()` method if that method does not cancel/interrupt.
 
 If the command did not throw any exceptions and it returned a response, Hystrix returns this response after it performs some some logging and metrics reporting. In the case of `run()`, Hystrix returns an `Observable` that emits the single response and then makes an `onCompleted` notification; in the case of `construct()` Hystrix returns the same `Observable` returned by `construct()`.
 
