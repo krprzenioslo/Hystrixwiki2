@@ -85,7 +85,7 @@ Here, Hystrix invokes the request to the dependency by means of the method you h
 * [`HystrixCommand.run()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) &mdash; returns a single response or throws an exception
 * [`HystrixObservableCommand.construct()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixObservableCommand.html#construct\(\)) &mdash; returns an Observable that emits the response(s) or sends an `onError` notification
 
-If the `run()` or `construct()` method exceeds the command&#8217;s timeout value, the thread will throw a `TimeoutException`. In that case Hystrix routes the response through 8. Get the Fallback, and it discards the eventual return value `run()` or `construct()` method if that method does not cancel/interrupt.
+If the `run()` or `construct()` method exceeds the command&#8217;s timeout value, the thread will throw a `TimeoutException` (or a separate timer thread will, if the command itself is not running in its own thread). In that case Hystrix routes the response through 8. Get the Fallback, and it discards the eventual return value `run()` or `construct()` method if that method does not cancel/interrupt.
 
 If the command did not throw any exceptions and it returned a response, Hystrix returns this response after it performs some some logging and metrics reporting. In the case of `run()`, Hystrix returns an `Observable` that emits the single response and then makes an `onCompleted` notification; in the case of `construct()` Hystrix returns the same `Observable` returned by `construct()`.
 
@@ -99,7 +99,7 @@ It uses these stats to determine when the circuit should &ldquo;trip,&rdquo; at 
 <a name="flow8" />
 ### 8. Get the Fallback
 
-Hystrix reverts to the fallback whenever a command execution fails: when an exception is thrown by `construct()` or `run()` (6.), when the command is short-circuited because the circuit is open (4.), or when the command&#8217;s thread pool and queue or semaphore are at capacity (5.).
+Hystrix reverts to the fallback whenever a command execution fails: when an exception is thrown by `construct()` or `run()` (6.), when the command is short-circuited because the circuit is open (4.), when the command&#8217;s thread pool and queue or semaphore are at capacity (5.), or when the command has exceeded its timeout length.
 
 The fallback provides a generic response, without any network dependency, from an in-memory cache or via other static logic.
 
