@@ -61,7 +61,7 @@ public class CommandHelloWorld extends HystrixObservableCommand<String> {
     }
 
     @Override
-    protected String construct() {
+    protected Observable<String> construct() {
         return Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(Subscriber<? super String> observer) {
