@@ -46,10 +46,10 @@ HystrixObservableCommand command = new HystrixObservableCommand(arg1, arg2);
 ### 2. Execute the Command
 
 There are four ways you can execute the command, by using one of the following four methods of your Hystrix command object (the first two are only applicable to simple `HystrixCommand` objects and are not available for the `HystrixObservableCommand`):
-* [`execute()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#execute\(\)) &mdash; blocks, then returns the single response received from the dependency (or throws an exception in case of an error)
-* [`queue()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#queue\(\)) &mdash; returns a `Future` with which you can obtain the single response from the dependency
-* [`observe()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/AbstractCommand.html#observe\(\)) &mdash; subscribes to the `Observable` that represents the response(s) from the dependency and returns an `Observable` that replicates that source `Observable`
-* [`toObservable()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/AbstractCommand.html#toObservable\(\)) &mdash; returns an `Observable` that, when you subscribe to it, will execute the Hystrix command and emit its responses
+* [`execute()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixCommand.html#execute\(\)) &mdash; blocks, then returns the single response received from the dependency (or throws an exception in case of an error)
+* [`queue()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixCommand.html#queue\(\)) &mdash; returns a `Future` with which you can obtain the single response from the dependency
+* [`observe()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixObservableCommand.html#observe\(\)) &mdash; subscribes to the `Observable` that represents the response(s) from the dependency and returns an `Observable` that replicates that source `Observable`
+* [`toObservable()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixObservableCommand.html#toObservable\(\)) &mdash; returns an `Observable` that, when you subscribe to it, will execute the Hystrix command and emit its responses
 ```java
 K             value   = command.execute();
 Future<K>     fValue  = command.queue();
@@ -82,8 +82,8 @@ If the thread-pool and queue (or semaphore, if not running in a thread) that are
 ### 6. `HystrixObservableCommand.construct()` or `HystrixCommand.run()`
 
 Here, Hystrix invokes the request to the dependency by means of the method you have written for this purpose, one of the following:
-* [`HystrixCommand.run()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) &mdash; returns a single response or throws an exception
-* [`HystrixObservableCommand.construct()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixObservableCommand.html#construct\(\)) &mdash; returns an Observable that emits the response(s) or sends an `onError` notification
+* [`HystrixCommand.run()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixCommand.html#run\(\)) &mdash; returns a single response or throws an exception
+* [`HystrixObservableCommand.construct()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixObservableCommand.html#construct\(\)) &mdash; returns an Observable that emits the response(s) or sends an `onError` notification
 
 If the `run()` or `construct()` method exceeds the command&#8217;s timeout value, the thread will throw a `TimeoutException` (or a separate timer thread will, if the command itself is not running in its own thread). In that case Hystrix routes the response through 8. Get the Fallback, and it discards the eventual return value `run()` or `construct()` method if that method does not cancel/interrupt.
 
@@ -105,9 +105,9 @@ The fallback provides a generic response, without any network dependency, from a
 
 _If you must use a network call in the fallback, you should do so by means of another `HystrixCommand` or `HystrixObservableCommand`._
 
-In the case of a `HystrixCommand`, to provide fallback logic you implement [`HystrixCommand.getFallback()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) which returns a fallback value.
+In the case of a `HystrixCommand`, to provide fallback logic you implement [`HystrixCommand.getFallback()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) which returns a fallback value.
 
-In the case of a `HystrixObservableCommand`, to provide fallback logic you implement [`HystrixObservableCommand.resumeWithFallback()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixObservableCommand.html#resumeWithFallback\(\)) which returns an Observable that emits a fallback value or values.
+In the case of a `HystrixObservableCommand`, to provide fallback logic you implement [`HystrixObservableCommand.resumeWithFallback()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixObservableCommand.html#resumeWithFallback\(\)) which returns an Observable that emits a fallback value or values.
 
 If the fallback returns a response then Hystrix will return it to the caller. In the case of a `HystrixCommand.getFallback()`, it will return an Observable that emits the value returned from the method. In the case of `HystrixObservableCommand.resumeWithFallback()` it will return the same Observable returned from the method. If the fallback throws an exception or if you did not implement `HystrixCommand.getFallback()` or `HystrixObservableCommand.resumeWithFallback()`, Hystrix returns an Observable that emits nothing and immediately terminates with an `onError` notification.
 
@@ -129,7 +129,7 @@ _(Click for larger view)_ </a>
 <a name='CircuitBreaker'/>
 ## Circuit Breaker
 
-The following diagram shows how a `HystrixCommand` or `HystrixObservableCommand` interacts with a [`HystrixCircuitBreaker`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCircuitBreaker.html) and its flow of logic and decision-making, including how the counters behave in the circuit breaker.
+The following diagram shows how a `HystrixCommand` or `HystrixObservableCommand` interacts with a [`HystrixCircuitBreaker`](http://netflix.github.io/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCircuitBreaker.html) and its flow of logic and decision-making, including how the counters behave in the circuit breaker.
 
 <a href="images/circuit-breaker-1280.png">[[images/circuit-breaker-640.png]]
 _(Click for larger view)_</a>
@@ -238,7 +238,7 @@ Semaphore rejection will start once the limit is hit but the threads filling the
 <a name='RequestCollapsing'/>
 ## Request Collapsing
 
-You can front a `HystrixCommand` with a request collapser ([`HystrixCollapser`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html) is the abstract parent) with which you can collapse multiple requests into a single back-end dependency call.
+You can front a `HystrixCommand` with a request collapser ([`HystrixCollapser`](http://netflix.github.io/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html) is the abstract parent) with which you can collapse multiple requests into a single back-end dependency call.
 
 The following diagram shows the number of threads and network connections in two scenarios: first without and then with request collapsing (assuming all connections are &ldquo;concurrent&rdquo; within a short time window, in this case 10ms).
 
