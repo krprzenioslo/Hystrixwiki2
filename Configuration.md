@@ -44,7 +44,7 @@
 
 Hystrix uses [Archaius](https://github.com/Netflix/archaius) for the default implementation of properties for configuration.
 
-The documentation below describes the default [`HystrixPropertiesStrategy`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/properties/HystrixPropertiesStrategy.html) implementation that is used unless you override it by using a [[plugin|Plugins]].
+The documentation below describes the default [`HystrixPropertiesStrategy`](http://netflix.github.io/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/properties/HystrixPropertiesStrategy.html) implementation that is used unless you override it by using a [[plugin|Plugins]].
 
 Each property has four levels of precedence:
 
@@ -88,7 +88,7 @@ Example:
 
 <table><tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.execution.isolation.thread.timeoutInMilliseconds</tt></td></tr></table>
 
-Replace the [_`HystrixCommandKey`_](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandKey.html) portion of the property with the [`HystrixCommandKey.name()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandKey.html#name\(\)) value of whichever `HystrixCommand` you are targeting.
+Replace the [_`HystrixCommandKey`_](http://netflix.github.io/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandKey.html) portion of the property with the [`HystrixCommandKey.name()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixCommandKey.html#name\(\)) value of whichever `HystrixCommand` you are targeting.
 
 For example, if the key was named &ldquo;`SubscriberGetAccount`&rdquo; then the property name would be:
 
@@ -97,12 +97,12 @@ For example, if the key was named &ldquo;`SubscriberGetAccount`&rdquo; then the 
 <a name="CommandProperties" />
 ## Command Properties
 
-The following [Properties](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandProperties.html) control [`HystrixCommand`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) behavior:
+The following [Properties](http://netflix.github.io/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandProperties.html) control `HystrixCommand` behavior:
 
 <a name='CommandExecution'/>
 ### Execution
 
-The following Properties control how [`HystrixCommand.run()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) executes.
+The following Properties control how [`HystrixCommand.run()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixCommand.html#run\(\)) executes.
 
 <a name="execution.isolation.strategy" />
 #### execution.isolation.strategy
@@ -156,7 +156,7 @@ This property sets the time in milliseconds after which the calling thread will 
 <a name="execution.isolation.thread.interruptOnTimeout" />
 #### execution.isolation.thread.interruptOnTimeout
 
-This property indicates whether the thread executing [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) should be interrupted when a timeout occurs.
+This property indicates whether the thread executing `HystrixCommand.run()` should be interrupted when a timeout occurs.
 
 <table><tbody>
  <tr><th>Default Value</th><td><tt>true</tt></td></tr>
@@ -190,7 +190,7 @@ The isolation principle is still the same so the semaphore should still be a sma
 <a name='CommandFallback'/>
 ### Fallback
 
-The following properties control how [`HystrixCommand.getFallback()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) executes. These properties apply to both `ExecutionIsolationStrategy.THREAD` and `ExecutionIsolationStrategy.SEMAPHORE`.
+The following properties control how [`HystrixCommand.getFallback()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) executes. These properties apply to both `ExecutionIsolationStrategy.THREAD` and `ExecutionIsolationStrategy.SEMAPHORE`.
 
 <a name="fallback.isolation.semaphore.maxConcurrentRequests" />
 #### fallback.isolation.semaphore.maxConcurrentRequests
@@ -212,7 +212,7 @@ If the maximum concurrent limit is hit then subsequent requests will be rejected
 
 Since: 1.2
 
-This property determines whether a call to  [HystrixCommand.getFallback()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) will be attempted when failure or rejection occurs.
+This property determines whether a call to `HystrixCommand.getFallback()` will be attempted when failure or rejection occurs.
 
 <table><tbody>
  <tr><th>Default Value</th><td><tt>true</tt></td></tr>
@@ -225,7 +225,7 @@ This property determines whether a call to  [HystrixCommand.getFallback()](http:
 <a name="CommandCircuitBreaker" />
 ### Circuit Breaker
 
-The circuit breaker [properties](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandProperties.html) control behavior of the [HystrixCircuitBreaker](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCircuitBreaker.html).
+The circuit breaker properties control behavior of the [`HystrixCircuitBreaker`](http://netflix.github.io/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCircuitBreaker.html).
 
 <a name="circuitBreaker.enabled" />
 #### circuitBreaker.enabled
@@ -314,7 +314,7 @@ The `circuitBreaker.forceOpen` property takes precedence so if it is set to `tru
 <a name="CommandMetrics" />
 ### Metrics
 
-The following [Properties](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandProperties.html) are related to capturing metrics from [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) execution.
+The following properties are related to capturing metrics from `HystrixCommand` and `HystrixObservableCommand` execution.
 
 <a name="metrics.rollingStats.timeInMilliseconds" />
 #### metrics.rollingStats.timeInMilliseconds
@@ -434,12 +434,12 @@ On high-volume circuits the continual calculation of error percentages can becom
 <a name="CommandRequestContext" />
 ### Request Context
 
-These [Properties](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandProperties.html) concern [`HystrixRequestContext`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/concurrency/HystrixRequestContext.html) functionality used by [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html).
+These properties concern [`HystrixRequestContext`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/concurrency/HystrixRequestContext.html) functionality used by `HystrixCommand`.
 
 <a name="requestCache.enabled" />
 #### requestCache.enabled
 
-This property indicates whether [`HystrixCommand.getCacheKey()`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#getCacheKey\(\)) should be used with [HystrixRequestCache](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixRequestCache.html) to provide de-duplication functionality via request-scoped caching. 
+This property indicates whether [`HystrixCommand.getCacheKey()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixCommand.html#getCacheKey\(\)) should be used with [`HystrixRequestCache`](http://netflix.github.io/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixRequestCache.html) to provide de-duplication functionality via request-scoped caching. 
 
 <table><tbody>
  <tr><th>Default Value</th><td><tt>true</tt></td></tr>
@@ -452,7 +452,7 @@ This property indicates whether [`HystrixCommand.getCacheKey()`](http://netflix.
 <a name="requestLog.enabled" />
 #### requestLog.enabled
 
-This property indicates whether [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) execution and events should be logged to [HystrixRequestLog](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixRequestLog.html). 
+This property indicates whether `HystrixCommand` execution and events should be logged to [`HystrixRequestLog`](http://netflix.github.io/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixRequestLog.html). 
 
 <table><tbody>
  <tr><th>Default Value</th><td><tt>true</tt></td></tr>
@@ -465,7 +465,7 @@ This property indicates whether [HystrixCommand](http://netflix.github.com/Hystr
 <a name="Collapser" />
 ## Collapser Properties
 
-The following [Properties](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapserProperties.html) control [HystrixCollapser](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html) behavior.
+The following properties control [`HystrixCollapser`](http://netflix.github.io/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html) behavior.
 
 <a name="maxRequestsInBatch" />
 #### maxRequestsInBatch
@@ -496,7 +496,7 @@ This property sets the number of milliseconds after the creation of the batch th
 <a name="collapser.requestCache.enabled" />
 #### requestCache.enabled
 
-This property indicates whether request caching is enabled for [HystrixCollapser.execute()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html#execute\(\)) and [HystrixCollapser.queue()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html#queue\(\)) invocations.
+This property indicates whether request caching is enabled for [`HystrixCollapser.execute()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixCollapser.html#execute\(\)) and [`HystrixCollapser.queue()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixCollapser.html#queue\(\)) invocations.
 
 <table><tbody>
  <tr><th>Default Value</th><td><tt>true</tt></td></tr>
@@ -509,7 +509,7 @@ This property indicates whether request caching is enabled for [HystrixCollapser
 <a name="ThreadPool" />
 ## ThreadPool Properties
 
-The following [Properties](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixThreadPoolProperties.html) control the behavior of the thread-pools that Hystrix Commands execute on.
+The following properties control the behavior of the thread-pools that Hystrix Commands execute on.
 
 Most of the time the default value of 10 threads will be fine (often it could be made smaller).
 
@@ -541,7 +541,7 @@ You can change configurations in real-time as needed as performance characterist
 <a name="coreSize" />
 #### coreSize
 
-This property sets the core thread-pool size. This is the maximum number of [HystrixCommands](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) that can execute concurrently.
+This property sets the core thread-pool size. This is the maximum number of `HystrixCommand`s that can execute concurrently.
 
 <table><tbody>
  <tr><th>Default Value</th><td><tt>10</tt></td></tr>
@@ -556,7 +556,7 @@ This property sets the core thread-pool size. This is the maximum number of [Hys
 
 This property sets the maximum queue size of the `BlockingQueue` implementation.
 
-If you set this to `-1` then [SynchronousQueue](http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/SynchronousQueue.html) will be used, otherwise a positive value will be used with [LinkedBlockingQueue](http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/LinkedBlockingQueue.html).
+If you set this to `-1` then [`SynchronousQueue`](http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/SynchronousQueue.html) will be used, otherwise a positive value will be used with [`LinkedBlockingQueue`](http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/LinkedBlockingQueue.html).
 
 **Note:** This property only applies at initialization time since queue implementations cannot be resized or changed without re-initializing the thread executor which is not supported.
 
