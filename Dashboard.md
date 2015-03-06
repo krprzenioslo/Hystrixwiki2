@@ -57,7 +57,7 @@ cp hystrix-dashboard/build/libs/hystrix-dashboard-*.war ./apache-tomcat-7.*/weba
 
 # Installation of Metrics Stream
 
-The [hystrix-metrics-event-stream](https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib/hystrix-metrics-event-stream) module exposes metrics in a [text/event-stream](https://developer.mozilla.org/en-US/docs/Server-sent_events/Using_server-sent_events) formatted stream that continues as long as a client holds the connection.
+The [`hystrix-metrics-event-stream`](https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib/hystrix-metrics-event-stream) module exposes metrics in a [text/event-stream](https://developer.mozilla.org/en-US/docs/Server-sent_events/Using_server-sent_events) formatted stream that continues as long as a client holds the connection.
 
 The Hystrix Dashboard expects data in the format that this module emits.
 
@@ -95,7 +95,7 @@ turbine.ConfigPropertyBasedDiscovery.default.instances=ec2-72-44-38-203.compute-
 turbine.instanceUrlSuffix=:8080/hystrix.stream
 ```
 
-The value of the `turbine.instanceUrlSuffix` property will be appended to each hostname to create a URL that will result in the [hystrix-metrics-event-stream](Hystrix/tree/master/hystrix-contrib/hystrix-metrics-event-stream).
+The value of the `turbine.instanceUrlSuffix` property will be appended to each hostname to create a URL that will result in the [`hystrix-metrics-event-stream`](https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib/hystrix-metrics-event-stream).
 
 The `config.properties` file can be:
 
@@ -148,7 +148,7 @@ The `title` parameter is used by the `monitor.html` page to display a nice title
 
 Because you may want to embed the dashboard functionality into your own existing dashboard, the app is very simple &mdash; primary just HTML, Javascript, and CSS, in modules that can be dropped into any app.
 
-The only portion that is server-side is a [proxy servlet](https://github.com/Netflix/Hystrix/blob/master/hystrix-dashboard/src/main/java/com/netflix/hystrix/dashboard/stream/ProxyStreamServlet.java) that proxies streams between the browser and back end, since EventSource CORS support is still [a work in progress](https://bugs.webkit.org/show_bug.cgi?id=61862).
+The only portion that is server-side is a [proxy servlet](https://github.com/Netflix/Hystrix/blob/master/hystrix-dashboard/src/main/java/com/netflix/hystrix/dashboard/stream/ProxyStreamServlet.java) that proxies streams between the browser and back end, since EventSource CORS support [was a work in progress](https://bugs.webkit.org/show_bug.cgi?id=61862) at development-time.
 
 To display `HystrixCommand` monitors on an existing page, simply import the javascript module, instantiate it with a `div`, and give it an `EventStream`, like this:
 
