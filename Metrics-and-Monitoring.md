@@ -11,23 +11,23 @@ HystrixThreadPoolMetrics.getInstances()
 
 # Metrics Event Stream
 
-You can use the [hystrix-metrics-event-stream](../tree/master/hystrix-contrib/hystrix-metrics-event-stream) to power the [[dashboard|Dashboard]], real-time alerting, and other such use cases.
+You can use the [`hystrix-metrics-event-stream`](../tree/master/hystrix-contrib/hystrix-metrics-event-stream) to power the [[dashboard|Dashboard]], real-time alerting, and other such use cases.
 
 # Metrics Publisher
 
-You can publish metrics by using an implementation of [HystrixMetricsPublisher](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/metrics/HystrixMetricsPublisher.html).
+You can publish metrics by using an implementation of [`HystrixMetricsPublisher`](http://netflix.github.io/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/metrics/HystrixMetricsPublisher.html).
 
-Register your `HystrixMetricsPublisher` implementations by calling [HystrixPlugins.registerMetricsPublisher(HystrixMetricsPublisher impl)](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/HystrixPlugins.html#registerMetricsPublisher\(com.netflix.hystrix.strategy.metrics.HystrixMetricsPublisher\)).
+Register your `HystrixMetricsPublisher` implementations by calling [`HystrixPlugins.registerMetricsPublisher(HystrixMetricsPublisher impl)`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/strategy/HystrixPlugins.html#registerMetricsPublisher\(com.netflix.hystrix.strategy.metrics.HystrixMetricsPublisher\)).
 
 Hystrix includes the following implementations as `hystrix-contrib` modules:
-- Netflix Servo: [hystrix-servo-metrics-publisher](../tree/master/hystrix-contrib/hystrix-servo-metrics-publisher)
-- Yammer Metrics: [hystrix-yammer-metrics-publisher](../tree/master/hystrix-contrib/hystrix-yammer-metrics-publisher)
+- Netflix Servo: [`hystrix-servo-metrics-publisher`](../tree/master/hystrix-contrib/hystrix-servo-metrics-publisher)
+- Yammer Metrics: [`hystrix-yammer-metrics-publisher`](../tree/master/hystrix-contrib/hystrix-yammer-metrics-publisher)
 
 The following sections explain the metrics published with those implementations:
 
 ## Command Metrics
 
-Each [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/HystrixCommand.html) publishes metrics with the following tags:
+Each [`HystrixCommand`](http://netflix.github.io/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html) publishes metrics with the following tags:
 
 * Servo Tag: `"instance"`, Value: `HystrixCommandKey.name()`
 * Servo Tag: `"type"`, Value: `"HystrixCommand"`
@@ -67,9 +67,9 @@ Rolling counts ([`Gauge`](https://github.com/Netflix/servo/blob/master/servo-cor
  </tbody>
 </table>
 
-### Latency Percentiles: HystrixCommand.run() Execution ([Gauge](https://github.com/Netflix/servo/blob/master/servo-core/src/main/java/com/netflix/servo/monitor/Gauge.java))
+### Latency Percentiles: `HystrixCommand.run()` Execution ([Gauge](https://github.com/Netflix/servo/blob/master/servo-core/src/main/java/com/netflix/servo/monitor/Gauge.java))
 
-These metrics represent percentiles of execution times for the [HystrixCommand.run()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#run\(\)) method (on the child thread if using thread isolation).
+These metrics represent percentiles of execution times for the [`HystrixCommand.run()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixCommand.html#run\(\)) method (on the child thread if using thread isolation).
 
 These are rolling percentiles as configured by [[metrics.rollingPercentile.* properties|Configuration]].
 
@@ -84,7 +84,7 @@ These are rolling percentiles as configured by [[metrics.rollingPercentile.* pro
 
 ### Latency Percentiles: End-to-End Execution ([Gauge](https://github.com/Netflix/servo/blob/master/servo-core/src/main/java/com/netflix/servo/monitor/Gauge.java))
 
-These metrics represent percentiles of execution times for the end-to-end execution of [HystrixCommand.execute()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#execute\(\)) or [HystrixCommand.queue()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#queue\(\)) until a response is returned (or is ready to return in case of [queue()](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html#queue\(\))).
+These metrics represent percentiles of execution times for the end-to-end execution of [`HystrixCommand.execute()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixCommand.html#execute\(\)) or [`HystrixCommand.queue()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixCommand.html#queue\(\)) until a response is returned (or is ready to return in case of `queue()`).
 
 The purpose of this compared with the `latencyExecute*` percentiles is to measure the cost of thread queuing/scheduling/execution, semaphores, circuit breaker logic, and other aspects of overhead (including metrics capture itself).
 
@@ -101,7 +101,7 @@ These are rolling percentiles as configured by [[metrics.rollingPercentile.* pro
 
 ### Property Values ([Informational](https://github.com/Netflix/servo/blob/master/servo-core/src/main/java/com/netflix/servo/monitor/Informational.java))
 
-These informational metrics report the actual property values being used by the [HystrixCommand](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommand.html). This enables you to see when a dynamic property takes effect and to confirm a property is set as expected.
+These informational metrics report the actual property values being used by the `HystrixCommand`. This enables you to see when a dynamic property takes effect and to confirm a property is set as expected.
 
 * _Number_ `propertyValue_rollingStatisticalWindowInMilliseconds`
 * _Number_ `propertyValue_circuitBreakerRequestVolumeThreshold`
@@ -119,7 +119,7 @@ These informational metrics report the actual property values being used by the 
 
 ## ThreadPool Metrics
 
-Each [HystrixThreadPool](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixThreadPool.html) publishes metrics with the following tags:
+Each [`HystrixThreadPool`](http://netflix.github.io/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixThreadPool.html) publishes metrics with the following tags:
 
 * Servo Tag: `"instance"`, Value: `HystrixThreadPoolKey.name()`
 * Servo Tag: `"type"`, Value: `"HystrixThreadPool"`
