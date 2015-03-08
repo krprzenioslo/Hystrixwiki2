@@ -99,19 +99,17 @@ It uses these stats to determine when the circuit should &ldquo;trip,&rdquo; at 
 <a name="flow8" />
 ### 8. Get the Fallback
 
-Hystrix reverts to the fallback whenever a command execution fails: when an exception is thrown by `construct()` or `run()` (6.), when the command is short-circuited because the circuit is open (4.), when the command&#8217;s thread pool and queue or semaphore are at capacity (5.), or when the command has exceeded its timeout length.
+Hystrix tried to revert to your fallback whenever a command execution fails: when an exception is thrown by `construct()` or `run()` (6.), when the command is short-circuited because the circuit is open (4.), when the command&#8217;s thread pool and queue or semaphore are at capacity (5.), or when the command has exceeded its timeout length.
 
-The fallback provides a generic response, without any network dependency, from an in-memory cache or via other static logic.
+Write your fallback to provide a generic response, without any network dependency, from an in-memory cache or by means of other static logic. _If you must use a network call in the fallback, you should do so by means of another `HystrixCommand` or `HystrixObservableCommand`._
 
-_If you must use a network call in the fallback, you should do so by means of another `HystrixCommand` or `HystrixObservableCommand`._
+In the case of a `HystrixCommand`, to provide fallback logic you implement [`HystrixCommand.getFallback()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) which returns a single fallback value.
 
-In the case of a `HystrixCommand`, to provide fallback logic you implement [`HystrixCommand.getFallback()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) which returns a fallback value.
+In the case of a `HystrixObservableCommand`, to provide fallback logic you implement [`HystrixObservableCommand.resumeWithFallback()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixObservableCommand.html#resumeWithFallback\(\)) which returns an Observable that may emit a fallback value or values.
 
-In the case of a `HystrixObservableCommand`, to provide fallback logic you implement [`HystrixObservableCommand.resumeWithFallback()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixObservableCommand.html#resumeWithFallback\(\)) which returns an Observable that emits a fallback value or values.
+If the fallback method returns a response then Hystrix will return this response to the caller. In the case of a `HystrixCommand.getFallback()`, it will return an Observable that emits the value returned from the method. In the case of `HystrixObservableCommand.resumeWithFallback()` it will return the same Observable returned from the method.
 
-If the fallback returns a response then Hystrix will return it to the caller. In the case of a `HystrixCommand.getFallback()`, it will return an Observable that emits the value returned from the method. In the case of `HystrixObservableCommand.resumeWithFallback()` it will return the same Observable returned from the method. If the fallback throws an exception or if you did not implement `HystrixCommand.getFallback()` or `HystrixObservableCommand.resumeWithFallback()`, Hystrix returns an Observable that emits nothing and immediately terminates with an `onError` notification.
-
-It is considered a poor practice to have a fallback implementation that can fail. You should implement your fallback such that it is not performing any logic that could fail.
+If you have not implemented a fallback method for your Hystrix command, or if the fallback itself throws an exception, Hystrix still returns an Observable, but one that emits nothing and immediately terminates with an `onError` notification. It is through this `onError` notification that the exception that caused the command to fail is transmitted back to the caller.  It is a poor practice to implement a fallback implementation that can fail. You should implement your fallback such that it is not performing any logic that could fail.
 
 <a name="flow9" />
 ### 9. Return the Successful Response
