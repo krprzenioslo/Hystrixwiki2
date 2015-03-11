@@ -109,7 +109,14 @@ In the case of a `HystrixObservableCommand`, to provide fallback logic you imple
 
 If the fallback method returns a response then Hystrix will return this response to the caller. In the case of a `HystrixCommand.getFallback()`, it will return an Observable that emits the value returned from the method. In the case of `HystrixObservableCommand.resumeWithFallback()` it will return the same Observable returned from the method.
 
-If you have not implemented a fallback method for your Hystrix command, or if the fallback itself throws an exception, Hystrix still returns an Observable, but one that emits nothing and immediately terminates with an `onError` notification. It is through this `onError` notification that the exception that caused the command to fail is transmitted back to the caller.  It is a poor practice to implement a fallback implementation that can fail. You should implement your fallback such that it is not performing any logic that could fail.
+If you have not implemented a fallback method for your Hystrix command, or if the fallback itself throws an exception, Hystrix still returns an Observable, but one that emits nothing and immediately terminates with an `onError` notification. It is through this `onError` notification that the exception that caused the command to fail is transmitted back to the caller.  (It is a poor practice to implement a fallback implementation that can fail. You should implement your fallback such that it is not performing any logic that could fail.)
+
+The result of a failed or nonexistent fallback will differ depending on how you invoked the Hystrix command:
+
+* `execute()` &mdash; throws an exception
+* `queue()` &mdash; successfully returns a `Future`, but this `Future` will throw an exception if its `get()` method is called
+* `observe()` &mdash; returns an `Observable` that, when you subscribe to it, will immediately terminate by calling the subscriber&#8217;s `onError` method
+* `toObservable()` &mdash; returns an `Observable` that, when you subscribe to it, will terminate by calling the subscriber&#8217;s `onError` method
 
 <a name="flow9" />
 ### 9. Return the Successful Response
@@ -119,10 +126,10 @@ If the Hystrix command succeeds, it will return the response or responses to the
 <a href="images/hystrix-return-flow.png">[[images/hystrix-return-flow-640.png]]
 _(Click for larger view)_ </a>
 
-* `.toObservable()` &mdash; returns the `Observable` unchanged; you must `subscribe` to it in order to actually begin the flow that leads to the execution of the command
-* `.observe()` &mdash; subscribes to the `Observable` immediately and begins the flow that executes the command; returns an Observable that, when you `subscribe` to it, replays the emissions and notifications received
-* `.queue()` &mdash; converts the `Observable` into a `BlockingObservable` so that it can be converted into a `Future,` then returns this `Future`
-* `.execute()` &mdash; obtains a `Future` in the same manner as does `.queue()` and then calls `get()` on this `Future` to obtain the single value emitted by the `Observable`
+* `execute()` &mdash; obtains a `Future` in the same manner as does `.queue()` and then calls `get()` on this `Future` to obtain the single value emitted by the `Observable`
+* `queue()` &mdash; converts the `Observable` into a `BlockingObservable` so that it can be converted into a `Future`, then returns this `Future`
+* `observe()` &mdash; subscribes to the `Observable` immediately and begins the flow that executes the command; returns an `Observable` that, when you `subscribe` to it, replays the emissions and notifications
+* `toObservable()` &mdash; returns the `Observable` unchanged; you must `subscribe` to it in order to actually begin the flow that leads to the execution of the command
 
 <a name='CircuitBreaker'/>
 ## Circuit Breaker
