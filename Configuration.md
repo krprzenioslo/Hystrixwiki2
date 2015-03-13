@@ -143,7 +143,11 @@ HystrixCommandProperties.Setter()
 <a name="execution.isolation.thread.timeoutInMilliseconds" />
 #### execution.isolation.thread.timeoutInMilliseconds
 
-This property sets the time in milliseconds after which the calling thread will timeout, walk away from the `HystrixCommand.run()` execution, mark the `HystrixCommand` as a TIMEOUT, and perform fallback logic. This property only applies when you use  `ExecutionIsolationStrategy.THREAD`.
+This property sets the time in milliseconds after which the calling thread or semaphore will timeout, walk away from the `HystrixCommand.run()` execution, mark the `HystrixCommand` as a TIMEOUT, and perform fallback logic.
+
+If the command is semaphore-isolated rather than thread-isolated it will have a timeout registered on another (`HystrixTimer`) thread, which triggers the timeout flow. If the command is thread-isolated, the timeout will be registered on that thread.
+
+**Note:** Timeouts will fire on `HystrixCommand.queue()`, even if the caller never calls `get()` on the resulting Future. Before Hystrix 1.4, only calls to `get()` triggered the timeout mechanism to take effect in such a case.
 
 <table><tbody>
  <tr><th>Default Value</th><td><tt>1000</tt></td></tr>
@@ -156,7 +160,7 @@ This property sets the time in milliseconds after which the calling thread will 
 <a name="execution.isolation.thread.interruptOnTimeout" />
 #### execution.isolation.thread.interruptOnTimeout
 
-This property indicates whether the thread executing `HystrixCommand.run()` should be interrupted when a timeout occurs.
+This property indicates whether the `HystrixCommand.run()` execution should be interrupted when a timeout occurs.
 
 <table><tbody>
  <tr><th>Default Value</th><td><tt>true</tt></td></tr>
