@@ -9,7 +9,7 @@
   * thread pool metrics for number of thread pool-rejections
   * collapser metrics for number of commands collapsed, number of batches, size of batches, size of shards
 * Added EMIT and FALLBACK_EMIT event types that will show up in the HystrixRequestLog for HystrixObservableCommands.  These show how many items are in the streams of data produced by the commands
-* Upgraded to Java7
+* ~~Upgraded to Java7~~ (1.4.0/1.4.1/1.4.2 were built with Java 7, but 1.4.3+ rolled back to Java 6)
 * Upgraded to RxJava 1.0.x (1.0.7 currently)
 
 
@@ -17,4 +17,3 @@
 ## (Proposed) changes from 1.4.x to 1.5.x
 * Remove deprecated hooks [#684](https://github.com/Netflix/Hystrix/issues/684)
 * Scalar asynchronous command [#602](https://github.com/Netflix/Hystrix/issues/602)
-* Upgrade to Java8 [#702](https://github.com/Netflix/Hystrix/issues/702)
