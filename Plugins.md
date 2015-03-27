@@ -86,11 +86,11 @@ A [`HystrixCommandExecutionHook`](http://netflix.github.io/Hystrix/javadoc/index
 <a name="howtouse" />
 ## How to Use
 
-Upon first use of a `HystrixCommand`, it starts accessing functionality that it governed by plugins.  Since swapping out plugins at runtime is not supported, this first access sets the plugin for the duration of the JVM run.
+When you invoke a `HystrixCommand` for the first time, it begins to access functionality that is governed by plugins. Since you cannot swap out plugins at runtime, the plugins that the `HystrixCommand` uses during this first invocation become the plugins that the `HystrixCommand` will use for the duration of the JVM run.
 
-If the plugin is registered in Archaius, then that plugin implementation is used.  If it is not, then a default is chosen.  Here's an example of Archaius being used: https://github.com/eirslett/pull-request-illustration.
+If you registered a plugin in Archaius, then that plugin implementation is used. If not, then Hystrix chooses a default plugin. Here&#8217;s an example of how to use Archaius for this purpose: https://github.com/eirslett/pull-request-illustration.
 
-If you wish to register a plugin before first access, you may register a plugin in code by executing the following:
+If you wish to register a plugin before you invoke the `HystrixCommand` for the first time, you may do so with code like the following:
 
 ```java
 HystrixPlugins.getInstance().registerEventNotifier(ACustomHystrixEventNotifierDefaultStrategy.getInstance());
