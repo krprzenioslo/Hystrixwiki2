@@ -255,7 +255,16 @@ To obtain an Observable representation of the `HystrixObservableCommand`, use on
 <a name='Fallback'/>
 ## Fallback
 
-You can support graceful degradation in an ordinary `HystrixCommand` by adding a [`getFallback()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) implementation. Hystrix will execute this fallback for all types of failure such as `run()` failure, timeout, thread pool or semaphore rejection, and circuit-breaker short-circuiting. The following example includes such a fallback:
+You can support graceful degradation in a Hystrix command by adding a fallback method that Hystrix will call to obtain a default value or values in case the main command fails.  You will want to implement a fallback for most Hystrix commands that might conceivably fail, with a couple of exceptions:
+
+1. a command that performs a write operation
+  * If your Hystrix command is designed to do a write operation rather than to return a value (such a command might normally return a `void` in the case of a `HystrixCommand` or an empty Observable in the case of a `HystrixObservableCommand`), there isn&#8217;t much point in implementing a fallback. If the write fails, you probably want the failure to propagate back to the caller.
+1. batch systems/offline compute
+   * If your Hystrix command is filling up a cache, or generating a report, or doing any sort of offline computation, it&#8217;s usually more appropriate to propagate the error back to the caller who can then retry the command later, rather than to send the caller a silently-degraded response.
+
+Whether or not your command has a fallback, all of the usual Hystrix state and circuit-breaker state/metrics are updated to indicate the command failure.
+
+In an ordinary `HystrixCommand` you implement a fallback by means of a [`getFallback()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) implementation. Hystrix will execute this fallback for all types of failure such as `run()` failure, timeout, thread pool or semaphore rejection, and circuit-breaker short-circuiting. The following example includes such a fallback:
 
 ```java
 public class CommandHelloFailure extends HystrixCommand<String> {
