@@ -64,7 +64,7 @@ Example:
 
 ```java
 HystrixCommandProperties.Setter()
-   .withExecutionIsolationThreadTimeoutInMilliseconds(int value)
+   .withExecutionTimeoutInMilliseconds(int value)
 ```
 
 You would insert a command of this sort into a `HystrixCommand` constructor in a manner similar to this:
@@ -73,7 +73,7 @@ You would insert a command of this sort into a `HystrixCommand` constructor in a
 public HystrixCommandInstance(int id) {
     super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("ExampleGroup"))
             .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
-                   .withExecutionIsolationThreadTimeoutInMilliseconds(500)));
+                   .withExecutionTimeoutInMilliseconds(500)));
     this.id = id;
 }
 ```
@@ -154,7 +154,7 @@ If the command is semaphore-isolated rather than thread-isolated it will have a 
  <tr><th>Default Property</th><td><tt>hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds</tt></td></tr>
  <tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.execution.isolation.thread.timeoutInMilliseconds</tt></td></tr>
  <tr><th>How to Set Instance Default</th><td><pre>HystrixCommandProperties.Setter()
-   .withExecutionIsolationThreadTimeoutInMilliseconds(int value)</pre></td></tr>
+   .withExecutionTimeoutInMilliseconds(int value)</pre></td></tr>
 </tbody></table>
 
 <a name="execution.isolation.thread.interruptOnTimeout" />
