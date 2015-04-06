@@ -4,6 +4,7 @@
   1. <a href="#CommandExecution">Execution</a>
     1. <a href="#execution.isolation.strategy"><tt>execution.isolation.strategy</tt></a>
     1. <a href="#execution.isolation.thread.timeoutInMilliseconds"><tt>execution.isolation.thread.timeoutInMilliseconds</a>
+    1. <a href="#execution.timeout.enabled"><tt>execution.timeout.enabled</tt></a>
     1. <a href="#execution.isolation.thread.interruptOnTimeout"><tt>execution.isolation.thread.interruptOnTimeout</tt></a>
     1. <a href="#execution.isolation.semaphore.maxConcurrentRequests"><tt>execution.isolation.semaphore.maxConcurrentRequests</tt></a>
   1. <a href="#CommandFallback">Fallback</a>
@@ -143,11 +144,9 @@ HystrixCommandProperties.Setter()
 <a name="execution.isolation.thread.timeoutInMilliseconds" />
 #### execution.isolation.thread.timeoutInMilliseconds
 
-This property sets the time in milliseconds after which the calling thread or semaphore will timeout, walk away from the `HystrixCommand.run()` execution, mark the `HystrixCommand` as a TIMEOUT, and perform fallback logic.
+This property sets the time in milliseconds after which the caller will observe a timeout and walk away from the command execution. Hystrix marks the `HystrixCommand` as a TIMEOUT, and performs fallback logic.  Note that there is configuration for turning off timeouts per-command, if that is desired (see command.timeout.enabled).
 
-If the command is semaphore-isolated rather than thread-isolated it will have a timeout registered on another (`HystrixTimer`) thread, which triggers the timeout flow. If the command is thread-isolated, the timeout will be registered on that thread.
-
-**Note:** Timeouts will fire on `HystrixCommand.queue()`, even if the caller never calls `get()` on the resulting Future. Before Hystrix 1.4, only calls to `get()` triggered the timeout mechanism to take effect in such a case.
+**Note:** Timeouts will fire on `HystrixCommand.queue()`, even if the caller never calls `get()` on the resulting Future. Before Hystrix 1.4.0, only calls to `get()` triggered the timeout mechanism to take effect in such a case.
 
 <table><tbody>
  <tr><th>Default Value</th><td><tt>1000</tt></td></tr>
@@ -155,6 +154,19 @@ If the command is semaphore-isolated rather than thread-isolated it will have a 
  <tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.execution.isolation.thread.timeoutInMilliseconds</tt></td></tr>
  <tr><th>How to Set Instance Default</th><td><pre>HystrixCommandProperties.Setter()
    .withExecutionTimeoutInMilliseconds(int value)</pre></td></tr>
+</tbody></table>
+
+<a name="execution.timeout.enabled" />
+#### execution.timeout.enabled
+
+This property indicates whether the `HystrixCommand.run()` execution should have a timeout.
+
+<table><tbody>
+ <tr><th>Default Value</th><td><tt>true</tt></td></tr>
+ <tr><th>Default Property</th><td><tt>hystrix.command.default.execution.timeout.enabled</tt></td></tr>
+ <tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.execution.timeout.enabled</tt></td></tr>
+ <tr><th>How to Set Instance Default</th><td><pre>HystrixCommandProperties.Setter()
+   .withExecutionTimeoutEnabled(boolean value)</pre></td></tr>
 </tbody></table>
 
 <a name="execution.isolation.thread.interruptOnTimeout" />
