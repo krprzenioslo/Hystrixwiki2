@@ -372,7 +372,7 @@ In other words, 10000/10 is okay, so is 10000/20 but 10000/7 is not.
 <a name="metrics.rollingPercentile.enabled" />
 #### metrics.rollingPercentile.enabled
 
-This property indicates whether execution latencies should be tracked and calculated as percentiles.
+This property indicates whether execution latencies should be tracked and calculated as percentiles.  If they are disabled, all summary statistics (mean, percentiles) are returned as -1.
 
 <table><tbody>
  <tr><th>Default Value</th><td><tt>true</tt></th></tr>
