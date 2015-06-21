@@ -337,6 +337,8 @@ The following properties are related to capturing metrics from `HystrixCommand` 
 
 This property sets the duration of the statistical rolling window, in milliseconds. This is how long Hystrix keeps metrics for the circuit breaker to use and for publishing.
 
+As of 1.4.12, this property affects the initial metrics creation only, and adjustments made to this property after startup will not take effect.  This avoids metrics data loss, and allows optimizations to metrics gathering.
+
 The window is divided into buckets and &ldquo;rolls&rdquo; by these increments.
 
 For example, if this property is set to 10 seconds (`10000`) with ten 1-second buckets, the following diagram represents how it rolls new buckets on and old ones off:
@@ -359,6 +361,8 @@ This property sets the number of buckets the rolling statistical window is divid
 **Note:** The following must be true &mdash; &ldquo;`metrics.rollingStats.timeInMilliseconds % metrics.rollingStats.numBuckets == 0`&rdquo; &mdash; otherwise it will throw an exception.
 
 In other words, 10000/10 is okay, so is 10000/20 but 10000/7 is not.
+
+As of 1.4.12, this property affects the initial metrics creation only, and adjustments made to this property after startup will not take effect.  This avoids metrics data loss, and allows optimizations to metrics gathering.
 
 <table><tbody>
  <tr><th>Default Value</th><td><tt>10</tt></th></tr>
@@ -389,6 +393,8 @@ This property sets the duration of the rolling window in which execution times a
 
 The window is divided into buckets and &ldquo;rolls&rdquo; by those increments. 
 
+As of 1.4.12, this property affects the initial metrics creation only, and adjustments made to this property after startup will not take effect.  This avoids metrics data loss, and allows optimizations to metrics gathering.
+
 <table><tbody>
  <tr><th>Default Value</th><td><tt>60000</tt></td></tr>
  <tr><th>Default Property</th><td><tt>hystrix.command.default.metrics.rollingPercentile.timeInMilliseconds</tt></td></tr>
@@ -405,6 +411,8 @@ This property sets the number of buckets the `rollingPercentile` window will be 
 Note: The following must be true &mdash; &ldquo;`metrics.rollingPercentile.timeInMilliseconds % metrics.rollingPercentile.numBuckets == 0`&rdquo; &mdash; otherwise it will throw an exception.
 
 In other words, 60000/6 is okay, so is 60000/60 but 10000/7 is not.
+
+As of 1.4.12, this property affects the initial metrics creation only, and adjustments made to this property after startup will not take effect.  This avoids metrics data loss, and allows optimizations to metrics gathering.
 
 <table><tbody>
  <tr><th>Default Value</th><td><tt>6</tt></td></tr>
@@ -423,6 +431,8 @@ This property sets the maximum number of execution times that are kept per bucke
 For example, if bucket size is set to 100 and represents a bucket window of 10 seconds, but 500 executions occur during this time, only the last 100 executions will be kept in that 10 second bucket.
 
 If you increase this size, this also increases the amount of memory needed to store values and increases the time needed for sorting the lists to do percentile calculations.
+
+As of 1.4.12, this property affects the initial metrics creation only, and adjustments made to this property after startup will not take effect.  This avoids metrics data loss, and allows optimizations to metrics gathering.
 
 <table><tbody>
  <tr><th>Default Value</th><td><tt>100</tt></td></tr>
