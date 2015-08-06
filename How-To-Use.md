@@ -482,7 +482,9 @@ Request collapsing enables multiple requests to be batched into a single `Hystri
 
 A collapser can use the batch size and the elapsed time since the creation of the batch as triggers for executing a batch.
 
-There are 2 styles of request-collapsing supported by Hystrix: request-scoped and globally-scoped.  This is configured at collapser construction, and defaulted to request-scoped.  A request-scoped collapser collects a batch per HystrixRequestContext, while a globally-scoped collapser collects a batch across multiple HystrixRequestContexts.  As a result, if your downstream dependencies cannot handle multiple HystrixRequestContexts in a single command invocation, request-scoped collapsing is the proper choice.  
+There are 2 styles of request-collapsing supported by Hystrix: request-scoped and globally-scoped.  This is configured at collapser construction, and defaulted to request-scoped.  
+
+A request-scoped collapser collects a batch per HystrixRequestContext, while a globally-scoped collapser collects a batch across multiple HystrixRequestContexts.  As a result, if your downstream dependencies cannot handle multiple HystrixRequestContexts in a single command invocation, request-scoped collapsing is the proper choice.  
 
 At Netflix, we exclusively use request-scoped collapsers because all current systems have been built on the assumption that a single HystrixRequestContext will be used in each command.  Since the batches are per-request only, collapsing is effective when commands occur in parallel with different arguments in the same request.
 
