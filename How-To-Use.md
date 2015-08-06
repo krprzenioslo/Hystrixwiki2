@@ -1244,7 +1244,7 @@ The unit test that confirms the behavior is:
 <a name='MigratingLibrary'/>
 ## Migrating a Library to Hystrix
 
-When you are migrating an existing client library to use Hystrix, you should replace each of the &ldquo;service methods&rdquo with a `HystrixCommand`.
+When you are migrating an existing client library to use Hystrix, you should replace each of the &ldquo;service methods&rdquo; with a `HystrixCommand`.
 
 The service methods should then forward calls to the `HystrixCommand` and not have any additional business logic in them.
 
