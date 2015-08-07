@@ -53,8 +53,8 @@ There are four ways you can execute the command, by using one of the following f
 ```java
 K             value   = command.execute();
 Future<K>     fValue  = command.queue();
-Observable<K> ohValue = command.observe();
-Observable<K> ocValue = command.toObservable();
+Observable<K> ohValue = command.observe();         //hot observable
+Observable<K> ocValue = command.toObservable();    //cold observable
 ```
 
 The synchronous call `execute()` invokes `queue().get()`. `queue()` in turn invokes `toObservable().toBlocking().toFuture()`. Which is to say that ultimately every `HystrixCommand` is backed by an [`Observable`](http://reactivex.io/documentation/observable.html) implementation, even those commands that are intended to return single, simple values.
