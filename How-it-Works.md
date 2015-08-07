@@ -260,6 +260,8 @@ The ideal type of collapsing is done at the global application level, so that re
 
 For example, if you configure a `HystrixCommand` to support batching for any user on requests to a dependency that retrieves movie ratings, then when any user thread in the same JVM makes such a request, Hystrix will add its request along with any others into the same collapsed network call.
 
+Note that the collapser will pass a single HystrixRequestContext object to the collapsed network call, so downstream systems must need to handle this case for this to be an effective option.
+
 #### User Request Context (Single Tomcat Thread)
 
 If you configure a `HystrixCommand` to only handle batch requests for _a single user_, then Hystrix can collapse requests from within a single Tomcat thread (request).
