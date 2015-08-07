@@ -335,6 +335,19 @@ To explicitly define the name pass it in via the `HystrixCommand` or `HystrixObs
     }
 ```
 
+To save a Setter allocation per command allocation, you may also cache the Setter like so:
+
+```java
+    private static final Setter cachedSetter = Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("ExampleGroup"))
+                .andCommandKey(HystrixCommandKey.Factory.asKey("HelloWorld"));    
+
+    public CommandHelloWorld(String name) {
+        super(cachedSetter);
+        this.name = name;
+    }
+
+```
+
 [`HystrixCommandKey`](http://netflix.github.io/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandKey.html) is an interface and can be implemented as an enum or regular class, but it also has the helper [`Factory`](http://netflix.github.io/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandKey.Factory.html) class to construct and intern instances such as:
 
 ```java
