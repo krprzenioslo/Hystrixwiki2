@@ -338,8 +338,9 @@ To explicitly define the name pass it in via the `HystrixCommand` or `HystrixObs
 To save a Setter allocation per command allocation, you may also cache the Setter like so:
 
 ```java
-    private static final Setter cachedSetter = Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("ExampleGroup"))
-                .andCommandKey(HystrixCommandKey.Factory.asKey("HelloWorld"));    
+    private static final Setter cachedSetter = 
+        Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("ExampleGroup"))
+            .andCommandKey(HystrixCommandKey.Factory.asKey("HelloWorld"));    
 
     public CommandHelloWorld(String name) {
         super(cachedSetter);
