@@ -319,6 +319,10 @@ For example, multiple paths through code that all need to get a user&#8217;s `Ac
 
 ```java
 Account account = new UserGetAccount(accountId).execute();
+
+//or
+
+Observable<Account> accountObservable = new UserGetAccount(accountId).observe();
 ``` 
 
 The Hystrix `RequestCache` will execute the underlying `run()` method once and only once, and both threads executing the `HystrixCommand` will receive the same data despite having instantiated different instances.
