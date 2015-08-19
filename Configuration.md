@@ -61,7 +61,9 @@ You can change a global default value by using properties.
 
 The global default property name is shown as &ldquo;**Default Property**&rdquo; in the tables below.
 
-Example:
+__3. Instance default from code__
+
+You can define an instance-specific default. Example:
 
 ```java
 HystrixCommandProperties.Setter()
