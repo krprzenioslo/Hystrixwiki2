@@ -73,9 +73,12 @@ HystrixCommandProperties.Setter()
 You would insert a command of this sort into a `HystrixCommand` constructor in a manner similar to this:
 
 ```java
-super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("ExampleGroup"))
+public HystrixCommandInstance(int id) {
+    super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("ExampleGroup"))
         .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
                .withExecutionTimeoutInMilliseconds(500)));
+    this.id = id;
+}
 ```
 There are convenience constructors for commonly-set initial values.  Here's an example:
 
