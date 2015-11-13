@@ -74,9 +74,7 @@ You would insert a command of this sort into a `HystrixCommand` constructor in a
 
 ```java
 public HystrixCommandInstance(int id) {
-    super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("ExampleGroup"))
-            .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
-                   .withExecutionTimeoutInMilliseconds(500)));
+    super(HystrixCommandGroupKey.Factory.asKey("ExampleGroup"), 500);
     this.id = id;
 }
 ```
