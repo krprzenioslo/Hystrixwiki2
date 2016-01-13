@@ -9,4 +9,4 @@
 * [Dashboard](https://github.com/Netflix/Hystrix/wiki/Dashboard)
 * [End-to-End Examples](https://github.com/Netflix/Hystrix/wiki/End-to-End-Examples)
 * [Migration Guide](https://github.com/Netflix/Hystrix/wiki/Migration-Guide)
-* [FAQ : General](https://github.com/Netflix/Hystrix/wiki/FAQ)
+* [FAQ : General](https://github.com/Netflix/Hystrix/wiki/FAQ%20:%20General)
