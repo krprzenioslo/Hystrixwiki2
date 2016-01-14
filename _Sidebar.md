@@ -4,7 +4,7 @@
 * [How To Use](https://github.com/Netflix/Hystrix/wiki/How-To-Use)
 * [Operations](https://github.com/Netflix/Hystrix/wiki/Operations)
 * [Configuration](https://github.com/Netflix/Hystrix/wiki/Configuration)
-* [Metrics and Monitoring (up to 1.4.x)](https://github.com/Netflix/Hystrix/wiki/Metrics-and-Monitoring-(up-to-1.4.x))
+* [Metrics (up to 1.4.x)](https://github.com/Netflix/Hystrix/wiki/Metrics-and-Monitoring-(up-to-1.4.x))
 * [Plugins](https://github.com/Netflix/Hystrix/wiki/Plugins)
 * [Dashboard](https://github.com/Netflix/Hystrix/wiki/Dashboard)
 * [End-to-End Examples](https://github.com/Netflix/Hystrix/wiki/End-to-End-Examples)
