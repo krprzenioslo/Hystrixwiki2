@@ -1,4 +1,4 @@
-This page includes many frequently-asked questions about how to operate Hystrix.
+This page includes frequently-asked questions about how to operate Hystrix.
 
 **Why am I receiving `java.lang.IllegalStateException`: Another strategy was already registered ?**
 
