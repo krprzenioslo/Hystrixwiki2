@@ -1,6 +1,6 @@
 This page includes many frequently-asked questions about how to operate Hystrix.
 
-**Why am I receiving `IllegalStateException: Another strategy was already registered**
+**Why am I receiving `java.lang.IllegalStateException`: Another strategy was already registered**
 
 > The root cause is that all of the objects held by `HystrixPlugins` must be singletons, and must be in place upon the first HystrixCommand invocation.  As an example, the `HystrixConcurrencyStrategy` must be non-null while the first HystrixCommand is executing, so that it knows how to wrap `Callable`s and set up a `HystrixRequestContext`.
 
