@@ -1,3 +1,0 @@
-The internal representation of metrics in the 1.5.0 release of Hystrix changed substantially.  The general premise of these changes is that it's more flexible to expose a stream of metric events, rather than the prior solution of providing data structures where aggregate queries were possible, but nothing else.  
-
-Because this change affects both the internals of Hystrix and the metrics consumption side, it warrants some discussion on how it works and how it may be consumed.
