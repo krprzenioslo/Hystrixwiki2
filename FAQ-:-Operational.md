@@ -22,3 +22,19 @@ This page includes frequently-asked questions about how to operate Hystrix.
 * `HystrixPlugins.registerMetricsPublisher`
 * `HystrixPlugins.registerPropertiesStrategy`
 * `HystrixPlugins.registerCommandExecutionHook`
+
+
+**Why is it not permitted to set thread pool size in a `HystrixObservableCommand` constructor?**
+
+> Copied from https://github.com/Netflix/Hystrix/issues/805#issuecomment-109371037
+
+> A thread doesn't make it blocking. If you already have a non-blocking
+Observable, you don't need another thread. It's wasteful as all that will
+happen is it will schedule the thread to schedule the async Observable and
+that thread will immediately be put back in the pool. It provides no
+benefit and is just a resource waste.
+
+> If you are wrapping something that is blocking, then use HystrixCommand. If
+what you're wrapping is async (meaning you don't need a thread to make it
+async), then HystrixObservableCommand is the right solution, and you don't
+need a thread.
