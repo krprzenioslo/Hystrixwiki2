@@ -37,6 +37,10 @@ $ ../gradlew jettyRun
 
 Once you see that the dashboard has reached the &ldquo;Running&rdquo; state, open <a href="http://localhost:7979/hystrix-dashboard">http://localhost:7979/hystrix-dashboard</a>.
 
+# Run via Docker
+
+@mlabouardy has published a Docker image for the Hystrix dashboard.  See <a href="https://github.com/mlabouardy/hystrix-dashboard-docker">https://github.com/mlabouardy/hystrix-dashboard-docker</a>.  This is an external project, so please get feedback to @mlabouardy directly.  Thanks @mlabouardy!
+
 # Installing the Dashboard
 
 ### Download
