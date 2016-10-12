@@ -6,6 +6,7 @@
     1. <a href="#execution.isolation.thread.timeoutInMilliseconds"><tt>execution.isolation.thread.timeoutInMilliseconds</a>
     1. <a href="#execution.timeout.enabled"><tt>execution.timeout.enabled</tt></a>
     1. <a href="#execution.isolation.thread.interruptOnTimeout"><tt>execution.isolation.thread.interruptOnTimeout</tt></a>
+    1. <a href="#execution.isolation.thread.interruptOnCancel"><tt>execution.isolation.thread.interruptOnCancel</tt></a>
     1. <a href="#execution.isolation.semaphore.maxConcurrentRequests"><tt>execution.isolation.semaphore.maxConcurrentRequests</tt></a>
   1. <a href="#CommandFallback">Fallback</a>
     1. <a href="#fallback.isolation.semaphore.maxConcurrentRequests"><tt>fallback.isolation.semaphore.maxConcurrentRequests</tt></a>
@@ -190,6 +191,19 @@ This property indicates whether the `HystrixCommand.run()` execution should be i
  <tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.execution.isolation.thread.interruptOnTimeout</tt></td></tr>
  <tr><th>How to Set Instance Default</th><td><pre>HystrixCommandProperties.Setter()
    .withExecutionIsolationThreadInterruptOnTimeout(boolean value)</pre></td></tr>
+</tbody></table>
+
+<a name="execution.isolation.thread.interruptOnCancel" />
+#### execution.isolation.thread.interruptOnCancel
+
+This property indicates whether the `HystrixCommand.run()` execution should be interrupted when a cancellation occurs.
+
+<table><tbody>
+ <tr><th>Default Value</th><td><tt>false</tt></td></tr>
+ <tr><th>Default Property</th><td><tt>hystrix.command.default.execution.isolation.thread.interruptOnCancel</tt></td></tr>
+ <tr><th>Instance Property</th><td><tt>hystrix.command.<i>HystrixCommandKey</i>.execution.isolation.thread.interruptOnCancel</tt></td></tr>
+ <tr><th>How to Set Instance Default</th><td><pre>HystrixCommandProperties.Setter()
+   .withExecutionIsolationThreadInterruptOnCancel(boolean value)</pre></td></tr>
 </tbody></table>
 
 <a name="execution.isolation.semaphore.maxConcurrentRequests" />
