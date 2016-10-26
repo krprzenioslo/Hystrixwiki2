@@ -319,7 +319,7 @@ In the case of a `HystrixObservableCommand`, non-recoverable errors are returned
 
 #### Execution Exception types
 | Failure Type | Exception class | Exception.cause | subject to fallback |
-| ------------- |-------------| -----|
+| ------------- |-------------| -----| ----|
 | FAILURE      | `HystrixRuntimeException` | underlying exception (user-controlled) | YES | 
 | TIMEOUT      | `HystrixRuntimeException` | `j.u.c.TimeoutException` | YES |
 | SHORT_CIRCUITED | `HystrixRuntimeException` | `j.l.RuntimeException` | YES |
