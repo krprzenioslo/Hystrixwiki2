@@ -316,6 +316,17 @@ You can wrap the exception that you would like to throw in `HystrixBadRequestExc
 
 In the case of a `HystrixObservableCommand`, non-recoverable errors are returned via `onError` notifications from the resulting `Observable`, and fallbacks are accomplished by falling back to a second Observable that Hystrix obtains through the `resumeWithFallback` method that you implement.
 
+
+#### Execution Exception types
+| Failure Type | Exception class | Exception.cause | subject to fallback |
+| ------------- |-------------| -----|
+| FAILURE      | `HystrixRuntimeException` | underlying exception (user-controlled) | YES | 
+| TIMEOUT      | `HystrixRuntimeException` | `j.u.c.TimeoutException` | YES |
+| SHORT_CIRCUITED | `HystrixRuntimeException` | `j.l.RuntimeException` | YES |
+| THREAD_POOL_REJECTED | `HystrixRuntimeException` | `j.u.c.RejectedExecutionException` | YES |
+| SEMAPHORE_REJECTED | `HystrixRuntimeException` | `j.l.RuntimeException` | YES | 
+| BAD_REQUEST | `HystrixBadRequestException` | underlying exception (user-controlled) | NO |
+
 <a name='CommandName'/>
 ## Command Name
 
