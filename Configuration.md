@@ -35,9 +35,11 @@
     1. <a href="#collapser.requestCache.enabled"><tt>requestCache.enabled</tt></a>
 1. <a href="#ThreadPool">Thread Pool Properties</a>
     1. <a href="#coreSize"><tt>coreSize</tt></a>
+    1. <a href="#maximumSize"><tt>maximumSize</tt></a>
     1. <a href="#maxQueueSize"><tt>maxQueueSize</tt></a>
     1. <a href="#queueSizeRejectionThreshold"><tt>queueSizeRejectionThreshold</tt></a>
     1. <a href="#keepAliveTimeMinutes"><tt>keepAliveTimeMinutes</tt></a>
+    1. <a href="#allowMaximumSizeToDivergeFromCoreSize"><tt>allowMaximumSizeToDivergeFromCoreSize</tt></a>
     1. <a href="#threadpool.metrics.rollingStats.timeInMilliseconds"><tt>metrics.rollingStats.timeInMilliseconds</tt></a>
     1. <a href="#threadpool.metrics.rollingStats.numBuckets"><tt>metrics.rollingStats.numBuckets</tt></a>
 
@@ -591,7 +593,7 @@ You can change configurations in real-time as needed as performance characterist
 <a name="coreSize" />
 #### coreSize
 
-This property sets the core thread-pool size. This is the maximum number of `HystrixCommand`s that can execute concurrently.
+This property sets the core thread-pool size. 
 
 <table><tbody>
  <tr><th>Default Value</th><td><tt>10</tt></td></tr>
@@ -600,6 +602,20 @@ This property sets the core thread-pool size. This is the maximum number of `Hys
  <tr><th>How to Set Instance Default</th><td><pre>HystrixThreadPoolProperties.Setter()
    .withCoreSize(int value)</pre></td></tr>
 </tbody></table>
+
+<a name="maximumSize" />
+#### maximumSize
+
+Added in 1.5.7.  This property sets the maximum thread-pool size. This is the maximum amount of concurrency that can be supported without starting to reject `HystrixCommand`s.  Please note that this setting only takes effect if you also set `allowMaximumSizeToDivergeFromCoreSize`.  Prior to 1.5.6, core and maximum sizes were always equal.
+
+<table><tbody>
+ <tr><th>Default Value</th><td><tt>10</tt></td></tr>
+ <tr><th>Default Property</th><td><tt>hystrix.threadpool.default.maximumSize</tt></td></tr>
+ <tr><th>Instance Property</th><td><tt>hystrix.threadpool.<i>HystrixThreadPoolKey</i>.maximumSize</tt></td></tr>
+ <tr><th>How to Set Instance Default</th><td><pre>HystrixThreadPoolProperties.Setter()
+   .withMaximumSize(int value)</pre></td></tr>
+</tbody></table>
+
 
 <a name="maxQueueSize" />
 #### maxQueueSize
@@ -644,7 +660,8 @@ This is used by `HystrixCommand` when queuing a thread for execution.
 
 This property sets the keep-alive time, in minutes.
 
-This is in practice not used since the `corePoolSize` and `maxPoolSize` are set to the same value in the default implementation, but if you were to use a custom implementation via [[plugin|Plugins]] then this would be available for you to use.
+Prior to 1.5.7, all thread pools were fixed-size, as `coreSize == maximumSize`.
+In 1.5.7 and after, setting `allowMaximumSizeToDivergeFromCoreSize` to `true` allows those 2 values to diverge, such that the pool may acquire/release threads.  If `coreSize < maximumSize`, then this property controls how long a thread will go unused before being released. 
 
 <table><tbody>
  <tr><th>Default Value</th><td><tt>1</tt></td></tr>
@@ -652,6 +669,19 @@ This is in practice not used since the `corePoolSize` and `maxPoolSize` are set 
  <tr><th>Instance Property</th><td><tt>hystrix.threadpool.<i>HystrixThreadPoolKey</i>.keepAliveTimeMinutes</tt></td></tr>
  <tr><th>How to Set Instance Default</th><td><pre>HystrixThreadPoolProperties.Setter()
    .withKeepAliveTimeMinutes(int value)</pre></td></tr>
+</tbody></table>
+
+<a name="allowMaximumSizeToDivergeFromCoreSize" />
+#### allowMaximumSizeToDivergeFromCoreSize
+
+Added in 1.5.7.  This property allows the configuration for `maximumSize` to take effect.  That value can then be equal to, or higher, than `coreSize`.  Setting `coreSize < maximumSize` creates a thread pool which can sustain `maximumSize` concurrency, but will return threads to the system during periods of relative inactivity. (subject to `keepAliveTimeInMinutes`)
+
+<table><tbody>
+ <tr><th>Default Value</th><td><tt>false</tt></td></tr>
+ <tr><th>Default Property</th><td><tt>hystrix.threadpool.default.allowMaximumSizeToDivergeFromCoreSize</tt></td></tr>
+ <tr><th>Instance Property</th><td><tt>hystrix.threadpool.<i>HystrixThreadPoolKey</i>.allowMaximumSizeToDivergeFromCoreSize</tt></td></tr>
+ <tr><th>How to Set Instance Default</th><td><pre>HystrixThreadPoolProperties.Setter()
+   .withAllowMaximumSizeToDivergeFromCoreSize(boolean value)</pre></td></tr>
 </tbody></table>
 
 <a name="threadpool.metrics.rollingStats.timeInMilliseconds" />
