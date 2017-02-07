@@ -34,7 +34,9 @@ Each instance of metrics being captured (such as for all `HystrixCommands` with 
 
 This gives the implementation the opportunity to receive the metrics data objects and start a background process for doing something with the metrics such as publishing them to a persistent store.
 
-The default implementation publishes them to [Servo](https://github.com/Netflix/servo) which is an in-memory system that supports various mechanisms of retrieving the data such as through pollers or JMX.
+The default implementation does not publish them anywhere.
+
+If you wish to use [Servo](https://github.com/Netflix/servo), which is an in-memory system that supports various mechanisms of retrieving the data such as through pollers or JMX, please see the documentation at https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib/hystrix-servo-metrics-publisher
 
 <a name="propertiesstrategy">
 ### Properties Strategy
