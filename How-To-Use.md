@@ -76,7 +76,7 @@ public class CommandHelloWorld extends HystrixObservableCommand<String> {
                     observer.onError(e);
                 }
             }
-         } );
+         } ).subscribeOn(Schedulers.io());
     }
 }
 ```
