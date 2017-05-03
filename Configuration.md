@@ -590,6 +590,8 @@ The aggressiveness of configurations and tradeoffs in each direction are differe
 
 You can change configurations in real-time as needed as performance characteristics change or when problems are found, all without the risk of taking down the entire app if problems or misconfigurations occur.
 
+Please note that these names match those in [the ThreadPoolExecutor Javadoc](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ThreadPoolExecutor.html)
+
 <a name="coreSize" />
 #### coreSize
 
