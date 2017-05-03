@@ -1,34 +1,34 @@
 ## Contents
 1. <a href="#intro">Introduction</a>
 1. <a href="#CommandProperties">Command Properties</a>
-  1. <a href="#CommandExecution">Execution</a>
-    1. <a href="#execution.isolation.strategy"><tt>execution.isolation.strategy</tt></a>
-    1. <a href="#execution.isolation.thread.timeoutInMilliseconds"><tt>execution.isolation.thread.timeoutInMilliseconds</a>
-    1. <a href="#execution.timeout.enabled"><tt>execution.timeout.enabled</tt></a>
-    1. <a href="#execution.isolation.thread.interruptOnTimeout"><tt>execution.isolation.thread.interruptOnTimeout</tt></a>
-    1. <a href="#execution.isolation.thread.interruptOnCancel"><tt>execution.isolation.thread.interruptOnCancel</tt></a>
-    1. <a href="#execution.isolation.semaphore.maxConcurrentRequests"><tt>execution.isolation.semaphore.maxConcurrentRequests</tt></a>
-  1. <a href="#CommandFallback">Fallback</a>
-    1. <a href="#fallback.isolation.semaphore.maxConcurrentRequests"><tt>fallback.isolation.semaphore.maxConcurrentRequests</tt></a>
-    1. <a href="#fallback.enabled"><tt>fallback.enabled</tt></a>
-  1. <a href="#CommandCircuitBreaker">Circuit Breaker</a>
-    1. <a href="#circuitBreaker.enabled"><tt>circuitBreaker.enabled</tt></a>
-    1. <a href="#circuitBreaker.requestVolumeThreshold"><tt>circuitBreaker.requestVolumeThreshold</tt></a>
-    1. <a href="#circuitBreaker.sleepWindowInMilliseconds"><tt>circuitBreaker.sleepWindowInMilliseconds</tt></a>
-    1. <a href="#circuitBreaker.errorThresholdPercentage"><tt>circuitBreaker.errorThresholdPercentage</tt></a>
-    1. <a href="#circuitBreaker.forceOpen"><tt>circuitBreaker.forceOpen</tt></a>
-    1. <a href="#circuitBreaker.forceClosed"><tt>circuitBreaker.forceClosed</tt></a>
-  1. <a href="#CommandMetrics">Metrics</a>
-    1. <a href="#metrics.rollingStats.timeInMilliseconds"><tt>metrics.rollingStats.timeInMilliseconds</tt></a>
-    1. <a href="#metrics.rollingStats.numBuckets"><tt>metrics.rollingStats.numBuckets</tt></a>
-    1. <a href="#metrics.rollingPercentile.enabled"><tt>metrics.rollingPercentile.enabled</tt></a>
-    1. <a href="#metrics.rollingPercentile.timeInMilliseconds"><tt>metrics.rollingPercentile.timeInMilliseconds</tt></a>
-    1. <a href="#metrics.rollingPercentile.numBuckets"><tt>metrics.rollingPercentile.numBuckets</tt></a>
-    1. <a href="#metrics.rollingPercentile.bucketSize"><tt>metrics.rollingPercentile.bucketSize</tt></a>
-    1. <a href="#metrics.healthSnapshot.intervalInMilliseconds"><tt>metrics.healthSnapshot.intervalInMilliseconds</tt></a>
-  1. <a href="#CommandRequestContext">Request Context</a>
-    1. <a href="#requestCache.enabled"><tt>requestCache.enabled</tt></a>
-    1. <a href="#requestLog.enabled"><tt>requestLog.enabled</tt></a>
+    1. <a href="#CommandExecution">Execution</a>
+        1. <a href="#execution.isolation.strategy"><tt>execution.isolation.strategy</tt></a>
+        1. <a href="#execution.isolation.thread.timeoutInMilliseconds"><tt>execution.isolation.thread.timeoutInMilliseconds</a>
+        1. <a href="#execution.timeout.enabled"><tt>execution.timeout.enabled</tt></a>
+        1. <a href="#execution.isolation.thread.interruptOnTimeout"><tt>execution.isolation.thread.interruptOnTimeout</tt></a>
+        1. <a href="#execution.isolation.thread.interruptOnCancel"><tt>execution.isolation.thread.interruptOnCancel</tt></a>
+        1. <a href="#execution.isolation.semaphore.maxConcurrentRequests"><tt>execution.isolation.semaphore.maxConcurrentRequests</tt></a>
+    1. <a href="#CommandFallback">Fallback</a>
+        1. <a href="#fallback.isolation.semaphore.maxConcurrentRequests"><tt>fallback.isolation.semaphore.maxConcurrentRequests</tt></a>
+        1. <a href="#fallback.enabled"><tt>fallback.enabled</tt></a>
+    1. <a href="#CommandCircuitBreaker">Circuit Breaker</a>
+        1. <a href="#circuitBreaker.enabled"><tt>circuitBreaker.enabled</tt></a>
+        1. <a href="#circuitBreaker.requestVolumeThreshold"><tt>circuitBreaker.requestVolumeThreshold</tt></a>
+        1. <a href="#circuitBreaker.sleepWindowInMilliseconds"><tt>circuitBreaker.sleepWindowInMilliseconds</tt></a>
+        1. <a href="#circuitBreaker.errorThresholdPercentage"><tt>circuitBreaker.errorThresholdPercentage</tt></a>
+        1. <a href="#circuitBreaker.forceOpen"><tt>circuitBreaker.forceOpen</tt></a>
+        1. <a href="#circuitBreaker.forceClosed"><tt>circuitBreaker.forceClosed</tt></a>
+    1. <a href="#CommandMetrics">Metrics</a>
+        1. <a href="#metrics.rollingStats.timeInMilliseconds"><tt>metrics.rollingStats.timeInMilliseconds</tt></a>
+        1. <a href="#metrics.rollingStats.numBuckets"><tt>metrics.rollingStats.numBuckets</tt></a>
+        1. <a href="#metrics.rollingPercentile.enabled"><tt>metrics.rollingPercentile.enabled</tt></a>
+        1. <a href="#metrics.rollingPercentile.timeInMilliseconds"><tt>metrics.rollingPercentile.timeInMilliseconds</tt></a>
+        1. <a href="#metrics.rollingPercentile.numBuckets"><tt>metrics.rollingPercentile.numBuckets</tt></a>
+        1. <a href="#metrics.rollingPercentile.bucketSize"><tt>metrics.rollingPercentile.bucketSize</tt></a>
+        1. <a href="#metrics.healthSnapshot.intervalInMilliseconds"><tt>metrics.healthSnapshot.intervalInMilliseconds</tt></a>
+    1. <a href="#CommandRequestContext">Request Context</a>
+        1. <a href="#requestCache.enabled"><tt>requestCache.enabled</tt></a>
+        1. <a href="#requestLog.enabled"><tt>requestLog.enabled</tt></a>
 1. <a href="#Collapser">Collapser Properties</a>
     1. <a href="#maxRequestsInBatch"><tt>maxRequestsInBatch</tt></a>
     1. <a href="#timerDelayInMilliseconds"><tt>timerDelayInMilliseconds</tt></a>
@@ -44,6 +44,7 @@
     1. <a href="#threadpool.metrics.rollingStats.numBuckets"><tt>metrics.rollingStats.numBuckets</tt></a>
 
 <a name="intro" />
+
 ## Introduction
 
 Hystrix uses [Archaius](https://github.com/Netflix/archaius) for the default implementation of properties for configuration.
@@ -114,11 +115,13 @@ For example, if the key was named &ldquo;`SubscriberGetAccount`&rdquo; then the 
 The following [Properties](http://netflix.github.io/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandProperties.html) control `HystrixCommand` behavior:
 
 <a name='CommandExecution'/>
+
 ### Execution
 
 The following Properties control how [`HystrixCommand.run()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixCommand.html#run\(\)) executes.
 
 <a name="execution.isolation.strategy" />
+
 #### execution.isolation.strategy
 
 This property indicates which isolation strategy `HystrixCommand.run()` executes with, one of the following two choices:
@@ -155,6 +158,7 @@ HystrixCommandProperties.Setter()
 </tbody></table>
 
 <a name="execution.isolation.thread.timeoutInMilliseconds" />
+
 #### execution.isolation.thread.timeoutInMilliseconds
 
 This property sets the time in milliseconds after which the caller will observe a timeout and walk away from the command execution. Hystrix marks the `HystrixCommand` as a TIMEOUT, and performs fallback logic.  Note that there is configuration for turning off timeouts per-command, if that is desired (see command.timeout.enabled).
@@ -170,6 +174,7 @@ This property sets the time in milliseconds after which the caller will observe 
 </tbody></table>
 
 <a name="execution.timeout.enabled" />
+
 #### execution.timeout.enabled
 
 This property indicates whether the `HystrixCommand.run()` execution should have a timeout.
@@ -183,6 +188,7 @@ This property indicates whether the `HystrixCommand.run()` execution should have
 </tbody></table>
 
 <a name="execution.isolation.thread.interruptOnTimeout" />
+
 #### execution.isolation.thread.interruptOnTimeout
 
 This property indicates whether the `HystrixCommand.run()` execution should be interrupted when a timeout occurs.
@@ -196,6 +202,7 @@ This property indicates whether the `HystrixCommand.run()` execution should be i
 </tbody></table>
 
 <a name="execution.isolation.thread.interruptOnCancel" />
+
 #### execution.isolation.thread.interruptOnCancel
 
 This property indicates whether the `HystrixCommand.run()` execution should be interrupted when a cancellation occurs.
@@ -209,6 +216,7 @@ This property indicates whether the `HystrixCommand.run()` execution should be i
 </tbody></table>
 
 <a name="execution.isolation.semaphore.maxConcurrentRequests" />
+
 #### execution.isolation.semaphore.maxConcurrentRequests
 
 This property sets the maximum number of requests allowed to a `HystrixCommand.run()` method when you are using `ExecutionIsolationStrategy.SEMAPHORE`.
@@ -230,11 +238,13 @@ The isolation principle is still the same so the semaphore should still be a sma
 </tbody></table>
 
 <a name='CommandFallback'/>
+
 ### Fallback
 
 The following properties control how [`HystrixCommand.getFallback()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixCommand.html#getFallback\(\)) executes. These properties apply to both `ExecutionIsolationStrategy.THREAD` and `ExecutionIsolationStrategy.SEMAPHORE`.
 
 <a name="fallback.isolation.semaphore.maxConcurrentRequests" />
+
 #### fallback.isolation.semaphore.maxConcurrentRequests
 
 This property sets the maximum number of requests a `HystrixCommand.getFallback()` method is allowed to make from the calling thread.
@@ -250,6 +260,7 @@ If the maximum concurrent limit is hit then subsequent requests will be rejected
 </tbody></table>
 
 <a name="fallback.enabled" />
+
 #### fallback.enabled
 
 Since: 1.2
@@ -265,11 +276,13 @@ This property determines whether a call to `HystrixCommand.getFallback()` will b
 </tbody></table>
 
 <a name="CommandCircuitBreaker" />
+
 ### Circuit Breaker
 
 The circuit breaker properties control behavior of the [`HystrixCircuitBreaker`](http://netflix.github.io/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCircuitBreaker.html).
 
 <a name="circuitBreaker.enabled" />
+
 #### circuitBreaker.enabled
 
 This property determines whether a circuit breaker will be used to track health and to short-circuit requests if it trips.
@@ -283,6 +296,7 @@ This property determines whether a circuit breaker will be used to track health 
 </tbody></table>
 
 <a name="circuitBreaker.requestVolumeThreshold" />
+
 #### circuitBreaker.requestVolumeThreshold
 
 This property sets the minimum number of requests in a rolling window that will trip the circuit.
@@ -298,6 +312,7 @@ For example, if the value is 20, then if only 19 requests are received in the ro
 </tbody></table>
 
 <a name="circuitBreaker.sleepWindowInMilliseconds" />
+
 #### circuitBreaker.sleepWindowInMilliseconds
 
 This property sets the amount of time, after tripping the circuit, to reject requests before allowing attempts again to determine if the circuit should again be closed.
@@ -311,6 +326,7 @@ This property sets the amount of time, after tripping the circuit, to reject req
 </tbody></table>
 
 <a name="circuitBreaker.errorThresholdPercentage" />
+
 #### circuitBreaker.errorThresholdPercentage
 
 This property sets the error percentage at or above which the circuit should trip open and start short-circuiting requests to fallback logic.
@@ -324,6 +340,7 @@ This property sets the error percentage at or above which the circuit should tri
 </tbody></table>
 
 <a name="circuitBreaker.forceOpen" />
+
 #### circuitBreaker.forceOpen
 
 This property, if `true`, forces the circuit breaker into an open (tripped) state in which it will reject all requests.
@@ -339,6 +356,7 @@ This property takes precedence over `circuitBreaker.forceClosed`.
 </tbody></table>
 
 <a name="circuitBreaker.forceClosed" />
+
 #### circuitBreaker.forceClosed
 
 This property, if `true`, forces the circuit breaker into a closed state in which it will  allow requests regardless of the error percentage.
@@ -354,11 +372,13 @@ The `circuitBreaker.forceOpen` property takes precedence so if it is set to `tru
 </tbody></table>
 
 <a name="CommandMetrics" />
+
 ### Metrics
 
 The following properties are related to capturing metrics from `HystrixCommand` and `HystrixObservableCommand` execution.
 
 <a name="metrics.rollingStats.timeInMilliseconds" />
+
 #### metrics.rollingStats.timeInMilliseconds
 
 This property sets the duration of the statistical rolling window, in milliseconds. This is how long Hystrix keeps metrics for the circuit breaker to use and for publishing.
@@ -380,6 +400,7 @@ For example, if this property is set to 10 seconds (`10000`) with ten 1-second b
 </tbody></table>
 
 <a name="metrics.rollingStats.numBuckets" />
+
 #### metrics.rollingStats.numBuckets
 
 This property sets the number of buckets the rolling statistical window is divided into.
@@ -400,6 +421,7 @@ As of 1.4.12, this property affects the initial metrics creation only, and adjus
 </tbody></table>
 
 <a name="metrics.rollingPercentile.enabled" />
+
 #### metrics.rollingPercentile.enabled
 
 This property indicates whether execution latencies should be tracked and calculated as percentiles.  If they are disabled, all summary statistics (mean, percentiles) are returned as -1.
@@ -413,6 +435,7 @@ This property indicates whether execution latencies should be tracked and calcul
 </tbody></table>
 
 <a name="metrics.rollingPercentile.timeInMilliseconds" />
+
 #### metrics.rollingPercentile.timeInMilliseconds
 
 This property sets the duration of the rolling window in which execution times are kept to allow for percentile calculations, in milliseconds.
@@ -430,6 +453,7 @@ As of 1.4.12, this property affects the initial metrics creation only, and adjus
 </tbody></table>
 
 <a name="metrics.rollingPercentile.numBuckets" />
+
 #### metrics.rollingPercentile.numBuckets
 
 This property sets the number of buckets the `rollingPercentile` window will be divided into.
@@ -450,6 +474,7 @@ As of 1.4.12, this property affects the initial metrics creation only, and adjus
 </tbody></table>
 
 <a name="metrics.rollingPercentile.bucketSize" />
+
 #### metrics.rollingPercentile.bucketSize
 
 This property sets the maximum number of execution times that are kept per bucket. If more executions occur during the time they will wrap around and start over-writing at the beginning of the bucket. 
@@ -469,6 +494,7 @@ As of 1.4.12, this property affects the initial metrics creation only, and adjus
 </tbody></table>
 
 <a name="metrics.healthSnapshot.intervalInMilliseconds" />
+
 #### metrics.healthSnapshot.intervalInMilliseconds
 
 This property sets the time to wait, in milliseconds, between allowing health snapshots to be taken that calculate success and error percentages and affect circuit breaker status.
@@ -484,11 +510,13 @@ On high-volume circuits the continual calculation of error percentages can becom
 </tbody></table>
 
 <a name="CommandRequestContext" />
+
 ### Request Context
 
 These properties concern [`HystrixRequestContext`](http://netflix.github.com/Hystrix/javadoc/index.html?com/netflix/hystrix/strategy/concurrency/HystrixRequestContext.html) functionality used by `HystrixCommand`.
 
 <a name="requestCache.enabled" />
+
 #### requestCache.enabled
 
 This property indicates whether [`HystrixCommand.getCacheKey()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixCommand.html#getCacheKey\(\)) should be used with [`HystrixRequestCache`](http://netflix.github.io/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixRequestCache.html) to provide de-duplication functionality via request-scoped caching. 
@@ -502,6 +530,7 @@ This property indicates whether [`HystrixCommand.getCacheKey()`](http://netflix.
 </tbody></table>
 
 <a name="requestLog.enabled" />
+
 #### requestLog.enabled
 
 This property indicates whether `HystrixCommand` execution and events should be logged to [`HystrixRequestLog`](http://netflix.github.io/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixRequestLog.html). 
@@ -515,11 +544,13 @@ This property indicates whether `HystrixCommand` execution and events should be 
 </tbody></table>
 
 <a name="Collapser" />
+
 ## Collapser Properties
 
 The following properties control [`HystrixCollapser`](http://netflix.github.io/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCollapser.html) behavior.
 
 <a name="maxRequestsInBatch" />
+
 #### maxRequestsInBatch
 
 This property sets the maximum number of requests allowed in a batch before this triggers a batch execution.
@@ -533,6 +564,7 @@ This property sets the maximum number of requests allowed in a batch before this
 </tbody></table>
 
 <a name="timerDelayInMilliseconds" />
+
 #### timerDelayInMilliseconds
 
 This property sets the number of milliseconds after the creation of the batch that its execution is triggered.
@@ -546,6 +578,7 @@ This property sets the number of milliseconds after the creation of the batch th
 </tbody></table>
 
 <a name="collapser.requestCache.enabled" />
+
 #### requestCache.enabled
 
 This property indicates whether request caching is enabled for [`HystrixCollapser.execute()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixCollapser.html#execute\(\)) and [`HystrixCollapser.queue()`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/HystrixCollapser.html#queue\(\)) invocations.
@@ -559,6 +592,7 @@ This property indicates whether request caching is enabled for [`HystrixCollapse
 </tbody></table>
 
 <a name="ThreadPool" />
+
 ## ThreadPool Properties
 
 The following properties control the behavior of the thread-pools that Hystrix Commands execute on.
@@ -593,6 +627,7 @@ You can change configurations in real-time as needed as performance characterist
 Please note that these names match those in [the ThreadPoolExecutor Javadoc](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ThreadPoolExecutor.html)
 
 <a name="coreSize" />
+
 #### coreSize
 
 This property sets the core thread-pool size. 
@@ -606,6 +641,7 @@ This property sets the core thread-pool size.
 </tbody></table>
 
 <a name="maximumSize" />
+
 #### maximumSize
 
 Added in 1.5.7.  This property sets the maximum thread-pool size. This is the maximum amount of concurrency that can be supported without starting to reject `HystrixCommand`s.  Please note that this setting only takes effect if you also set `allowMaximumSizeToDivergeFromCoreSize`.  Prior to 1.5.6, core and maximum sizes were always equal.
@@ -620,6 +656,7 @@ Added in 1.5.7.  This property sets the maximum thread-pool size. This is the ma
 
 
 <a name="maxQueueSize" />
+
 #### maxQueueSize
 
 This property sets the maximum queue size of the `BlockingQueue` implementation.
@@ -641,6 +678,7 @@ To change between `SynchronousQueue` and `LinkedBlockingQueue` requires a restar
 </tbody></table>
 
 <a name="queueSizeRejectionThreshold" />
+
 #### queueSizeRejectionThreshold
 
 This property sets the queue size rejection threshold &mdash; an artificial maximum queue size at which rejections will occur even if `maxQueueSize` has not been reached. This property exists because the `maxQueueSize` of a [`BlockingQueue`](http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/BlockingQueue.html) cannot be dynamically changed and we want to allow you to dynamically change the queue size that affects rejections.
@@ -658,6 +696,7 @@ This is used by `HystrixCommand` when queuing a thread for execution.
 </tbody></table>
 
 <a name="keepAliveTimeMinutes" />
+
 #### keepAliveTimeMinutes
 
 This property sets the keep-alive time, in minutes.
@@ -674,6 +713,7 @@ In 1.5.7 and after, setting `allowMaximumSizeToDivergeFromCoreSize` to `true` al
 </tbody></table>
 
 <a name="allowMaximumSizeToDivergeFromCoreSize" />
+
 #### allowMaximumSizeToDivergeFromCoreSize
 
 Added in 1.5.7.  This property allows the configuration for `maximumSize` to take effect.  That value can then be equal to, or higher, than `coreSize`.  Setting `coreSize < maximumSize` creates a thread pool which can sustain `maximumSize` concurrency, but will return threads to the system during periods of relative inactivity. (subject to `keepAliveTimeInMinutes`)
@@ -687,6 +727,7 @@ Added in 1.5.7.  This property allows the configuration for `maximumSize` to tak
 </tbody></table>
 
 <a name="threadpool.metrics.rollingStats.timeInMilliseconds" />
+
 #### metrics.rollingStats.timeInMilliseconds
 
 This property sets the duration of the statistical rolling window, in milliseconds. This is how long metrics are kept for the thread pool.
@@ -702,6 +743,7 @@ The window is divided into buckets and &ldquo;rolls&rdquo; by those increments.
 </tbody></table>
 
 <a name="threadpool.metrics.rollingStats.numBuckets" />
+
 #### metrics.rollingStats.numBuckets
 
 This property sets the number of buckets the rolling statistical window is divided into.
