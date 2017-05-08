@@ -595,7 +595,7 @@ This property indicates whether request caching is enabled for [`HystrixCollapse
 
 ## ThreadPool Properties
 
-The following properties control the behavior of the thread-pools that Hystrix Commands execute on.
+The following properties control the behavior of the thread-pools that Hystrix Commands execute on.  Please note that these names match those in [the ThreadPoolExecutor Javadoc](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ThreadPoolExecutor.html)
 
 Most of the time the default value of 10 threads will be fine (often it could be made smaller).
 
@@ -623,8 +623,6 @@ When you configure it correctly a timeout at the `HystrixCommand` layer should b
 The aggressiveness of configurations and tradeoffs in each direction are different for each dependency.
 
 You can change configurations in real-time as needed as performance characteristics change or when problems are found, all without the risk of taking down the entire app if problems or misconfigurations occur.
-
-Please note that these names match those in [the ThreadPoolExecutor Javadoc](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ThreadPoolExecutor.html)
 
 <a name="coreSize" />
 
