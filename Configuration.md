@@ -642,7 +642,7 @@ This property sets the core thread-pool size.
 
 #### maximumSize
 
-Added in 1.5.7.  This property sets the maximum thread-pool size. This is the maximum amount of concurrency that can be supported without starting to reject `HystrixCommand`s.  Please note that this setting only takes effect if you also set `allowMaximumSizeToDivergeFromCoreSize`.  Prior to 1.5.6, core and maximum sizes were always equal.
+Added in 1.5.9.  This property sets the maximum thread-pool size. This is the maximum amount of concurrency that can be supported without starting to reject `HystrixCommand`s.  Please note that this setting only takes effect if you also set `allowMaximumSizeToDivergeFromCoreSize`.  Prior to 1.5.9, core and maximum sizes were always equal.
 
 <table><tbody>
  <tr><th>Default Value</th><td><tt>10</tt></td></tr>
@@ -699,8 +699,8 @@ This is used by `HystrixCommand` when queuing a thread for execution.
 
 This property sets the keep-alive time, in minutes.
 
-Prior to 1.5.7, all thread pools were fixed-size, as `coreSize == maximumSize`.
-In 1.5.7 and after, setting `allowMaximumSizeToDivergeFromCoreSize` to `true` allows those 2 values to diverge, such that the pool may acquire/release threads.  If `coreSize < maximumSize`, then this property controls how long a thread will go unused before being released. 
+Prior to 1.5.9, all thread pools were fixed-size, as `coreSize == maximumSize`.
+In 1.5.9 and after, setting `allowMaximumSizeToDivergeFromCoreSize` to `true` allows those 2 values to diverge, such that the pool may acquire/release threads.  If `coreSize < maximumSize`, then this property controls how long a thread will go unused before being released. 
 
 <table><tbody>
  <tr><th>Default Value</th><td><tt>1</tt></td></tr>
@@ -714,7 +714,7 @@ In 1.5.7 and after, setting `allowMaximumSizeToDivergeFromCoreSize` to `true` al
 
 #### allowMaximumSizeToDivergeFromCoreSize
 
-Added in 1.5.7.  This property allows the configuration for `maximumSize` to take effect.  That value can then be equal to, or higher, than `coreSize`.  Setting `coreSize < maximumSize` creates a thread pool which can sustain `maximumSize` concurrency, but will return threads to the system during periods of relative inactivity. (subject to `keepAliveTimeInMinutes`)
+Added in 1.5.9.  This property allows the configuration for `maximumSize` to take effect.  That value can then be equal to, or higher, than `coreSize`.  Setting `coreSize < maximumSize` creates a thread pool which can sustain `maximumSize` concurrency, but will return threads to the system during periods of relative inactivity. (subject to `keepAliveTimeInMinutes`)
 
 <table><tbody>
  <tr><th>Default Value</th><td><tt>false</tt></td></tr>
