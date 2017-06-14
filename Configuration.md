@@ -132,11 +132,11 @@ This property indicates which isolation strategy `HystrixCommand.run()` executes
 
 ##### Thread or Semaphore
 
-The default, and the recommended setting, is to run commands using thread isolation (`THREAD`).
+The default, and the recommended setting, is to run `HystrixCommand`s using thread isolation (`THREAD`) and `HystrixObservableCommand`s using semaphore isolation (`SEMAPHORE`).
 
 Commands executed in threads have an extra layer of protection against latencies beyond what network timeouts can offer.
 
-Generally the only time you should use semaphore isolation (`SEMAPHORE`) is when the call is so high volume (hundreds per second, per instance) that the overhead of separate threads is too high; this typically only applies to non-network calls.
+Generally the only time you should use semaphore isolation for `HystrixCommand`s is when the call is so high volume (hundreds per second, per instance) that the overhead of separate threads is too high; this typically only applies to non-network calls.
 
 >Netflix API has 100+ commands running in 40+ thread pools and only a handful of those commands are not running in a thread - those that fetch metadata from an in-memory cache or that are fa&ccedil;ades to thread-isolated commands (see [&ldquo;Primary + Secondary with Fallback&rdquo; pattern](https://github.com/Netflix/Hystrix/wiki/How-To-Use#common-patterns) for more information on this).
 
