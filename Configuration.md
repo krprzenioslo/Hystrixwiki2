@@ -753,8 +753,8 @@ In other words, 10000/10 is okay, so is 10000/20 but 10000/7 is not.
 <table><tbody>
  <tr><th>Default Value</th><td><tt>10</tt></td></tr>
  <tr><th>Possible Values</th><td>Any value that <tt>metrics.rollingStats.timeInMilliseconds</tt> can be evenly divided by. The result however should be buckets measuring hundreds or thousands of milliseconds. Performance at high volume has not been tested with buckets &lt;100ms.</td></tr>
- <tr><th>Default Property</th><td><tt>hystrix.threadpool.default.metrics.rollingPercentile.numBuckets</tt></td></tr>
- <tr><th>Instance Property</th><td><tt>hystrix.threadpool.<i>HystrixThreadPoolProperties</i>.metrics.rollingPercentile.numBuckets</tt></td></tr>
+ <tr><th>Default Property</th><td><tt>hystrix.threadpool.default.metrics.rollingStats.numBuckets</tt></td></tr>
+ <tr><th>Instance Property</th><td><tt>hystrix.threadpool.<i>HystrixThreadPoolProperties</i>.metrics.rollingStats.numBuckets</tt></td></tr>
  <tr><th>How to Set Instance Default</th><td><pre>HystrixThreadPoolProperties.Setter()
    .withMetricsRollingStatisticalWindowBuckets(int value)</pre></td></tr>
 </tbody</table>
