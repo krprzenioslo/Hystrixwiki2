@@ -110,6 +110,7 @@ For example, if the key was named &ldquo;`SubscriberGetAccount`&rdquo; then the 
 > `hystrix.command.SubscriberGetAccount.execution.isolation.thread.timeoutInMilliseconds`
 
 <a name="CommandProperties" />
+
 ## Command Properties
 
 The following [Properties](http://netflix.github.io/Hystrix/javadoc/index.html?com/netflix/hystrix/HystrixCommandProperties.html) control `HystrixCommand` behavior:
