@@ -4,6 +4,7 @@
 1. <a href="#building">Building</a>
 
 <a name="binaries" />
+
 ## Getting Binaries
 
 Binaries and dependency information for Maven, Ivy, Gradle and others can be found at [http://search.maven.org](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.netflix.hystrix%22%20AND%20a%3A%22hystrix-core%22).
@@ -56,6 +57,7 @@ It will download hystrix-core-*.jar and its dependencies into ./target/dependenc
 You need Java 6 or later.
 
 <a name="hello" />
+
 ## Hello World!
 
 The simplest use of Hystrix is as follows:
@@ -92,6 +94,7 @@ More examples and information can be found in the [[How To Use]] section.
 Example source code can be found in the [hystrix-examples](../tree/master/hystrix-examples/src/main/java/com/netflix/hystrix/examples) module.
 
 <a name="building" />
+
 ## Building
 
 To checkout the source and build:
