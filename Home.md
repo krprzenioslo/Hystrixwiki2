@@ -25,6 +25,7 @@ The following links provide more context around Hystrix and the challenges that 
 * [&ldquo;Application Resilience Engineering & Operations at Netflix&rdquo;] (https://speakerdeck.com/benjchristensen/application-resilience-engineering-and-operations-at-netflix)
 
 <a name="purpose" />
+
 ## What Is Hystrix For?
 
 Hystrix is designed to do the following:
