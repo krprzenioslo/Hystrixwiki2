@@ -1,6 +1,7 @@
 ## Contents
 
 1. <a href="#Flow">Flow Chart</a>
+1. <a href="#SequenceDiagram">Sequence Diagram</a>
 1. <a href="#CircuitBreaker">Circuit Breaker</a>
 1. <a href="#Isolation">Isolation</a>
 1. <a href="#Threads">Threads & Thread Pools</a>
@@ -142,6 +143,12 @@ _(Click for larger view)_ </a>
 * `queue()` &mdash; converts the `Observable` into a `BlockingObservable` so that it can be converted into a `Future`, then returns this `Future`
 * `observe()` &mdash; subscribes to the `Observable` immediately and begins the flow that executes the command; returns an `Observable` that, when you `subscribe` to it, replays the emissions and notifications
 * `toObservable()` &mdash; returns the `Observable` unchanged; you must `subscribe` to it in order to actually begin the flow that leads to the execution of the command
+
+<a name='SequenceDiagram'/>
+
+## Sequence Diagram
+
+@adrianb11 has kindly provided a [sequence diagram](https://design.codelytics.io/hystrix/how-it-works) demonstrating the above flows
 
 <a name='CircuitBreaker'/>
 
