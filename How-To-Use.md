@@ -311,6 +311,9 @@ For a `HystrixObservableCommand` you instead may override the `resumeWithFallbac
 
 Internally, Hystrix uses the RxJava [`onErrorResumeNext`](http://reactivex.io/documentation/operators/catch.html) operator to seamlessly transition between the primary and fallback `Observable` in case of an error.
 
+#### Sequence Diagram
+@adrianb11 has kindly provided a [sequence diagram](https://design.codelytics.io/hystrix/fallback) demonstrating how a timeout then fallback works.
+
 <a name='ErrorPropagation'/>
 
 ## Error Propagation
