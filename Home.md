@@ -7,6 +7,7 @@
 1. <a href="#how">How Does Hystrix Accomplish Its Goals?</a>
 
 <a name="what" />
+
 ## What Is Hystrix?
 
 In a distributed environment, inevitably some of the many service dependencies will fail.  Hystrix is a library that helps you control the interactions between these distributed services by adding latency tolerance and fault tolerance logic.  Hystrix does this by isolating points of access between the services, stopping cascading failures across them, and providing fallback options, all of which improve your system&#8217;s overall resiliency.
@@ -34,6 +35,7 @@ Hystrix is designed to do the following:
 * Enable near real-time monitoring, alerting, and operational control.
 
 <a name="problem" />
+
 ## What Problem Does Hystrix Solve?
 
 Applications in complex distributed architectures have dozens of dependencies, each of which will inevitably fail at some point.  If the host application is not isolated from these external failures, it risks being taken down with them.
@@ -85,6 +87,7 @@ Hystrix works by:
 * Protecting against failures in the entire dependency client execution, not just in the network traffic.
 
 <a name="how" />
+
 ## How Does Hystrix Accomplish Its Goals?
 
 Hystrix does this by:
