@@ -312,6 +312,7 @@ For a `HystrixObservableCommand` you instead may override the `resumeWithFallbac
 Internally, Hystrix uses the RxJava [`onErrorResumeNext`](http://reactivex.io/documentation/operators/catch.html) operator to seamlessly transition between the primary and fallback `Observable` in case of an error.
 
 <a name='ErrorPropagation'/>
+
 ## Error Propagation
 
 All exceptions thrown from the `run()` method except for [`HystrixBadRequestException`](http://netflix.github.io/Hystrix/javadoc/com/netflix/hystrix/exception/HystrixBadRequestException.html) count as failures and trigger `getFallback()` and circuit-breaker logic.
