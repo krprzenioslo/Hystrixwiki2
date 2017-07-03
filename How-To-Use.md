@@ -374,6 +374,7 @@ HystrixCommandKey.Factory.asKey("HelloWorld")
 ```
 
 <a name='CommandGroup'/>
+
 ## Command Group
 
 Hystrix uses the command group key to group together commands such as for reporting, alerting, dashboards, or team/library ownership.
@@ -665,6 +666,7 @@ You could enable the filter for all incoming traffic by adding a section to the 
 In the following sections are common uses and patterns of use for `HystrixCommand` and `HystrixObservableCommand`.
 
 <a name='Common-Patterns-FailFast'/>
+
 ### Fail Fast
 
 The most basic execution is one that does a single thing and has no fallback behavior. It will throw an exception if any type of failure occurs.
