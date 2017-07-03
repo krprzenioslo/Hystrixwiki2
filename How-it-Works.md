@@ -273,6 +273,9 @@ The following diagram shows the number of threads and network connections in two
 <a href="images/collapser-1280.png">[[images/collapser-640.png]]
 _(Click for larger view)_</a>
 
+### Sequence Diagram
+@adrianb11 has kindly provided a [sequence diagram](https://design.codelytics.io/hystrix/request-collapsing) of request-collapsing.
+
 ### Why Use Request Collapsing?
 
 Use request collapsing to reduce the number of threads and network connections needed to perform concurrent `HystrixCommand` executions. Request collapsing does this in an automated manner that does not force all developers of a codebase to coordinate the manual batching of requests.
