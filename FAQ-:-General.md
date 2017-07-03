@@ -1,4 +1,5 @@
 <a name='Name'/>
+
 ## Where does the name come from?
 
 Naming things is [hard](http://martinfowler.com/bliki/TwoHardThings.html).
@@ -13,6 +14,7 @@ And it allows for cool artistic interpretations such as this logo:
 
 
 <a name='AtNetflix'/>
+
 ## How is this used at Netflix?
 
 Netflix uses Hystrix in many applications, particularly its edge services such as the Netflix API. Tens of billions of thread-isolated and hundreds of billions of semaphore-isolated calls are executed via Hystrix every day at Netflix.
@@ -28,6 +30,7 @@ Also, this slidedeck is from a presentation that goes into a little more detail 
 
 
 <a name='Intrusive'/>
+
 ## Why is it so intrusive?
 
 Common first reactions to Hystrix (even internally at Netflix when first introduced to teams) include:
@@ -60,6 +63,7 @@ If you still feel strongly that you shouldn't have to modify libraries and add c
 
 
 <a name='TransitiveDependencies'/>
+
 ## What about transitive dependencies?
 
 Transitive dependencies and thus transitive calls to HystrixCommands are expected and okay.
@@ -74,6 +78,7 @@ Also, because all command executions are logged for a request, metrics on transi
 
 
 <a name='Annotations'/>
+
 ## Can annotations be used?
 
 Not as part of [hystrix-core](https://github.com/Netflix/Hystrix/tree/master/hystrix-core) functionality. It has been considered but not pursued. It is definitely a candidate for someone to implement as a [sub-module](https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib).
@@ -81,6 +86,7 @@ Not as part of [hystrix-core](https://github.com/Netflix/Hystrix/tree/master/hys
 The primary design principle this doesn't mesh very well with is that it makes the isolation barriers transparent (see [["Why is it so intrusive?"|FAQ#wiki-Intrusive]] for more reasoning on this). In other words, a consumer of a library would no longer see a HystrixCommand implementation with standard execute(), queue() and other functionality nor receive the communication of isolation and fault tolerance that is assumed when interacting with a HystrixCommand. They would just invoke a method and have no idea of whether it's isolated or not.
 
 <a name='AOP'/>
+
 ## Why not use AOP?
 
 AOP has been avoided as part of [hystrix-core](https://github.com/Netflix/Hystrix/tree/master/hystrix-core) functionality due to the non-obviousness of using it and the desire to stay away from bytecode manipulation. 
@@ -93,6 +99,7 @@ A related area where it may be useful is not for Hystrix command objects but for
 
 
 <a name='InterceptNetwork'/>
+
 ## Why not just automatically intercept all network calls?
 
 Network calls are too low in the stack to provide the needed business logic and granularity for fallback behavior and logical isolation.
@@ -142,6 +149,7 @@ Applications must be designed for resilience and not rely upon infrastructure â€
 
 
 <a name='Costs'/>
+
 ## What is the processing overhead of using Hystrix?
 
 As a point of reference each Netflix API server executes around 350 thread-isolated and 5000+ semaphore-isolated HystrixCommand instances per second on 4-core Amazon EC2 servers.
@@ -205,6 +213,7 @@ This overhead at the 90th percentile and higher for circuits such as these has b
 For circuits that wrap very low latency requests (such as those primarily hitting in-memory caches) the overhead can be too high and in those cases we choose to use tryable semaphores which do not allow for timeouts but provide most of the resilience benefits without the overhead. The overhead in general though is small enough that we prefer the isolation benefits of a separate thread.
 
 <a name='Async'/>
+
 ## What about asynchronous dependency calls?
 
 These are supported as of Hystrix 1.4.
